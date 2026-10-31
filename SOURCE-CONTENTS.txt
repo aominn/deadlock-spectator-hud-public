@@ -4,4 +4,4 @@ Excluded: prior.git history/tags; game images/native UI originals/game fonts/gen
 Full extracted modifier data is reduced to source/class lookup fields consumed by buildCatalog(). Verify catalog equality before publication. Runtime display/timing code is unchanged; update-link default and new source-built package metadata target this repository.
 Game-related names/identifiers belong to their owners. Third-party components retain their licenses. No Valve approval or affiliation is implied.
 
-Documentation photographs: docs/images contains actual0.5.12 screenshots for README/article explanations. These are distinct from extracted runtime game assets and are excluded from executableZIPs; game-content rights are not licensed under projectMIT.
+Documentation photographs: docs/images contains actual0.6.0 photographs (and retained historical0.5.12 screenshots) for README/article explanations. These are distinct from extracted runtime game assets and are excluded from executableZIPs; game-content rights are not licensed under projectMIT.
