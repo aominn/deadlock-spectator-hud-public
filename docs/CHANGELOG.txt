@@ -1,3 +1,10 @@
+0.6.0 — first public runnable release
+
+Retains the reviewed 0.5.12 HUD display, input and update timing. No additional gameplay features.
+Adds Japanese/English illustrated README, setup and recovery guidance, authored-code MIT and complete third-party notices.
+Runtime ZIP excludes game images, original native UI and generated MOD; first setup prepares them from the installed game. README images link to the versioned source documentation.
+Public source history contains only the reviewed public snapshot and subsequent release changes. Previous private history/tags are not imported.
+
 Public source preparation / based on0.5.12
 
 Initial history-free source snapshot. Previous development history and generated game materials are not imported. Full extracted modifier tables are reduced to lookup identifiers/classes with catalog equality checked.

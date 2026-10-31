@@ -1,0 +1,445 @@
+{
+  "schema": 1,
+  "scope": "Source and executable distribution; third-party original notices govern their components; no game-material grant",
+  "components": [
+    {
+      "name": "Deadlock Spectator HUD (authored portions)",
+      "version": "0.6.0",
+      "license": "MIT",
+      "notice_files": [
+        "LICENSE"
+      ],
+      "source": "https://github.com/aominn/deadlock-spectator-hud-public"
+    },
+    {
+      "name": "Modlock-derived code",
+      "version": "attributed source portions",
+      "license": "MIT",
+      "notice_files": [
+        "licenses/Modlock-LICENSE.txt"
+      ],
+      "source": "existingcopyrightnoticesretained"
+    },
+    {
+      "name": "Python",
+      "version": "3.14.10",
+      "license": "PSF-2.0 and bundled third-party terms",
+      "notice_files": [
+        "licenses/Python-LICENSE.txt"
+      ],
+      "source": "https://docs.python.org/3/license.html"
+    },
+    {
+      "name": "Pillow",
+      "version": "12.3.0",
+      "license": "MIT-CMU and bundled codec/library terms",
+      "notice_files": [
+        "licenses/Pillow-LICENSE.txt"
+      ],
+      "source": "https://github.com/python-pillow/Pillow"
+    },
+    {
+      "name": "Node.js",
+      "version": "24.19.0",
+      "license": "MIT and bundled third-party terms",
+      "notice_files": [
+        "licenses/Node-LICENSE.txt"
+      ],
+      "source": "https://nodejs.org/"
+    },
+    {
+      "name": ".NET manager runtime",
+      "version": "10.0.12",
+      "license": "MIT and bundled third-party terms",
+      "notice_files": [
+        "licenses/DotNet-LICENSE.txt",
+        "licenses/DotNet-THIRD-PARTY-NOTICES.txt"
+      ],
+      "source": "https://github.com/dotnet/runtime"
+    },
+    {
+      "name": "Noto Sans JP Bold",
+      "version": "2.004-H2",
+      "license": "OFL-1.1",
+      "notice_files": [
+        "licenses/Noto-OFL.txt"
+      ],
+      "source": "https://github.com/notofonts/noto-cjk/blob/main/Sans/LICENSE"
+    },
+    {
+      "name": "@deademx/engine",
+      "version": "4.0.2",
+      "license": "MIT",
+      "notice_files": [
+        "licenses/NPM/@deademx/engine/LICENSE"
+      ],
+      "source": "https://registry.npmjs.org/@deademx/engine/-/engine-4.0.2.tgz"
+    },
+    {
+      "name": "deadem",
+      "version": "4.0.2",
+      "license": "MIT",
+      "notice_files": [
+        "licenses/NPM/deadem/LICENSE"
+      ],
+      "source": "https://registry.npmjs.org/deadem/-/deadem-4.0.2.tgz"
+    },
+    {
+      "name": "long",
+      "version": "5.3.2",
+      "license": "Apache-2.0",
+      "notice_files": [
+        "licenses/NPM/long/LICENSE"
+      ],
+      "source": "https://registry.npmjs.org/long/-/long-5.3.2.tgz"
+    },
+    {
+      "name": "protobufjs",
+      "version": "8.8.1",
+      "license": "BSD-3-Clause",
+      "notice_files": [
+        "licenses/NPM/protobufjs/ext/protojson.LICENSE",
+        "licenses/NPM/protobufjs/google/LICENSE",
+        "licenses/NPM/protobufjs/LICENSE"
+      ],
+      "source": "https://registry.npmjs.org/protobufjs/-/protobufjs-8.8.1.tgz"
+    },
+    {
+      "name": "snappyjs",
+      "version": "0.7.0",
+      "license": "MIT",
+      "notice_files": [
+        "licenses/NPM/snappyjs/LICENSE"
+      ],
+      "source": "https://registry.npmjs.org/snappyjs/-/snappyjs-0.7.0.tgz"
+    },
+    {
+      "name": "Blake3/3.0.2",
+      "license": "See original notice",
+      "notice_files": [
+        "licenses/AssetReader/Blake3-3.0.2/UPSTREAM-LICENSE.txt"
+      ],
+      "source_notices_index": "licenses/AssetReader/INDEX.json",
+      "scope": "asset-reader resolved build/runtime dependency; platform-specific notices retained conservatively"
+    },
+    {
+      "name": "K4os.Compression.LZ4/1.3.8",
+      "license": "See original notice",
+      "notice_files": [
+        "licenses/AssetReader/K4os.Compression.LZ4-1.3.8/UPSTREAM-LICENSE.txt"
+      ],
+      "source_notices_index": "licenses/AssetReader/INDEX.json",
+      "scope": "asset-reader resolved build/runtime dependency; platform-specific notices retained conservatively"
+    },
+    {
+      "name": "KeyValues2/0.8.0",
+      "license": [
+        {
+          "type": "file",
+          "text": "COPYING"
+        }
+      ],
+      "notice_files": [
+        "licenses/AssetReader/KeyValues2-0.8.0/COPYING"
+      ],
+      "source_notices_index": "licenses/AssetReader/INDEX.json",
+      "scope": "asset-reader resolved build/runtime dependency; platform-specific notices retained conservatively"
+    },
+    {
+      "name": "Microsoft.NET.ILLink.Tasks/10.0.12",
+      "license": [
+        {
+          "type": "expression",
+          "text": "MIT"
+        }
+      ],
+      "notice_files": [
+        "licenses/DotNet-LICENSE.txt",
+        "licenses/AssetReader/Microsoft.NET.ILLink.Tasks-10.0.12/THIRD-PARTY-NOTICES.TXT"
+      ],
+      "source_notices_index": "licenses/AssetReader/INDEX.json",
+      "scope": "asset-reader resolved build/runtime dependency; platform-specific notices retained conservatively"
+    },
+    {
+      "name": "SharpGLTF.Core/1.0.6",
+      "license": [
+        {
+          "type": "expression",
+          "text": "MIT"
+        }
+      ],
+      "notice_files": [
+        "licenses/AssetReader/SharpGLTF.Core-1.0.6/UPSTREAM-LICENSE.txt"
+      ],
+      "source_notices_index": "licenses/AssetReader/INDEX.json",
+      "scope": "asset-reader resolved build/runtime dependency; platform-specific notices retained conservatively"
+    },
+    {
+      "name": "SharpGLTF.Runtime/1.0.6",
+      "license": [
+        {
+          "type": "expression",
+          "text": "MIT"
+        }
+      ],
+      "notice_files": [
+        "licenses/AssetReader/SharpGLTF.Runtime-1.0.6/UPSTREAM-LICENSE.txt"
+      ],
+      "source_notices_index": "licenses/AssetReader/INDEX.json",
+      "scope": "asset-reader resolved build/runtime dependency; platform-specific notices retained conservatively"
+    },
+    {
+      "name": "SharpGLTF.Toolkit/1.0.6",
+      "license": [
+        {
+          "type": "expression",
+          "text": "MIT"
+        }
+      ],
+      "notice_files": [
+        "licenses/AssetReader/SharpGLTF.Toolkit-1.0.6/UPSTREAM-LICENSE.txt"
+      ],
+      "source_notices_index": "licenses/AssetReader/INDEX.json",
+      "scope": "asset-reader resolved build/runtime dependency; platform-specific notices retained conservatively"
+    },
+    {
+      "name": "SkiaSharp/4.151.1",
+      "license": [
+        {
+          "type": "expression",
+          "text": "MIT"
+        }
+      ],
+      "notice_files": [
+        "licenses/AssetReader/SkiaSharp-4.151.1/LICENSE.txt"
+      ],
+      "source_notices_index": "licenses/AssetReader/INDEX.json",
+      "scope": "asset-reader resolved build/runtime dependency; platform-specific notices retained conservatively"
+    },
+    {
+      "name": "SkiaSharp.NativeAssets.Linux.NoDependencies/4.151.1",
+      "license": [
+        {
+          "type": "expression",
+          "text": "MIT"
+        }
+      ],
+      "notice_files": [
+        "licenses/AssetReader/SkiaSharp.NativeAssets.Linux.NoDependencies-4.151.1/LICENSE.txt",
+        "licenses/AssetReader/SkiaSharp.NativeAssets.Linux.NoDependencies-4.151.1/THIRD-PARTY-NOTICES.txt"
+      ],
+      "source_notices_index": "licenses/AssetReader/INDEX.json",
+      "scope": "asset-reader resolved build/runtime dependency; platform-specific notices retained conservatively"
+    },
+    {
+      "name": "SkiaSharp.NativeAssets.macOS/4.151.1",
+      "license": [
+        {
+          "type": "expression",
+          "text": "MIT"
+        }
+      ],
+      "notice_files": [
+        "licenses/AssetReader/SkiaSharp.NativeAssets.macOS-4.151.1/LICENSE.txt",
+        "licenses/AssetReader/SkiaSharp.NativeAssets.macOS-4.151.1/THIRD-PARTY-NOTICES.txt"
+      ],
+      "source_notices_index": "licenses/AssetReader/INDEX.json",
+      "scope": "asset-reader resolved build/runtime dependency; platform-specific notices retained conservatively"
+    },
+    {
+      "name": "SkiaSharp.NativeAssets.Win32/4.151.1",
+      "license": [
+        {
+          "type": "expression",
+          "text": "MIT"
+        }
+      ],
+      "notice_files": [
+        "licenses/AssetReader/SkiaSharp.NativeAssets.Win32-4.151.1/LICENSE.txt",
+        "licenses/AssetReader/SkiaSharp.NativeAssets.Win32-4.151.1/THIRD-PARTY-NOTICES.txt"
+      ],
+      "source_notices_index": "licenses/AssetReader/INDEX.json",
+      "scope": "asset-reader resolved build/runtime dependency; platform-specific notices retained conservatively"
+    },
+    {
+      "name": "System.IO.Hashing/10.0.10",
+      "license": "See original notice",
+      "notice_files": [
+        "licenses/AssetReader/System.IO.Hashing-10.0.10/THIRD-PARTY-NOTICES.TXT",
+        "licenses/AssetReader/System.IO.Hashing-10.0.10/UPSTREAM-LICENSE.txt"
+      ],
+      "source_notices_index": "licenses/AssetReader/INDEX.json",
+      "scope": "asset-reader resolved build/runtime dependency; platform-specific notices retained conservatively"
+    },
+    {
+      "name": "TinyBCSharp/0.1.2",
+      "license": [
+        {
+          "type": "expression",
+          "text": "MIT"
+        }
+      ],
+      "notice_files": [
+        "licenses/AssetReader/TinyBCSharp-0.1.2/UPSTREAM-LICENSE.txt"
+      ],
+      "source_notices_index": "licenses/AssetReader/INDEX.json",
+      "scope": "asset-reader resolved build/runtime dependency; platform-specific notices retained conservatively"
+    },
+    {
+      "name": "TinyEXR.NET/1.1.0",
+      "license": [
+        {
+          "type": "expression",
+          "text": "MIT"
+        }
+      ],
+      "notice_files": [
+        "licenses/AssetReader/TinyEXR.NET-1.1.0/UPSTREAM-LICENSE.txt"
+      ],
+      "source_notices_index": "licenses/AssetReader/INDEX.json",
+      "scope": "asset-reader resolved build/runtime dependency; platform-specific notices retained conservatively"
+    },
+    {
+      "name": "ValveKeyValue/0.70.0.499",
+      "license": [
+        {
+          "type": "expression",
+          "text": "MIT"
+        }
+      ],
+      "notice_files": [
+        "licenses/AssetReader/ValveKeyValue-0.70.0.499/UPSTREAM-LICENSE.txt"
+      ],
+      "source_notices_index": "licenses/AssetReader/INDEX.json",
+      "scope": "asset-reader resolved build/runtime dependency; platform-specific notices retained conservatively"
+    },
+    {
+      "name": "ValvePak/5.0.2.177",
+      "license": [
+        {
+          "type": "expression",
+          "text": "MIT"
+        }
+      ],
+      "notice_files": [
+        "licenses/AssetReader/ValvePak-5.0.2.177/UPSTREAM-LICENSE.txt"
+      ],
+      "source_notices_index": "licenses/AssetReader/INDEX.json",
+      "scope": "asset-reader resolved build/runtime dependency; platform-specific notices retained conservatively"
+    },
+    {
+      "name": "ValveResourceFormat/20.1.7467",
+      "license": [
+        {
+          "type": "expression",
+          "text": "MIT"
+        }
+      ],
+      "notice_files": [
+        "licenses/AssetReader/ValveResourceFormat-20.1.7467/UPSTREAM-LICENSE.txt"
+      ],
+      "source_notices_index": "licenses/AssetReader/INDEX.json",
+      "scope": "asset-reader resolved build/runtime dependency; platform-specific notices retained conservatively"
+    },
+    {
+      "name": "Vortice.SPIRV/1.0.5",
+      "license": [
+        {
+          "type": "expression",
+          "text": "MIT"
+        }
+      ],
+      "notice_files": [
+        "licenses/AssetReader/Vortice.SPIRV-1.0.5/UPSTREAM-LICENSE.txt"
+      ],
+      "source_notices_index": "licenses/AssetReader/INDEX.json",
+      "scope": "asset-reader resolved build/runtime dependency; platform-specific notices retained conservatively"
+    },
+    {
+      "name": "Vortice.SpirvCross/1.5.4",
+      "license": [
+        {
+          "type": "expression",
+          "text": "MIT"
+        }
+      ],
+      "notice_files": [
+        "licenses/AssetReader/Vortice.SpirvCross-1.5.4/UPSTREAM-LICENSE.txt"
+      ],
+      "source_notices_index": "licenses/AssetReader/INDEX.json",
+      "scope": "asset-reader resolved build/runtime dependency; platform-specific notices retained conservatively"
+    },
+    {
+      "name": "ZstdSharp.Port/0.8.8",
+      "license": [
+        {
+          "type": "expression",
+          "text": "MIT"
+        }
+      ],
+      "notice_files": [
+        "licenses/AssetReader/ZstdSharp.Port-0.8.8/UPSTREAM-LICENSE.txt"
+      ],
+      "source_notices_index": "licenses/AssetReader/INDEX.json",
+      "scope": "asset-reader resolved build/runtime dependency; platform-specific notices retained conservatively"
+    },
+    {
+      "name": ".NET asset-reader runtime",
+      "version": "10.0.12",
+      "license": "MIT and bundled third-party terms",
+      "notice_files": [
+        "licenses/AssetReader/DotNet10.0.12-LICENSE.TXT",
+        "licenses/AssetReader/DotNet10.0.12-THIRD-PARTY-NOTICES.TXT"
+      ],
+      "source": "https://github.com/dotnet/runtime"
+    }
+  ],
+  "notice_sha256": {
+    "LICENSE": "3a69822ef867bcc7d526e64c5702c497f85f5662f9c9ff02a798c5194a6d5a39",
+    "licenses/AssetReader/Blake3-3.0.2/UPSTREAM-LICENSE.txt": "7f7d75677fb85a9a2cb8146e5a96eec2d574654ce54e5c70a820531ece14b073",
+    "licenses/AssetReader/DotNet10.0.12-LICENSE.TXT": "d7a68596ab69b06f51ca278a6545148e4269a9381c26d597c13df5d88e08cf5b",
+    "licenses/AssetReader/DotNet10.0.12-THIRD-PARTY-NOTICES.TXT": "6d15e10a101c6bfff2ab4429ed061bf76c456fc4b23ad6b03e0d0f8377148a21",
+    "licenses/AssetReader/K4os.Compression.LZ4-1.3.8/UPSTREAM-LICENSE.txt": "ef5a021fc2ae3658f4ad8d2526c87fb2cf394285f47abfb784cf73a27ffd9522",
+    "licenses/AssetReader/KeyValues2-0.8.0/COPYING": "28762bd1e2393dc04904f1153660a3f1388c03f6976a94c765d99876058081cc",
+    "licenses/AssetReader/Microsoft.NET.ILLink.Tasks-10.0.12/THIRD-PARTY-NOTICES.TXT": "6d15e10a101c6bfff2ab4429ed061bf76c456fc4b23ad6b03e0d0f8377148a21",
+    "licenses/AssetReader/SharpGLTF.Core-1.0.6/UPSTREAM-LICENSE.txt": "5e720094b3423cc2c1aef53325f2b99145d45155e36b81adb9063d18a552e469",
+    "licenses/AssetReader/SharpGLTF.Runtime-1.0.6/UPSTREAM-LICENSE.txt": "5e720094b3423cc2c1aef53325f2b99145d45155e36b81adb9063d18a552e469",
+    "licenses/AssetReader/SharpGLTF.Toolkit-1.0.6/UPSTREAM-LICENSE.txt": "5e720094b3423cc2c1aef53325f2b99145d45155e36b81adb9063d18a552e469",
+    "licenses/AssetReader/SkiaSharp-4.151.1/LICENSE.txt": "89101e35a8c66fd4d6dffc1763259161d35cb564c169714ec227a768c89f2938",
+    "licenses/AssetReader/SkiaSharp.NativeAssets.Linux.NoDependencies-4.151.1/LICENSE.txt": "89101e35a8c66fd4d6dffc1763259161d35cb564c169714ec227a768c89f2938",
+    "licenses/AssetReader/SkiaSharp.NativeAssets.Linux.NoDependencies-4.151.1/THIRD-PARTY-NOTICES.txt": "21504c46c4c58aa64c1055bd2dcbc5f9a136b4b8c412ed3cc6740e22c5b127f5",
+    "licenses/AssetReader/SkiaSharp.NativeAssets.Win32-4.151.1/LICENSE.txt": "89101e35a8c66fd4d6dffc1763259161d35cb564c169714ec227a768c89f2938",
+    "licenses/AssetReader/SkiaSharp.NativeAssets.Win32-4.151.1/THIRD-PARTY-NOTICES.txt": "21504c46c4c58aa64c1055bd2dcbc5f9a136b4b8c412ed3cc6740e22c5b127f5",
+    "licenses/AssetReader/SkiaSharp.NativeAssets.macOS-4.151.1/LICENSE.txt": "89101e35a8c66fd4d6dffc1763259161d35cb564c169714ec227a768c89f2938",
+    "licenses/AssetReader/SkiaSharp.NativeAssets.macOS-4.151.1/THIRD-PARTY-NOTICES.txt": "21504c46c4c58aa64c1055bd2dcbc5f9a136b4b8c412ed3cc6740e22c5b127f5",
+    "licenses/AssetReader/System.IO.Hashing-10.0.10/THIRD-PARTY-NOTICES.TXT": "6d15e10a101c6bfff2ab4429ed061bf76c456fc4b23ad6b03e0d0f8377148a21",
+    "licenses/AssetReader/System.IO.Hashing-10.0.10/UPSTREAM-LICENSE.txt": "ae48df11a335dc1a615f4f938b69cba73bcf4485c4f97af49b38efb0f216353b",
+    "licenses/AssetReader/TinyBCSharp-0.1.2/UPSTREAM-LICENSE.txt": "ca95d5d74a4cd4704cc19863d9141fd3fc1775f2a51106468801a85df4f6cd7c",
+    "licenses/AssetReader/TinyEXR.NET-1.1.0/UPSTREAM-LICENSE.txt": "30ec59c966331b7f029a579410fbd69577456eaeb078c752e0b274e9fbdc0345",
+    "licenses/AssetReader/ValveKeyValue-0.70.0.499/UPSTREAM-LICENSE.txt": "9b7097b8aeaea38ffe59e3e5de30879064332c9477384851e5df300825764958",
+    "licenses/AssetReader/ValvePak-5.0.2.177/UPSTREAM-LICENSE.txt": "f254d7ab2ba0281da8510d69de18693d592391beae254d46e3dd75376bc389f7",
+    "licenses/AssetReader/ValveResourceFormat-20.1.7467/UPSTREAM-LICENSE.txt": "19549e9b3203eaf3938f35f98e63fc6b166a16af29936affa3df6ec7e2ae7f8d",
+    "licenses/AssetReader/Vortice.SPIRV-1.0.5/UPSTREAM-LICENSE.txt": "82bd4e84d144bebbb519ed05899f0ceaeaf2e0f95160ac32fd8cc388710c76d0",
+    "licenses/AssetReader/Vortice.SpirvCross-1.5.4/UPSTREAM-LICENSE.txt": "82bd4e84d144bebbb519ed05899f0ceaeaf2e0f95160ac32fd8cc388710c76d0",
+    "licenses/AssetReader/ZstdSharp.Port-0.8.8/UPSTREAM-LICENSE.txt": "9a6a7216e532c4ee4f78881d31fb641c27148eb01b2d0e8e3235ffe9a70a662c",
+    "licenses/DotNet-LICENSE.txt": "d7a68596ab69b06f51ca278a6545148e4269a9381c26d597c13df5d88e08cf5b",
+    "licenses/DotNet-THIRD-PARTY-NOTICES.txt": "6d15e10a101c6bfff2ab4429ed061bf76c456fc4b23ad6b03e0d0f8377148a21",
+    "licenses/Modlock-LICENSE.txt": "1778e3780f31e105eb15a095fd2caac11dea70daf53e5b2b5c7b5200de2264d1",
+    "licenses/NPM/@deademx/engine/LICENSE": "c676d5aed3fc0638f74e37e27a167e75eccfb48e151894156358c41096c4e320",
+    "licenses/NPM/deadem/LICENSE": "c676d5aed3fc0638f74e37e27a167e75eccfb48e151894156358c41096c4e320",
+    "licenses/NPM/long/LICENSE": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+    "licenses/NPM/protobufjs/LICENSE": "49d6a1c9a623784c61c6cb70f773f3457faceb1914a13c8560a9823b7631950c",
+    "licenses/NPM/protobufjs/ext/protojson.LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "licenses/NPM/protobufjs/google/LICENSE": "4ab87e6e3c0c0b78e47c77d49ec10c048f8a519fb8062e6e3217e3e6e9b0c6e9",
+    "licenses/NPM/snappyjs/LICENSE": "46964f47c4b0a572739d12620f0acc456618f9d81ed9678e05994998946b31a9",
+    "licenses/Node-LICENSE.txt": "148eacf7863ef4329224a29398623077200a27194aa075569faf4a0a85566ca5",
+    "licenses/Noto-OFL.txt": "1c05c68c34f9708415aada51f17e1b0092d2cea709bf4a94cd38114f9e73d7d9",
+    "licenses/Pillow-LICENSE.txt": "4f7866a74802c6326f81faff59a56546b6aec2b10b91973e0e9308de95e79857",
+    "licenses/Python-LICENSE.txt": "935cf13e19f8c31b497d20b05d73623431a226b230c3599bc30fa3348979bc68"
+  },
+  "font": {
+    "file": "engine/fonts/NotoSansJP-Bold.ttf",
+    "sha256": "778214c61deec84ce9f74164f1be5756807a9895feac2d7a553fdd7d410070d4",
+    "embedded_copyright_matches_notice": true
+  }
+}

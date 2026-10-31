@@ -1,6 +1,4 @@
-Source preparation: no runnable release is published here yet.
-
-Deadlock Spectator HUD 0.5.12 — Quick guide
+Deadlock Spectator HUD 0.6.0 — Quick guide
 
 SETUP
 Close Deadlock. Extract the complete release ZIP, open HudManager.exe, select the

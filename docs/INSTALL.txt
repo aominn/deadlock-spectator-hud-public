@@ -1,4 +1,4 @@
-Deadlock Spectator HUD 0.5.12 — 導入・更新・復旧
+Deadlock Spectator HUD 0.6.0 — 導入・更新・復旧
 
 Windows10/11 x64、Steam、Deadlockが必要です。配布ZIPには実行環境が含まれます。
 初回：ZIPをすべて展開 → HudManager.exe → Deadlock/game/citadelを選ぶ →「準備する」→「HUDを有効にする」→「ゲームを起動」。

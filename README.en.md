@@ -1,55 +1,75 @@
 # Deadlock Spectator HUD
 
-Source preparation snapshot **0.5.12 / Windows 10–11 x64**. An unofficial HUD for spectating and replays. It is not developed, approved or supported by Valve.
+An unofficial HUD for Deadlock spectating and replays. It brings together purchases, ability upgrades, effects, souls and building HP, with on-screen drawing for commentary.
 
-[日本語](README.md)
+[日本語](README.md) · Windows 10–11 x64
 
-> This repository is being prepared for distribution. No runnable Release ZIP has been published here yet. The setup instructions below apply once a release is available.
+> **0.6.0 release**: Extract the entire runnable ZIP from the [release page](https://github.com/aominn/deadlock-spectator-hud-public/releases/tag/v0.6.0). Code → Download ZIP contains development source.
 
-## Setup
+![Live spectator view showing hero names, KDA, total souls and wallet](docs/images/spectator-overview-0.5.12.png)
+*Captured in a real live spectator session using 0.5.12. All screenshots below are also from 0.5.12.*
 
-1. Download `DeadlockSpectatorHUD-0.5.12-win-x64.zip` from [Releases](https://github.com/aominn/deadlock-spectator-hud-public/releases) and extract the entire ZIP. Use the runnable release, not the source-code ZIP.
-2. Close Deadlock and open `HudManager.exe` in the extracted folder.
-3. Select `Steam/steamapps/common/Deadlock/game/citadel`, then choose **Set up**. Images are prepared from your installed game.
-4. Choose **Enable HUD**, then **Launch game**. Enter a spectator match or a supported replay.
+## What it shows
 
-Steam and Deadlock are required. Python, Node.js and .NET do not need separate installation.
-Keep the manager open while using the HUD. It continues when minimized; closing it stops the companion and analysis. To restore the normal HUD, close the game and choose **Restore normal mode**.
+| Area | Information |
+| --- | --- |
+| Hero row | Hero names, K/D/A, total souls / wallet, confirmed individual soul changes |
+| Around each hero | Purchases, sales, ability upgrades, verified ultimate unlocks, supported buff/debuff icons |
+| Ownership | Urn holder, up to two bridge buffs, individual Rejuvenator ownership |
+| Center and minimap | Team soul lead, Rejuvenator charges, Mid Boss HP/timing, bridge buff cycle |
+| Buildings and detail view | Lane-based damage HP bars, side-by-side shrines, three-column inventory in the detailed view |
 
-## Language
+Unknown data is not guessed. Complete coverage of every hero or effect is not guaranteed.
 
-The manager and drawing toolbar follow the Windows display language: Japanese uses Japanese; every other language uses English. Regional number/date formatting does not determine the UI language.
+## First setup
 
-Additional game text follows the Deadlock client language: Japanese uses Japanese; every other language uses English. The original game's UI language is left unchanged. For example, an English Windows installation with Japanese Deadlock has an English manager and Japanese HUD additions.
+Use a Windows PC with Steam and Deadlock installed. Runnable ZIPs include their runtime; separate Python, Node.js and .NET installation is not required.
 
-Items resolve through exact localized aliases tied to internal names and IDs. Ability icons use hero ID and slot. Ambiguous or unknown names are not guessed. Complete coverage of every game language, hero, effect or future update is not guaranteed.
+1. **Extract the entire executable ZIP**. Do not run it from inside the archive.
+2. Close Deadlock and open **HudManager.exe**.
+3. Select **Deadlock/game/citadel** and choose **Set up**. Images are prepared from that PC's installed game.
+4. Choose **Enable HUD → Launch game**, then open spectating or a supported replay.
 
-## Update and recovery
+![0.5.12 manager with game folder, setup, enable, restore and launch controls](docs/images/manager-0.5.12.png)
+*Manager example in normal mode; the photographed Windows UI is Japanese.*
 
-Close the game and manager, extract the latest release to a new folder, then open its `HudManager.exe`. A newer release carries over your settings and preserves the previous version. Opening an older or identical release does not automatically downgrade.
+Keep the manager open while spectating. It continues when minimized; **closing it also stops the companion**. Initial parsing or joining an ongoing match can require preparation time.
 
-**Help** provides **Verify files**, **Refresh images**, and **Restore previous version**. Close the game before these operations. Missing images use a retained image of the same identity, or stay hidden if none is available. Other features continue.
+## Draw on the screen
 
+Enable **Draw lines (spectating/replays only)** in the manager, then press **F8** in the game. Use your selected key if you changed it.
 
-If a game update changes native UI resources, a compatible HUD release is required; refreshing images alone may not resolve it. See [game update checks](docs/GAME-UPDATES.txt).
+![A paused replay with a white drawn line and drawing toolbar along the bottom](docs/images/drawing-0.5.12.png)
 
-## Features
+- Choose a color, thickness, pen or arrow on the toolbar.
+- Choose **Watch**, or press Esc, to use game controls while retaining lines. Choose **Draw** to resume.
+- F8 toggles the toolbar. Drawing covers the screen, including the minimap.
+- Enable the drawing checkbox each time you reopen the manager. Drawing mode can reduce FPS.
 
-- Hero names, K/D/A, total souls / wallet, and confirmed individual soul changes.
-- Purchases, sales, ability upgrades and verified ultimate unlocks.
-- Effect icons shown for three seconds when applied. Four align normally; additional effects overlap and fade.
-- Urn holder, up to two bridge buffs, and individual Rejuvenator ownership.
-- Team soul lead, Rejuvenator count, Mid Boss HP/timer, bridge timer and native-position rifts.
-- Lane-based building damage bars held for five seconds; two base guardians shown individually; shrines side by side.
-- Three-column inventory in the detailed view.
+[Drawing details](docs/DRAWING.txt)
 
-Enable “Draw lines (spectating/replays only)” in the manager to use F8. Enable it again each time you reopen the manager. F8 toggles the drawing toolbar. Choose **Watch**, or press Esc, to use game controls while retaining drawings; choose **Draw** to resume. Drawing covers the screen, including the minimap.
+## Restore, update and recover
 
-## Limits and materials
+**Restore normal mode:** close Deadlock, then choose **Restore normal mode** in the manager.
 
-Testing on a moved local folder is distinct from testing on a physical second PC. All OBS capture methods, exclusive fullscreen, every live feature and long replay seeks have not been exhaustively verified. See [current status](docs/STATUS.txt) and [English instructions](docs/INSTALL.en.txt).
+**Update:** close the game and manager, extract the new ZIP to a new folder, and open its HudManager.exe. Do not replace individual files.
 
-The release does not bundle game images, original game UI resources or game fonts. They are prepared on the user's PC. This does not imply Valve approval or permission to redistribute game materials. Game and material rights belong to their respective owners.
+**Recovery:** with the game closed, **Help** offers file verification, image refresh and restoration of the retained previous version. [English setup and recovery](docs/INSTALL.en.txt)
 
+## Language and test coverage
 
-[Changelog](docs/CHANGELOG.txt) / [Build](docs/BUILD.txt) / [Portable checks](docs/PORTABLE.txt) / [Licenses](licenses)
+The manager and drawing toolbar follow the **Windows display language**. Added in-game text follows the **Deadlock client language**. Japanese uses Japanese; all other languages use English.
+
+The user confirmed basic second-PC setup, asset preparation, live/replay use, normal restoration, Japanese/English and companion shutdown on close. This is a user report. Every OBS capture method, exclusive fullscreen, hero/effect and live feature has not been exhaustively verified. Long seeks in some replays can still exit the game. [Status and limits](docs/STATUS.txt)
+
+Report problems through [GitHub Issues](https://github.com/aominn/deadlock-spectator-hud-public/issues), including HUD version, game language, live/replay mode and reproduction steps. Do not post logs containing credentials. You can also use the [website contact form](https://aominn.jp/form/).
+
+## Unofficial tool and licenses
+
+This tool is not developed, approved or supported by Valve. It is intended for spectating and replays, not normal player matches.
+
+Executable ZIPs do not bundle game icons, original native UI, game fonts or a generated MOD. These are prepared from the user's game installation. Documentation screenshots illustrate the tool; game-content rights remain with their respective owners.
+
+Authored code uses the [MIT License](LICENSE). See [Third-party notices](THIRD_PARTY_NOTICES.txt) for third-party components and documentation screenshots.
+
+[Changelog](docs/CHANGELOG.txt) · [Build](docs/BUILD.txt) · [Portable checks](docs/PORTABLE.txt) · [Local assets](docs/LOCAL-ASSETS.txt)

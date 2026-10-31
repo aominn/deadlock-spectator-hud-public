@@ -1,5 +1,7 @@
-History-free public-preparation source snapshot based on local0.5.12.
+Public 0.6.0 source. Based on the reviewed 0.5.12 HUD behavior; earlier private history is not imported.
 Included: authored HUD/manager/parser/build code and tests; minimum compatibility identifiers and display-name mappings; third-party font and license notices.
 Excluded: prior.git history/tags; game images/native UI originals/game fonts/generatedVPK; research/history notes and private-only publisher; runtimes/dependencies/buildproducts/logs/replays/settings/authentication.
 Full extracted modifier data is reduced to source/class lookup fields consumed by buildCatalog(). Verify catalog equality before publication. Runtime display/timing code is unchanged; update-link default and new source-built package metadata target this repository.
 Game-related names/identifiers belong to their owners. Third-party components retain their licenses. No Valve approval or affiliation is implied.
+
+Documentation photographs: docs/images contains actual0.5.12 screenshots for README/article explanations. These are distinct from extracted runtime game assets and are excluded from executableZIPs; game-content rights are not licensed under projectMIT.

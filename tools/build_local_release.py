@@ -30,11 +30,27 @@ def runtime_sources(root):
    if rel.as_posix()!='engine/effect-catalog.json':names.append(rel.as_posix())
  return names
 
+def verify_notices(root):
+ root=Path(root)
+ for name in ['LICENSE','THIRD_PARTY_NOTICES.txt','licenses/THIRD-PARTY-INDEX.json']:
+  if not (root/name).is_file():raise ValueError('Missing distribution notice: '+name)
+ index=json.loads((root/'licenses/THIRD-PARTY-INDEX.json').read_text(encoding='utf-8'))
+ if index.get('schema')!=1 or not index.get('components'):raise ValueError('Invalid distribution notice index')
+ notices=index['notice_sha256']
+ for component in index['components']:
+  if not component.get('notice_files') or any(n not in notices for n in component['notice_files']):raise ValueError('Unindexed component notice')
+ for name,expected in notices.items():
+  f=root/name
+  if not f.is_file() or sha(f)!=expected:raise ValueError('Distribution notice changed or missing: '+name)
+ font=index['font'];f=root/font['file']
+ if not f.is_file() or sha(f)!=font['sha256']:raise ValueError('Font does not match reviewed notice')
+ return index
+
 def main():
  ap=argparse.ArgumentParser(description=__doc__)
  for name in ['base-bundle','native-manager','asset-reader','output','version']:ap.add_argument('--'+name,required=True)
  ap.add_argument('--asset-template');ap.add_argument('--verify-game')
- q=ap.parse_args();root=Path(__file__).resolve().parents[1];sys.path.insert(0,str(root/'engine'));from manager_core import Manager,safe,member;from asset_prepare import verify_tree;from asset_install import PROFILE
+ q=ap.parse_args();root=Path(__file__).resolve().parents[1];verify_notices(root);sys.path.insert(0,str(root/'engine'));from manager_core import Manager,safe,member;from asset_prepare import verify_tree;from asset_install import PROFILE
  base=safe(q.base_bundle);m=Manager(Path(q.output).parent/'.build-check-home',base,busy=lambda:[]).verify();lock=json.loads((root/'tools/runtime-lock.json').read_text(encoding='utf-8'));origin=json.loads((base/'runtime/python/vendor-manifest.json').read_text(encoding='utf-8'))
  if origin['sources']!={n:lock[n] for n in ['python','pillow']} or sha(base/'runtime/node/node.exe')!=lock['node']['sha256']:raise ValueError('Pinned runtime identity differs')
  out=safe(q.output)
@@ -74,10 +90,15 @@ def main():
   target=package/member(n);target.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(root/n,target)
  shutil.copy2(template/'engine/effect-catalog.json',package/'engine/effect-catalog.json')
  copy_files(root/'licenses',package/'licenses')
- copy_files(root/'docs',package/'docs',skip=lambda n:n.startswith('history/') or n in ('MAINTENANCE-0.4.txt','MILESTONE-0.2.txt'))
- for n in ['README.md','README.en.md','README.txt']:shutil.copy2(root/n,package/n)
+ copy_files(root/'docs',package/'docs',skip=lambda n:n.startswith(('history/','images/')) or n in ('MAINTENANCE-0.4.txt','MILESTONE-0.2.txt'))
+ for n in ['README.md','README.en.md','README.txt','LICENSE','THIRD_PARTY_NOTICES.txt']:
+  if n in ('README.md','README.en.md'):
+   # Runtime ZIPs omit documentation photographs; retain usable versioned links.
+   content=(root/n).read_text(encoding='utf-8').replace('](docs/images/','](https://raw.githubusercontent.com/aominn/deadlock-spectator-hud-public/v'+q.version+'/docs/images/')
+   (package/n).write_text(content,encoding='utf-8',newline='\n')
+  else:shutil.copy2(root/n,package/n)
  shutil.copy2(Path(q.native_manager)/'HudManager.exe',package/'HudManager.exe');copy_files(template,package/PROFILE['template']);copy_files(reader.parent,package/'asset-preparation/reader');shutil.copy2(root/'tools/local-assets-recipe.json',package/PROFILE['recipe'])
- manifest=dict(m);manifest['repository']='aominn/deadlock-spectator-hud-public';manifest['version']=q.version;manifest['manager_protocol']=2;manifest['game_compatibility']=json.loads((root/'mod-src/compatibility.json').read_text(encoding='utf-8'));manifest['asset_preparation']=PROFILE;manifest.pop('prepared_assets',None);manifest['files']={f.relative_to(package).as_posix():sha(f) for f in sorted(package.rglob('*')) if f.is_file()};(package/'release.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding='utf-8');Manager(out/'.validation-home',package,busy=lambda:[]).verify()
+ verify_notices(package);manifest=dict(m);manifest['repository']='aominn/deadlock-spectator-hud-public';manifest['version']=q.version;manifest['manager_protocol']=2;manifest['game_compatibility']=json.loads((root/'mod-src/compatibility.json').read_text(encoding='utf-8'));manifest['asset_preparation']=PROFILE;manifest.pop('prepared_assets',None);manifest['files']={f.relative_to(package).as_posix():sha(f) for f in sorted(package.rglob('*')) if f.is_file()};(package/'release.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding='utf-8');Manager(out/'.validation-home',package,busy=lambda:[]).verify()
  archive=out/('DeadlockSpectatorHUD-'+q.version+'-win-x64.zip')
  with zipfile.ZipFile(archive,'w',zipfile.ZIP_DEFLATED,compresslevel=6) as z:
   for f in sorted(package.rglob('*')):

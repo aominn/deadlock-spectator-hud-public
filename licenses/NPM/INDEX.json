@@ -1,0 +1,85 @@
+{
+  "schema": 1,
+  "components": [
+    {
+      "name": "@deademx/engine",
+      "version": "4.0.2",
+      "license": "MIT",
+      "package_url": "https://registry.npmjs.org/@deademx/engine/-/engine-4.0.2.tgz",
+      "integrity": "sha512-Kq00dIDaQ8PocuvS0nxtrW/47nJNm8yvPdjfODIniN9z0BYtZ1cGAOOIdiNTMNYfAYM2VYw8+52AKq9RcN/w9A==",
+      "notices": [
+        {
+          "file": "licenses/NPM/@deademx/engine/LICENSE",
+          "sha256": "c676d5aed3fc0638f74e37e27a167e75eccfb48e151894156358c41096c4e320",
+          "original_package_path": "parser/node_modules/@deademx/engine/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "deadem",
+      "version": "4.0.2",
+      "license": "MIT",
+      "package_url": "https://registry.npmjs.org/deadem/-/deadem-4.0.2.tgz",
+      "integrity": "sha512-8PuvpyW+6Iul/00HBafAMK3KC7DALckmxF1/KHA7iGwpbyIIUDb7DW7wTr8VasvTOq8wUfdzljLTLmuQHXHpow==",
+      "notices": [
+        {
+          "file": "licenses/NPM/deadem/LICENSE",
+          "sha256": "c676d5aed3fc0638f74e37e27a167e75eccfb48e151894156358c41096c4e320",
+          "original_package_path": "parser/node_modules/deadem/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "long",
+      "version": "5.3.2",
+      "license": "Apache-2.0",
+      "package_url": "https://registry.npmjs.org/long/-/long-5.3.2.tgz",
+      "integrity": "sha512-mNAgZ1GmyNhD7AuqnTG3/VQ26o760+ZYBPKjPvugO8+nLbYfX6TVpJPseBvopbdY+qpZ/lKUnmEc1LeZYS3QAA==",
+      "notices": [
+        {
+          "file": "licenses/NPM/long/LICENSE",
+          "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30",
+          "original_package_path": "parser/node_modules/long/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "protobufjs",
+      "version": "8.8.1",
+      "license": "BSD-3-Clause",
+      "package_url": "https://registry.npmjs.org/protobufjs/-/protobufjs-8.8.1.tgz",
+      "integrity": "sha512-d9e9179bjXSJdpJ3+R9fP8hzXsnKLyxTjHLG1dUzje8a27pPyXCe6PrcRtgx2rjoM3IZzHd2vAs+6J/BsO1k7Q==",
+      "notices": [
+        {
+          "file": "licenses/NPM/protobufjs/ext/protojson.LICENSE",
+          "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+          "original_package_path": "parser/node_modules/protobufjs/ext/protojson.LICENSE"
+        },
+        {
+          "file": "licenses/NPM/protobufjs/google/LICENSE",
+          "sha256": "4ab87e6e3c0c0b78e47c77d49ec10c048f8a519fb8062e6e3217e3e6e9b0c6e9",
+          "original_package_path": "parser/node_modules/protobufjs/google/LICENSE"
+        },
+        {
+          "file": "licenses/NPM/protobufjs/LICENSE",
+          "sha256": "49d6a1c9a623784c61c6cb70f773f3457faceb1914a13c8560a9823b7631950c",
+          "original_package_path": "parser/node_modules/protobufjs/LICENSE"
+        }
+      ]
+    },
+    {
+      "name": "snappyjs",
+      "version": "0.7.0",
+      "license": "MIT",
+      "package_url": "https://registry.npmjs.org/snappyjs/-/snappyjs-0.7.0.tgz",
+      "integrity": "sha512-u5iEEXkMe2EInQio6Wv9LWHOQYRDbD2O9hzS27GpT/lwfIQhTCnHCTqedqHIHe9ZcvQo+9au6vngQayipz1NYw==",
+      "notices": [
+        {
+          "file": "licenses/NPM/snappyjs/LICENSE",
+          "sha256": "46964f47c4b0a572739d12620f0acc456618f9d81ed9678e05994998946b31a9",
+          "original_package_path": "parser/node_modules/snappyjs/LICENSE"
+        }
+      ]
+    }
+  ]
+}

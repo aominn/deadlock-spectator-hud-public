@@ -1,0 +1,85 @@
+Deadlock Spectator HUD - license guide / ライセンス案内
+
+The authored portions are licensed under MIT; see LICENSE. This grant does not relicense third-party components or Valve game content.
+自作部分はMITです。第三者の部品とValveのゲーム素材には、それぞれの条件を適用します。
+
+Component / version / terms / original notices
+
+Deadlock Spectator HUD (authored portions) / 0.6.0 / MIT
+  LICENSE
+Modlock-derived code / attributed source portions / MIT
+  licenses/Modlock-LICENSE.txt
+Python / 3.14.10 / PSF-2.0 and bundled third-party terms
+  licenses/Python-LICENSE.txt
+Pillow / 12.3.0 / MIT-CMU and bundled codec/library terms
+  licenses/Pillow-LICENSE.txt
+Node.js / 24.19.0 / MIT and bundled third-party terms
+  licenses/Node-LICENSE.txt
+.NET manager runtime / 10.0.12 / MIT and bundled third-party terms
+  licenses/DotNet-LICENSE.txt, licenses/DotNet-THIRD-PARTY-NOTICES.txt
+Noto Sans JP Bold / 2.004-H2 / OFL-1.1
+  licenses/Noto-OFL.txt
+@deademx/engine / 4.0.2 / MIT
+  licenses/NPM/@deademx/engine/LICENSE
+deadem / 4.0.2 / MIT
+  licenses/NPM/deadem/LICENSE
+long / 5.3.2 / Apache-2.0
+  licenses/NPM/long/LICENSE
+protobufjs / 8.8.1 / BSD-3-Clause
+  licenses/NPM/protobufjs/ext/protojson.LICENSE, licenses/NPM/protobufjs/google/LICENSE, licenses/NPM/protobufjs/LICENSE
+snappyjs / 0.7.0 / MIT
+  licenses/NPM/snappyjs/LICENSE
+Blake3/3.0.2 / See original notice
+  licenses/AssetReader/Blake3-3.0.2/UPSTREAM-LICENSE.txt
+K4os.Compression.LZ4/1.3.8 / See original notice
+  licenses/AssetReader/K4os.Compression.LZ4-1.3.8/UPSTREAM-LICENSE.txt
+KeyValues2/0.8.0 / See original COPYING
+  licenses/AssetReader/KeyValues2-0.8.0/COPYING
+Microsoft.NET.ILLink.Tasks/10.0.12 / MIT
+  licenses/DotNet-LICENSE.txt, licenses/AssetReader/Microsoft.NET.ILLink.Tasks-10.0.12/THIRD-PARTY-NOTICES.TXT
+SharpGLTF.Core/1.0.6 / MIT
+  licenses/AssetReader/SharpGLTF.Core-1.0.6/UPSTREAM-LICENSE.txt
+SharpGLTF.Runtime/1.0.6 / MIT
+  licenses/AssetReader/SharpGLTF.Runtime-1.0.6/UPSTREAM-LICENSE.txt
+SharpGLTF.Toolkit/1.0.6 / MIT
+  licenses/AssetReader/SharpGLTF.Toolkit-1.0.6/UPSTREAM-LICENSE.txt
+SkiaSharp/4.151.1 / MIT
+  licenses/AssetReader/SkiaSharp-4.151.1/LICENSE.txt
+SkiaSharp.NativeAssets.Linux.NoDependencies/4.151.1 / MIT
+  licenses/AssetReader/SkiaSharp.NativeAssets.Linux.NoDependencies-4.151.1/LICENSE.txt, licenses/AssetReader/SkiaSharp.NativeAssets.Linux.NoDependencies-4.151.1/THIRD-PARTY-NOTICES.txt
+SkiaSharp.NativeAssets.macOS/4.151.1 / MIT
+  licenses/AssetReader/SkiaSharp.NativeAssets.macOS-4.151.1/LICENSE.txt, licenses/AssetReader/SkiaSharp.NativeAssets.macOS-4.151.1/THIRD-PARTY-NOTICES.txt
+SkiaSharp.NativeAssets.Win32/4.151.1 / MIT
+  licenses/AssetReader/SkiaSharp.NativeAssets.Win32-4.151.1/LICENSE.txt, licenses/AssetReader/SkiaSharp.NativeAssets.Win32-4.151.1/THIRD-PARTY-NOTICES.txt
+System.IO.Hashing/10.0.10 / See original notice
+  licenses/AssetReader/System.IO.Hashing-10.0.10/THIRD-PARTY-NOTICES.TXT, licenses/AssetReader/System.IO.Hashing-10.0.10/UPSTREAM-LICENSE.txt
+TinyBCSharp/0.1.2 / MIT
+  licenses/AssetReader/TinyBCSharp-0.1.2/UPSTREAM-LICENSE.txt
+TinyEXR.NET/1.1.0 / MIT
+  licenses/AssetReader/TinyEXR.NET-1.1.0/UPSTREAM-LICENSE.txt
+ValveKeyValue/0.70.0.499 / MIT
+  licenses/AssetReader/ValveKeyValue-0.70.0.499/UPSTREAM-LICENSE.txt
+ValvePak/5.0.2.177 / MIT
+  licenses/AssetReader/ValvePak-5.0.2.177/UPSTREAM-LICENSE.txt
+ValveResourceFormat/20.1.7467 / MIT
+  licenses/AssetReader/ValveResourceFormat-20.1.7467/UPSTREAM-LICENSE.txt
+Vortice.SPIRV/1.0.5 / MIT
+  licenses/AssetReader/Vortice.SPIRV-1.0.5/UPSTREAM-LICENSE.txt
+Vortice.SpirvCross/1.5.4 / MIT
+  licenses/AssetReader/Vortice.SpirvCross-1.5.4/UPSTREAM-LICENSE.txt
+ZstdSharp.Port/0.8.8 / MIT
+  licenses/AssetReader/ZstdSharp.Port-0.8.8/UPSTREAM-LICENSE.txt
+.NET asset-reader runtime / 10.0.12 / MIT and bundled third-party terms
+  licenses/AssetReader/DotNet10.0.12-LICENSE.TXT, licenses/AssetReader/DotNet10.0.12-THIRD-PARTY-NOTICES.TXT
+
+licenses/THIRD-PARTY-INDEX.json records notice hashes and sources. Original notice text is preserved, including codec/native library notices inside Python, Pillow, Node and.NET texts.
+
+Standalone game icons, native UI originals, game fonts and generatedMOD files are not included in the distributed source or runnable ZIP. They are prepared from the user installation. Names and compatibility identifiers are not a grant to game materials. This tool is unofficial and not approved or supported by Valve.
+
+MIT text: https://opensource.org/license/mit
+Python terms: https://docs.python.org/3/license.html
+Noto terms: https://github.com/notofonts/noto-cjk/blob/main/Sans/LICENSE
+
+The AssetReader index also retains build-time and non-Windows platform notices; their presence does not mean every platform binary is shipped.
+
+Documentation images in docs/images are actual application/game screenshots, not runtime assets. Game content in those screenshots is not covered by the authored-code MIT grant. Image rights remain with their respective owners. Documentation screenshots are excluded from runnable ZIPs.

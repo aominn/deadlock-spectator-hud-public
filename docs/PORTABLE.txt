@@ -1,4 +1,4 @@
-別PC配布の確認事項 — v0.5.12 / ローカル試用
+別PC配布の確認事項 — v0.6.0 / 公開配布
 
 利用先はWindows10/11 x64、Steam、Deadlock。ZIP全体を展開しHudManager.exeを起動。
 Python/Node.js/.NET/Codex/GitHub CLIの事前導入は不要。同梱環境を使う。
@@ -53,3 +53,9 @@ MODと補助アプリを別の版から個別コピーしない。認証・個�
 ・アイテムID/内部名、現在言語の完全一致別名、曖昧名の非推測、ヒーローID/スロットのアイコン照合。
 ・長い英語名、英語の建物/レーン/タイマー/売却、JP回帰、言語別画像キャッシュ、通常モード復帰。
 ・管理画面の擬似描画と実ゲームの画面を区別し、Windows設定を変えずに検証する。
+
+ライセンス検査
+・LICENSE（自作部分MIT）、THIRD_PARTY_NOTICES.txt、licenses/THIRD-PARTY-INDEX.jsonを同梱。
+・各部品の原文とフォントのSHAを照合し、欠落・書換えがあればビルドを停止。
+・NPMの5依存はlicenses/NPM/INDEX.jsonと元パッケージ内の通知も維持。
+・MITはゲーム素材や第三者部品の条件を変更しない。
