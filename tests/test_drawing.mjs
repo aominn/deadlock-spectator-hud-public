@@ -1,0 +1,11 @@
+import fs from 'node:fs';import vm from 'node:vm';import assert from 'node:assert/strict';
+const source=fs.readFileSync(new URL('../mod-src/spectator_probe.js',import.meta.url),'utf8');const text=source.slice(source.indexOf('// Session-local telestration display.'));
+let spectator=true;let now=10000;const schedules=[],images=[];
+const map={visible:true,actuallayoutwidth:320,actuallayoutheight:360,actualuiscale_x:1,GetPositionWithinWindow:()=>({x:1560,y:680})};
+const parent={actuallayoutwidth:1920,actuallayoutheight:1080,actualuiscale_x:1,GetPositionWithinWindow:()=>({x:0,y:0}),FindChildrenWithClassTraverse:()=>[map]};
+const ctx={GetParent:()=>parent,BHasClass:k=>spectator&&k==='spec_mode',FindChildTraverse:()=>({text:'12:30'})};parent.GetParent=()=>null;parent.BHasClass=()=>false;
+const handlers=new Map();const c={$:{GetContextPanel:()=>ctx,CreatePanel:(type,p,id)=>{const n={id,style:{},visible:false,SetImage(url){this.url=url;}};images.push(n);return n;},RegisterEventHandler:(event,n,fn)=>handlers.set(event+n.id,fn),Schedule:(delay,fn)=>schedules.push({delay,fn})},Date:{now:()=>now},isFinite,encodeURIComponent};vm.createContext(c);vm.runInContext(text,c);
+assert.equal(images.length,2);assert(images.every(x=>!x.hittest&&!x.hittestchildren));schedules.shift().fn();assert(images[0].url.includes('/ink.png'));let q=new URL(images[0].url);let geometry=JSON.parse(q.searchParams.get('context'));assert.equal(geometry.clock,750);assert(Math.abs(geometry.map[0]-1560/1920)<1e-6);handlers.get('ImageLoaded'+images[0].id)();assert(images[0].visible);
+spectator=false;schedules.shift().fn();assert(images.every(x=>!x.visible));handlers.get('ImageLoaded'+images[1].id)();assert(images.every(x=>!x.visible));
+spectator=true;parent.actualuiscale_x=2;map.actualuiscale_x=2;map.GetPositionWithinWindow=()=>({x:3120,y:1360});schedules.shift().fn();q=new URL(images[0].url);geometry=JSON.parse(q.searchParams.get('context'));assert(Math.abs(geometry.map[0]-1560/1920)<1e-6);
+assert(!text.includes('hittest=true'));assert(!text.includes('RegisterKey'));console.log('PASS native drawing display:noninteractive;normalized map coordinates atscale1/2;normal hides;late load guard;bounded two-image pool');

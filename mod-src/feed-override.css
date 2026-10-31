@@ -1,0 +1,9 @@
+/* Keep native kill / urn semantics and expiry. Compact spectator log only. */
+.spec_mode #EventFeed {width: 720px; margin-top: 416px; margin-left: 12px;}
+.spec_mode #EventFeed CitadelHudInfoFeed {ui-scale: 85%;}
+.spec_mode #EventFeed CitadelHudBossKilled {ui-scale: 85%;}
+
+/* Preserve native feed flow and lifetime; no additional height clipping. */
+
+/* Keep feed data alive; reserve comparison columns only while build details are open. */
+.spec_mode.SpecBuildDetailsOpen #EventFeed {visibility: collapse;}

@@ -1,0 +1,784 @@
+{
+  "items": {
+    "7409189": {
+      "en": "Improved Spirit",
+      "internal": "upgrade_soaring_spirit"
+    },
+    "26002154": {
+      "en": "Melee Charge",
+      "internal": "upgrade_melee_charge"
+    },
+    "64550694": {
+      "en": "Runed Gauntlets",
+      "internal": "upgrade_runed_gauntlets"
+    },
+    "84321454": {
+      "en": "Quicksilver Reload",
+      "internal": "upgrade_quick_silver"
+    },
+    "98582110": {
+      "en": "Stalker",
+      "internal": "upgrade_weapon_backstabber"
+    },
+    "112198670": {
+      "en": "Spirit Shielding",
+      "internal": "upgrade_spirit_bubble"
+    },
+    "138320648": {
+      "en": "Patron's Healing",
+      "internal": "upgrade_heal_on_level"
+    },
+    "194116661": {
+      "en": "Conjure Missiles",
+      "internal": "upgrade_magic_missile"
+    },
+    "223594321": {
+      "en": "Spirit Armor",
+      "internal": "upgrade_tech_armor"
+    },
+    "230297145": {
+      "en": "Eternal Gift",
+      "internal": "upgrade_eternal_gift"
+    },
+    "334300056": {
+      "en": "Stamina Mastery",
+      "internal": "upgrade_superior_stamina"
+    },
+    "339443430": {
+      "en": "Frenzy",
+      "internal": "upgrade_fervor"
+    },
+    "343572757": {
+      "en": "Spirit Burn",
+      "internal": "upgrade_spirit_burn"
+    },
+    "365620721": {
+      "en": "Glass Cannon",
+      "internal": "upgrade_glass_cannon"
+    },
+    "380806748": {
+      "en": "Compress Cooldown",
+      "internal": "upgrade_magic_tempo"
+    },
+    "381961617": {
+      "en": "Active Reload",
+      "internal": "upgrade_active_reload"
+    },
+    "393974127": {
+      "en": "Slowing Bullets",
+      "internal": "upgrade_slowing_bullets"
+    },
+    "395867183": {
+      "en": "Mystic Shot",
+      "internal": "upgrade_crackshot"
+    },
+    "395944548": {
+      "en": "Torment Pulse",
+      "internal": "upgrade_tech_damage_pulse"
+    },
+    "424779525": {
+      "en": "Omnicharge Signet",
+      "internal": "upgrade_omnicharge_pendant"
+    },
+    "465043967": {
+      "en": "Spirit Strike",
+      "internal": "upgrade_acolytes_glove"
+    },
+    "493591231": {
+      "en": "Lightning Scroll",
+      "internal": "upgrade_ultimate_burst"
+    },
+    "499683006": {
+      "en": "Bullet Lifesteal",
+      "internal": "upgrade_vampire"
+    },
+    "558396679": {
+      "en": "Enduring Spirit",
+      "internal": "upgrade_resilience"
+    },
+    "564937160": {
+      "en": "Aerial Supremacy",
+      "internal": "upgrade_aerial_supremacy"
+    },
+    "600033864": {
+      "en": "Majestic Leap",
+      "internal": "upgrade_rocket_booster"
+    },
+    "619484391": {
+      "en": "Silence Wave",
+      "internal": "upgrade_targeted_silence"
+    },
+    "630839635": {
+      "en": "Echo Shard",
+      "internal": "upgrade_ability_power_shard"
+    },
+    "668299740": {
+      "en": "Rapid Rounds",
+      "internal": "upgrade_rapid_rounds"
+    },
+    "673001892": {
+      "en": "Armor Piercer",
+      "internal": "upgrade_aprounds"
+    },
+    "677738769": {
+      "en": "Refresher",
+      "internal": "upgrade_ability_refresher"
+    },
+    "690458959": {
+      "en": "Express Shot",
+      "internal": "upgrade_express_shot"
+    },
+    "709540378": {
+      "en": "Cultist Sacrifice",
+      "internal": "upgrade_non_player_bonus_sacrifice"
+    },
+    "710436191": {
+      "en": "Capacitor",
+      "internal": "upgrade_capacitor"
+    },
+    "754480263": {
+      "en": "Mystic Expansion",
+      "internal": "upgrade_magic_reach"
+    },
+    "787198704": {
+      "en": "Rapid Recharge",
+      "internal": "upgrade_rapid_recharge"
+    },
+    "800008313": {
+      "en": "Crushing Fists",
+      "internal": "upgrade_crushing_fists"
+    },
+    "805079544": {
+      "en": "Weapon Shielding",
+      "internal": "upgrade_weapon_shielding"
+    },
+    "811521119": {
+      "en": "Tesla Bullets",
+      "internal": "upgrade_chain_lightning"
+    },
+    "857669956": {
+      "en": "Guardian Ward",
+      "internal": "upgrade_guardian_ward"
+    },
+    "865846625": {
+      "en": "Leech",
+      "internal": "upgrade_damage_recycler"
+    },
+    "865958998": {
+      "en": "Veil Walker",
+      "internal": "upgrade_veil_walker"
+    },
+    "876563814": {
+      "en": "Spirit Lifesteal",
+      "internal": "upgrade_health_stealing_magic"
+    },
+    "915014646": {
+      "en": "Transcendent Cooldown",
+      "internal": "upgrade_transcendent_cooldown"
+    },
+    "951866250": {
+      "en": "Indomitable",
+      "internal": "upgrade_auto_cleanse"
+    },
+    "968099481": {
+      "en": "Extra Spirit",
+      "internal": "upgrade_improved_spirit"
+    },
+    "989206714": {
+      "en": "Blood Tribute",
+      "internal": "upgrade_blood_tribute"
+    },
+    "1009965641": {
+      "en": "Monster Rounds",
+      "internal": "upgrade_non_player_bonus"
+    },
+    "1047818222": {
+      "en": "Debuff Reducer",
+      "internal": "upgrade_debuff_reducer"
+    },
+    "1055679805": {
+      "en": "Vampiric Burst",
+      "internal": "upgrade_surging_power"
+    },
+    "1102081447": {
+      "en": "Mystic Slow",
+      "internal": "upgrade_magic_slow"
+    },
+    "1113837674": {
+      "en": "Silencer",
+      "internal": "upgrade_proc_silence"
+    },
+    "1132564516": {
+      "en": "Prism Blast",
+      "internal": "upgrade_prism_blast"
+    },
+    "1144549437": {
+      "en": "Spirit Shredder",
+      "internal": "upgrade_tech_defense_shredders"
+    },
+    "1150006784": {
+      "en": "Arcane Surge",
+      "internal": "upgrade_arcane_surge"
+    },
+    "1152158042": {
+      "en": "Vortex Web",
+      "internal": "upgrade_aoe_root"
+    },
+    "1193964439": {
+      "en": "Greater Expansion",
+      "internal": "upgrade_tech_range"
+    },
+    "1200177229": {
+      "en": "Hexafoil Ward",
+      "internal": "upgrade_spellshield"
+    },
+    "1219329868": {
+      "en": "Spirit Sap",
+      "internal": "upgrade_spirit_sap"
+    },
+    "1235347618": {
+      "en": "Battle Vest",
+      "internal": "upgrade_regenerating_bullet_shield"
+    },
+    "1248737459": {
+      "en": "Ammo Scavenger",
+      "internal": "upgrade_ammo_scavenger"
+    },
+    "1250307611": {
+      "en": "Juggernaut",
+      "internal": "upgrade_juggernaut"
+    },
+    "1252627263": {
+      "en": "Lifestrike",
+      "internal": "upgrade_boxing_glove"
+    },
+    "1254091416": {
+      "en": "Knockdown",
+      "internal": "upgrade_target_stun"
+    },
+    "1282141666": {
+      "en": "Siphon Bullets",
+      "internal": "upgrade_siphon_bullets"
+    },
+    "1292979587": {
+      "en": "Surge of Power",
+      "internal": "upgrade_magic_storm"
+    },
+    "1342610602": {
+      "en": "Close Quarters",
+      "internal": "upgrade_close_range"
+    },
+    "1371725689": {
+      "en": "Phantom Strike",
+      "internal": "upgrade_phantom_strike"
+    },
+    "1378931225": {
+      "en": "Metal Skin",
+      "internal": "upgrade_metal_skin"
+    },
+    "1396247347": {
+      "en": "Lucky Shot",
+      "internal": "upgrade_critshot"
+    },
+    "1409190604": {
+      "en": "Fury Trance",
+      "internal": "upgrade_fury_trance"
+    },
+    "1414025773": {
+      "en": "Counterspell",
+      "internal": "upgrade_counterspell"
+    },
+    "1414319208": {
+      "en": "Berserker",
+      "internal": "upgrade_berserker"
+    },
+    "1427630806": {
+      "en": "Healing Tempo",
+      "internal": "upgrade_healbuff"
+    },
+    "1437614329": {
+      "en": "Melee Lifesteal",
+      "internal": "upgrade_lifestrike_gauntlets"
+    },
+    "1439347412": {
+      "en": "Mystic Regeneration",
+      "internal": "upgrade_mystic_regeneration"
+    },
+    "1497973293": {
+      "en": "Glass Cannon v2",
+      "internal": "upgrade_glass_cannon2"
+    },
+    "1548066885": {
+      "en": "Extended Magazine",
+      "internal": "upgrade_clip_size"
+    },
+    "1558545403": {
+      "en": "Unstable Concoction",
+      "internal": "upgrade_unstable_concoction"
+    },
+    "1644605047": {
+      "en": "Reactive Barrier",
+      "internal": "upgrade_vex_barrier"
+    },
+    "1662311306": {
+      "en": "Divine Barrier",
+      "internal": "upgrade_divine_barrier"
+    },
+    "1672893796": {
+      "en": "Grit",
+      "internal": "upgrade_grit"
+    },
+    "1710079648": {
+      "en": "Healing Rite",
+      "internal": "upgrade_health_stimpak"
+    },
+    "1736094134": {
+      "en": "Seraphim Wings",
+      "internal": "upgrade_icarus_wings"
+    },
+    "1763073141": {
+      "en": "Recharging Rush",
+      "internal": "upgrade_rechargingbullets"
+    },
+    "1770441818": {
+      "en": "Weakening Headshot",
+      "internal": "upgrade_headshot_booster2"
+    },
+    "1797283378": {
+      "en": "Infuser",
+      "internal": "upgrade_infuser"
+    },
+    "1798666702": {
+      "en": "Shadow Weave",
+      "internal": "upgrade_cloaking_device_active"
+    },
+    "1804594021": {
+      "en": "Rescue Beam",
+      "internal": "upgrade_rescue_beam"
+    },
+    "1813726886": {
+      "en": "Slowing Hex",
+      "internal": "upgrade_containment"
+    },
+    "1825399334": {
+      "en": "Electric Slippers",
+      "internal": "upgrade_electric_slippers"
+    },
+    "1925087134": {
+      "en": "Suppressor",
+      "internal": "upgrade_suppressor"
+    },
+    "1932939246": {
+      "en": "Alchemical Fire",
+      "internal": "upgrade_thermal_detonator"
+    },
+    "1955841979": {
+      "en": "Spellbreaker",
+      "internal": "upgrade_spellbreaker"
+    },
+    "1976391348": {
+      "en": "Cold Front",
+      "internal": "upgrade_cold_front"
+    },
+    "1998374645": {
+      "en": "Mystic Burst",
+      "internal": "upgrade_magic_burst"
+    },
+    "2010028405": {
+      "en": "Headshot Booster",
+      "internal": "upgrade_headshot_booster"
+    },
+    "2037039379": {
+      "en": "Inhibitor",
+      "internal": "upgrade_inhibitor"
+    },
+    "2054088113": {
+      "en": "Mystical Piano",
+      "internal": "upgrade_mystical_piano"
+    },
+    "2059712766": {
+      "en": "Restorative Locket",
+      "internal": "upgrade_restorative_locket"
+    },
+    "2061878743": {
+      "en": "Disarming Hex",
+      "internal": "upgrade_greater_withering_whip"
+    },
+    "2064029594": {
+      "en": "Opening Rounds",
+      "internal": "upgrade_pristine_emblem"
+    },
+    "2068250483": {
+      "en": "Frostbite Charm",
+      "internal": "upgrade_shivas_bracelet"
+    },
+    "2081037738": {
+      "en": "Mystic Vulnerability",
+      "internal": "upgrade_magic_vulnerability"
+    },
+    "2095565695": {
+      "en": "Point Blank",
+      "internal": "upgrade_close_quarter_combat"
+    },
+    "2108215830": {
+      "en": "Heroic Aura",
+      "internal": "upgrade_dps_aura"
+    },
+    "2121044373": {
+      "en": "Tankbuster",
+      "internal": "upgrade_magic_shock"
+    },
+    "2142980412": {
+      "en": "Focus Lens",
+      "internal": "upgrade_focus_lens"
+    },
+    "2152872419": {
+      "en": "Sharpshooter",
+      "internal": "upgrade_sharpshooter"
+    },
+    "2163598980": {
+      "en": "Spirit Resilience",
+      "internal": "upgrade_tech_purge"
+    },
+    "2221211450": {
+      "en": "Spellslinger",
+      "internal": "upgrade_enchanted_holsters"
+    },
+    "2226497419": {
+      "en": "Spiritual Overflow",
+      "internal": "upgrade_tech_overflow"
+    },
+    "2319629810": {
+      "en": "Shadow Strike",
+      "internal": "upgrade_shadow_strike"
+    },
+    "2329546537": {
+      "en": "Rebirth",
+      "internal": "upgrade_personal_rejuvenator"
+    },
+    "2331566268": {
+      "en": "Hex-Sealed Knuckles",
+      "internal": "upgrade_superacolytes_glove"
+    },
+    "2356412290": {
+      "en": "Titanic Magazine",
+      "internal": "upgrade_titan_round"
+    },
+    "2407033488": {
+      "en": "Intensifying Magazine",
+      "internal": "upgrade_intensifying_clip"
+    },
+    "2407781327": {
+      "en": "Colossus",
+      "internal": "upgrade_colossus"
+    },
+    "2417568017": {
+      "en": "Scourge",
+      "internal": "upgrade_discord"
+    },
+    "2447176615": {
+      "en": "Enduring Speed",
+      "internal": "upgrade_cardio_calibrator"
+    },
+    "2462046703": {
+      "en": "Golden Goose Egg",
+      "internal": "upgrade_goose_egg"
+    },
+    "2463960640": {
+      "en": "Escalating Resilience",
+      "internal": "upgrade_reinforcing_casings"
+    },
+    "2480592370": {
+      "en": "Ricochet",
+      "internal": "upgrade_ricochet"
+    },
+    "2481177645": {
+      "en": "Hunter's Aura",
+      "internal": "upgrade_bullet_armor_reduction_aura"
+    },
+    "2519598785": {
+      "en": "Boundless Spirit",
+      "internal": "upgrade_boundless_spirit"
+    },
+    "2533252781": {
+      "en": "Ethereal Shift",
+      "internal": "upgrade_self_bubble"
+    },
+    "2566692615": {
+      "en": "Healing Booster",
+      "internal": "upgrade_healing_booster"
+    },
+    "2603935618": {
+      "en": "Healbane",
+      "internal": "upgrade_healbane"
+    },
+    "2617435668": {
+      "en": "Cursed Relic",
+      "internal": "upgrade_glitch"
+    },
+    "2678489038": {
+      "en": "Hollow Point",
+      "internal": "upgrade_hollow_point_rounds"
+    },
+    "2717651715": {
+      "en": "Superior Duration",
+      "internal": "upgrade_imbued_duration_extender"
+    },
+    "2739107182": {
+      "en": "Burst Fire",
+      "internal": "upgrade_burst_fire"
+    },
+    "2800629741": {
+      "en": "Magic Carpet",
+      "internal": "upgrade_magic_carpet"
+    },
+    "2820116164": {
+      "en": "Diviner's Kevlar",
+      "internal": "upgrade_diviners_kevlar"
+    },
+    "2829638276": {
+      "en": "Extra Regen",
+      "internal": "upgrade_endurance"
+    },
+    "2858617477": {
+      "en": "Toughness",
+      "internal": "upgrade_health_2"
+    },
+    "2922054143": {
+      "en": "Rusted Barrel",
+      "internal": "upgrade_withering_whip"
+    },
+    "2947183272": {
+      "en": "Radiant Regeneration",
+      "internal": "upgrade_resonant_healing"
+    },
+    "2951612397": {
+      "en": "Duration Extender",
+      "internal": "upgrade_arcane_extension"
+    },
+    "2956256701": {
+      "en": "Healing Nova",
+      "internal": "upgrade_health_nova"
+    },
+    "2971868509": {
+      "en": "Bullet Resist Shredder",
+      "internal": "upgrade_bullet_resist_shredder"
+    },
+    "3005970438": {
+      "en": "Escalating Exposure",
+      "internal": "upgrade_escalating_exposure"
+    },
+    "3028234315": {
+      "en": "Witchmail",
+      "internal": "upgrade_absorbing_armor"
+    },
+    "3074274290": {
+      "en": "Trophy Collector",
+      "internal": "upgrade_trophy_collector"
+    },
+    "3077079169": {
+      "en": "High-Velocity Rounds",
+      "internal": "upgrade_high_velocity_mag"
+    },
+    "3133167885": {
+      "en": "Silencer",
+      "internal": "upgrade_silencer"
+    },
+    "3140772621": {
+      "en": "Bullet Resilience",
+      "internal": "upgrade_improved_bullet_armor"
+    },
+    "3144988365": {
+      "en": "Decay",
+      "internal": "upgrade_rupture"
+    },
+    "3190916303": {
+      "en": "Spirit Snatch",
+      "internal": "upgrade_spirit_snatch"
+    },
+    "3261353684": {
+      "en": "Superior Cooldown",
+      "internal": "upgrade_cooldown_reduction"
+    },
+    "3269957497": {
+      "en": "Infinite Rounds",
+      "internal": "upgrade_infinite_rounds"
+    },
+    "3270001687": {
+      "en": "Warp Stone",
+      "internal": "upgrade_warp_stone"
+    },
+    "3294954488": {
+      "en": "Ballistic Enchantment",
+      "internal": "upgrade_bulletshredimbue"
+    },
+    "3331811235": {
+      "en": "Long Range",
+      "internal": "upgrade_long_range"
+    },
+    "3346798998": {
+      "en": "Endless Magazine",
+      "internal": "upgrade_infinitemagazine"
+    },
+    "3357231760": {
+      "en": "Unstoppable",
+      "internal": "upgrade_unstoppable"
+    },
+    "3361075077": {
+      "en": "Return Fire",
+      "internal": "upgrade_return_fire"
+    },
+    "3361811174": {
+      "en": "Cheat Death",
+      "internal": "upgrade_cheat_death"
+    },
+    "3399065363": {
+      "en": "Sprint Boots",
+      "internal": "upgrade_sprint_booster"
+    },
+    "3403085434": {
+      "en": "Fleetfoot",
+      "internal": "upgrade_fleetfoot_boots"
+    },
+    "3456645009": {
+      "en": "Shadow Step",
+      "internal": "upgrade_shadow_step"
+    },
+    "3491236900": {
+      "en": "Plated Armor",
+      "internal": "upgrade_deflecting_armor"
+    },
+    "3523480953": {
+      "en": "Cloak of Opportunity",
+      "internal": "upgrade_cloak_of_opportunity"
+    },
+    "3568217437": {
+      "en": "Haunting Shot",
+      "internal": "upgrade_eldritch_shot"
+    },
+    "3577481646": {
+      "en": "Mystic Reverb",
+      "internal": "upgrade_mystic_reverb"
+    },
+    "3585132399": {
+      "en": "Fortitude",
+      "internal": "upgrade_chonky"
+    },
+    "3633614685": {
+      "en": "Extra Health",
+      "internal": "upgrade_health"
+    },
+    "3647584222": {
+      "en": "Split Shot",
+      "internal": "upgrade_split_shot"
+    },
+    "3696726732": {
+      "en": "Toxic Bullets",
+      "internal": "upgrade_toxic_bullets"
+    },
+    "3713423303": {
+      "en": "Bullet Armor",
+      "internal": "upgrade_bullet_armor"
+    },
+    "3729138568": {
+      "en": "Celestial Blessing",
+      "internal": "upgrade_celestial_guidance"
+    },
+    "3731635960": {
+      "en": "Dispel Magic",
+      "internal": "upgrade_reduce_debuff_duration"
+    },
+    "3776945997": {
+      "en": "Extra Charge",
+      "internal": "upgrade_extra_charge"
+    },
+    "3791587546": {
+      "en": "Weighted Shots",
+      "internal": "upgrade_weighted_shots"
+    },
+    "3812615317": {
+      "en": "Arctic Blast",
+      "internal": "upgrade_arctic_blast"
+    },
+    "3830846077": {
+      "en": "Majestic Leap - Disabled",
+      "internal": "upgrade_rocket_boots"
+    },
+    "3862866912": {
+      "en": "Restorative Shot",
+      "internal": "upgrade_medic_bullets"
+    },
+    "3884003354": {
+      "en": "Crippling Headshot",
+      "internal": "upgrade_banshee_slugs"
+    },
+    "3893702034": {
+      "en": "Timeless Emblem",
+      "internal": "upgrade_timeless_emblem"
+    },
+    "3913864662": {
+      "en": "Soul Explosion",
+      "internal": "upgrade_corpse_explosion"
+    },
+    "3919289022": {
+      "en": "Mercurial Magnum",
+      "internal": "upgrade_ethereal_bullets"
+    },
+    "3927044172": {
+      "en": "Haunting Scream",
+      "internal": "upgrade_haunting_scream"
+    },
+    "3949773228": {
+      "en": "Nullification Burst",
+      "internal": "upgrade_nullification_aura"
+    },
+    "3970837787": {
+      "en": "Enchanter's Emblem",
+      "internal": "upgrade_magic_shield"
+    },
+    "3977876567": {
+      "en": "Kinetic Dash",
+      "internal": "upgrade_kinetic_sash"
+    },
+    "4003032160": {
+      "en": "Soul Rebirth",
+      "internal": "upgrade_rebirth"
+    },
+    "4050602737": {
+      "en": "Mystic Conduit",
+      "internal": "upgrade_patrons_blessing"
+    },
+    "4053935515": {
+      "en": "Headhunter",
+      "internal": "upgrade_headhunter"
+    },
+    "4075861416": {
+      "en": "Spirit Rend",
+      "internal": "upgrade_spellslinger_headshots"
+    },
+    "4104549924": {
+      "en": "Swift Striker",
+      "internal": "upgrade_blitz_bullets"
+    },
+    "4121584236": {
+      "en": "Shrink Ray",
+      "internal": "upgrade_shrink_ray"
+    },
+    "4139877411": {
+      "en": "Extra Stamina",
+      "internal": "upgrade_improved_stamina"
+    },
+    "4149380528": {
+      "en": "Apex Combat",
+      "internal": "upgrade_apex_combat"
+    },
+    "4204808176": {
+      "en": "Rebuttal",
+      "internal": "upgrade_melee_rebuttal"
+    },
+    "4238249888": {
+      "en": "Ancient Shield",
+      "internal": "upgrade_ancient_shield"
+    }
+  }
+}

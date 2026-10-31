@@ -1,0 +1,14 @@
+Source development / 0.5.12 / Windows x64
+
+Source-only preparation; no executable or baseline runtime bundle is published here yet.
+Pinned inputs: tools/runtime-lock.json, parser/package-lock.json, manager/HudManager.csproj and tools/asset-reader/AssetReader.csproj.
+1. Prepare verified runtimes using tools/prepare_runtime.py. The current build_local_release.py requires an already verified base bundle.
+2. Run npm ci --prefix parser --ignore-scripts --no-audit --no-fund.
+3. Publish the manager for win-x64 self-contained. Rebuild the asset reader only with corresponding license-index/recipe verification.
+4. Run tools/build_local_release.py with --base-bundle, --native-manager, --asset-reader, --output, --version and --verify-game. Use existing local inputs and a new output directory.
+5. Prepare ignored development assets using tools/prepare_dev_assets.py --generated <generation-check>.
+6. Run Python unittest discovery in tests and every tests/test_*.mjs using pinned runtimes.
+7. Complete docs/PORTABLE.txt before publishing executables; source/tag/version/ZIP/checksums must agree.
+
+Do not merge/push old private refs/tags into this history-free repository. No automatic publisher is included. Publish only reviewed artifacts with explicit authorization.
+Game images and native UI originals are prepared from the user installation. Do not bypass unverified game changes by editing hashes. Source uses LF; third-party license texts retain their original bytes. Minimal modifier identifiers preserve parser lookup without full extracted game definitions.

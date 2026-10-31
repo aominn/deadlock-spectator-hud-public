@@ -1,0 +1,7 @@
+Current source snapshot: 0.5.12 / Windows 10-11 x64 / Japanese and English
+
+History-free source preparation. No runnable release has been published here.
+Verified locally on game build6837: replay parsing, paused replay, drawing, live spectator updates, normal restoration and companion shutdown. CPU user testing confirmed mode-change-only HUD logs.
+Known limits: long seeks in some replays can exit the game; drawing mode can reduce FPS; physical second-PC end-to-end verification, all OBS capture methods, exclusive fullscreen, all live features/heroes/effects and shrine physical left/right mapping are not exhaustively verified.
+No game images/native UI originals/game fonts/generatedVPK/authentication/personalsettings/logs/replays are included. Compatibility identifiers and display-name mappings remain.
+See INSTALL.txt / INSTALL.en.txt, PORTABLE.txt and LOCAL-ASSETS.txt. Valve does not develop, approve or support this tool.

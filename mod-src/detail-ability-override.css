@@ -1,0 +1,3 @@
+/* Native ability subtree has its own stylesheet; detail-only sizing. */
+.spec_mode .SpecBuildDetailsOpen CitadelHudTopBarPlayer #PlayerAbilitiesContainer .button_container { width: 24px; height: 24px; margin: 0px; }
+.spec_mode .SpecBuildDetailsOpen CitadelHudTopBarPlayer #PlayerAbilitiesContainer .ability_image { width: 18px; height: 18px; horizontal-align: center; vertical-align: center; }

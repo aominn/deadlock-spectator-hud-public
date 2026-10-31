@@ -1,0 +1,10 @@
+import assert from 'node:assert/strict';
+import {buildCatalog,exactCandidate,pawnIdentity,extract} from '../parser/extract-replay-effects.mjs';
+import {nativeRoute,runLimits} from '../parser/live-receipt-producer.mjs';
+const c=buildCatalog();assert.equal(c.approved.get('modifier_citadel_stunned').effect,'スタン');assert.ok(c.approved.size>=70&&c.approved.size<145);assert.equal(c.approved.get('citadel_ability_melee_parry/modifier_citadel_parried_stun').effect,'パリースタン');assert.ok(!c.approved.has('upgrade_glitch/modifier_glitch_self_penalty'));assert.ok(!c.approved.has('upgrade_fury_trance/modifier_fury_trance/modifier_citadel_silenced'));assert.ok(!c.approved.has('ability_sleep_dagger/modifier_citadel_sleep_dagger_asleep/modifier_bullet_shred_postsleep'));assert.ok(c.map.size>1000);
+assert.equal(exactCandidate(new Map([[1,[{},{}]]]),1),null);assert.equal(exactCandidate(new Map(),1),null);
+const pawn={active:true,class:{name:'CCitadelPlayerPawn'},handle:1000,index:1,fieldEntries:()=>[['m_nHeroID',1]],getField:()=>2};assert.equal(pawnIdentity(pawn).hero,1);assert.equal(pawnIdentity({...pawn,fieldEntries:()=>[['m_nHeroID',1],['nested.m_nHeroID',2]]}),null);assert.equal(pawnIdentity({...pawn,active:false}),null);
+assert.throws(()=>nativeRoute("[Client] creating client connection to 'https://evil.example/tv/fixture'"));assert.throws(()=>nativeRoute("[Client] creating client connection to 'https://relay.steamcontent.com/tv/fixture?token=x'"));assert.equal(nativeRoute("[Client] creating client connection to 'https://relay.steamcontent.com/tv/fixture'"),'https://relay.steamcontent.com/tv/fixture');
+assert.equal(runLimits(21600,{follow:true}).maxRequests,250);assert.throws(()=>runLimits(21601,{follow:true}));assert.throws(()=>runLimits(181));assert.throws(()=>runLimits(10,{expectedRoute:'bad'}));
+await assert.rejects(()=>extract('../123456',null),/numeric/);await assert.rejects(()=>extract('123456',null),/Explicit/);
+console.log(JSON.stringify({catalog_size:c.approved.size,hashes:c.map.size,exact_owner_and_collision_gates:true,strict_native_route:true,bounded_live:true,explicit_replay_path:true,network:false}));

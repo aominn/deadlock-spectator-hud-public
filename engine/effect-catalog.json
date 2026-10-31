@@ -1,0 +1,2924 @@
+{
+  "version": 1,
+  "heroes": {
+    "hero_base": 0,
+    "hero_inferno": 1,
+    "hero_gigawatt": 2,
+    "hero_hornet": 3,
+    "hero_ghost": 4,
+    "hero_atlas": 6,
+    "hero_wraith": 7,
+    "hero_forge": 8,
+    "hero_chrono": 10,
+    "hero_dynamo": 11,
+    "hero_kelvin": 12,
+    "hero_haze": 13,
+    "hero_astro": 14,
+    "hero_bebop": 15,
+    "hero_nano": 16,
+    "hero_orion": 17,
+    "hero_krill": 18,
+    "hero_shiv": 19,
+    "hero_tengu": 20,
+    "hero_kali": 21,
+    "hero_warden": 25,
+    "hero_yamato": 27,
+    "hero_lash": 31,
+    "hero_viscous": 35,
+    "hero_gunslinger": 38,
+    "hero_yakuza": 39,
+    "hero_genericperson": 46,
+    "hero_wrecker": 48,
+    "hero_rutger": 49,
+    "hero_synth": 50,
+    "hero_thumper": 51,
+    "hero_mirage": 52,
+    "hero_slork": 53,
+    "hero_cadence": 54,
+    "hero_targetdummy": 55,
+    "hero_bomber": 56,
+    "hero_shieldguy": 57,
+    "hero_viper": 58,
+    "hero_vandal": 59,
+    "hero_magician": 60,
+    "hero_trapper": 61,
+    "hero_operative": 62,
+    "hero_vampirebat": 63,
+    "hero_drifter": 64,
+    "hero_priest": 65,
+    "hero_frank": 66,
+    "hero_bookworm": 67,
+    "hero_boho": 68,
+    "hero_doorman": 69,
+    "hero_skyrunner": 70,
+    "hero_swan": 71,
+    "hero_punkgoat": 72,
+    "hero_druid": 73,
+    "hero_graf": 74,
+    "hero_fortuna": 75,
+    "hero_necro": 76,
+    "hero_fencer": 77,
+    "hero_deadpack": 78,
+    "hero_familiar": 79,
+    "hero_werewolf": 80,
+    "hero_unicorn": 81,
+    "hero_opera": 82,
+    "hero_testhero": 83,
+    "hero_ratking": 84,
+    "hero_chessmaster": 85,
+    "hero_artist": 86,
+    "hero_nurse": 87,
+    "hero_baba": 88
+  },
+  "modifiers": {
+    "ability_explosive_barrel/barrel_burn": {
+      "source": "ability_explosive_barrel",
+      "modifier": "barrel_burn",
+      "kind": "ability",
+      "name": "パウダーケグ",
+      "effect": "パウダー 燃焼",
+      "icon": "file://{images}/hud/abilities/astro/holliday_powder_keg.psd",
+      "basis": "explicit native polarity flag",
+      "field": "m_BurnModifier",
+      "native_flag": "MODIFIER_DEBUFF_YES",
+      "polarity": "debuff"
+    },
+    "citadel_ability_bull_charge/modifier_shoulder_charge_buff": {
+      "source": "citadel_ability_bull_charge",
+      "modifier": "modifier_shoulder_charge_buff",
+      "kind": "ability",
+      "name": "ショルダーチャージ",
+      "effect": "追加ダメージ",
+      "icon": "file://{images}/hud/abilities/bull_charge.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_ModifierWeaponPowerIncrease",
+      "native_flag": null,
+      "polarity": "buff"
+    },
+    "citadel_ability_uppercut/modifier_uppercut_buff": {
+      "source": "citadel_ability_uppercut",
+      "modifier": "modifier_uppercut_buff",
+      "kind": "ability",
+      "name": "ブラストアッパーカット",
+      "effect": "武器ブースト",
+      "icon": null,
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_BuffModifier",
+      "native_flag": null,
+      "polarity": "buff"
+    },
+    "citadel_ability_chrono_pulse_grenade/modifier_chrono_pulse_grenade_debuff": {
+      "source": "citadel_ability_chrono_pulse_grenade",
+      "modifier": "modifier_chrono_pulse_grenade_debuff",
+      "kind": "ability",
+      "name": "パルスグレネード",
+      "effect": "パルスグレネード",
+      "icon": "file://{images}/hud/abilities/chrono/chrono_time_bomb.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_DebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "citadel_ability_chrono_time_wall/modifier_citadel_silenced": {
+      "source": "citadel_ability_chrono_time_wall",
+      "modifier": "modifier_citadel_silenced",
+      "kind": "ability",
+      "name": "タイムウォール",
+      "effect": "サイレンス状態",
+      "icon": "file://{images}/hud/abilities/chrono/chrono_time_wall.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_DebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_blood_shards/modifier_blood_shard_debuff": {
+      "source": "ability_blood_shards",
+      "modifier": "modifier_blood_shard_debuff",
+      "kind": "ability",
+      "name": "マリス",
+      "effect": "マリス",
+      "icon": "file://{images}/hud/abilities/spectre/geist_dagger.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_DebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_life_drain/modifier_life_drain_silence": {
+      "source": "ability_life_drain",
+      "modifier": "modifier_life_drain_silence",
+      "kind": "ability",
+      "name": "ライフドレイン",
+      "effect": "サイレンス状態",
+      "icon": "file://{images}/hud/abilities/spectre/life_drain.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_SilenceModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_health_swap/modifier_base": {
+      "source": "ability_health_swap",
+      "modifier": "modifier_base",
+      "kind": "ability",
+      "name": "ソウルエクスチェンジ",
+      "effect": "ソウルエクスチェンジ",
+      "icon": "file://{images}/hud/abilities/spectre/blood_exchange.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_BuffModifier",
+      "native_flag": null,
+      "polarity": "buff"
+    },
+    "ability_health_swap/modifier_citadel_silenced": {
+      "source": "ability_health_swap",
+      "modifier": "modifier_citadel_silenced",
+      "kind": "ability",
+      "name": "ソウルエクスチェンジ",
+      "effect": "サイレンス状態",
+      "icon": "file://{images}/hud/abilities/spectre/blood_exchange.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_SilenceModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "citadel_ability_hornet_chain/modifier_citadel_disarmed": {
+      "source": "citadel_ability_hornet_chain",
+      "modifier": "modifier_citadel_disarmed",
+      "kind": "ability",
+      "name": "テザーステイク",
+      "effect": "ディスアーム状態",
+      "icon": "file://{images}/hud/abilities/hornet/vindicta_stake.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_DisarmModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_fire_bomb/slow": {
+      "source": "ability_fire_bomb",
+      "modifier": "slow",
+      "kind": "ability",
+      "name": "スタンバースト",
+      "effect": "-移動速度",
+      "icon": "file://{images}/hud/abilities/inferno_bomb.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_DebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_incendiary_projectile/modifier_incendiary_debuff": {
+      "source": "ability_incendiary_projectile",
+      "modifier": "modifier_incendiary_debuff",
+      "kind": "ability",
+      "name": "ナパーム",
+      "effect": "ナパーム",
+      "icon": "file://{images}/hud/abilities/inferno_molotov.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_DebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_ice_dome/freeze_debuff": {
+      "source": "ability_ice_dome",
+      "modifier": "freeze_debuff",
+      "kind": "ability",
+      "name": "フローズンシェルター",
+      "effect": "フローズンシェルター",
+      "icon": "file://{images}/hud/abilities/kelvin/frozen_shelter.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_modifierProvidedByAura",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "citadel_ability_lash_ultimate/modifier_lash_grapple_enemy_debuff": {
+      "source": "citadel_ability_lash_ultimate",
+      "modifier": "modifier_lash_grapple_enemy_debuff",
+      "kind": "ability",
+      "name": "デススラム",
+      "effect": "スタン状態",
+      "icon": null,
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_GrappleEnemyModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "mirage_tornado/slow": {
+      "source": "mirage_tornado",
+      "modifier": "slow",
+      "kind": "ability",
+      "name": "ダストデビル",
+      "effect": "スロウ",
+      "icon": "file://{images}/hud/abilities/mirage/mirage_tornado.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_SlowModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "mirage_fire_beetles/modifier_mirage_fire_scarabs_health_loss": {
+      "source": "mirage_fire_beetles",
+      "modifier": "modifier_mirage_fire_scarabs_health_loss",
+      "kind": "ability",
+      "name": "ファイアスカラベ",
+      "effect": "ファイアスカラベ",
+      "icon": "file://{images}/hud/abilities/mirage/mirage_fire_beetles.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_StatStolenDebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_intimidate/modifier_intimidate_debuff": {
+      "source": "ability_intimidate",
+      "modifier": "modifier_intimidate_debuff",
+      "kind": "ability",
+      "name": "スコーン",
+      "effect": "スコーン",
+      "icon": "file://{images}/hud/abilities/grappler/grappler_regen.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_DebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_throw_sand/modifier_citadel_throw_sand_debuff": {
+      "source": "ability_throw_sand",
+      "modifier": "modifier_citadel_throw_sand_debuff",
+      "kind": "ability",
+      "name": "サンドブラスト",
+      "effect": "ディスアーム状態",
+      "icon": "file://{images}/hud/abilities/grappler/grappler_throw_sand.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_DebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_nano_catform/modifier_catform": {
+      "source": "ability_nano_catform",
+      "modifier": "modifier_catform",
+      "kind": "ability",
+      "name": "アヴァ",
+      "effect": "アヴァ",
+      "icon": "file://{images}/hud/abilities/nano/nano_catform.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_BuffModifier",
+      "native_flag": null,
+      "polarity": "buff"
+    },
+    "ability_immobilize_trap/modifier_glitch_debuff": {
+      "source": "ability_immobilize_trap",
+      "modifier": "modifier_glitch_debuff",
+      "kind": "ability",
+      "name": "スピリットスネア",
+      "effect": "スピリットスネア",
+      "icon": "file://{images}/hud/abilities/archer/imobolize_trap.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_GlitchModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "citadel_ability_shiv_dagger/modifier_shiv_thrown_shiv_damage_debuff": {
+      "source": "citadel_ability_shiv_dagger",
+      "modifier": "modifier_shiv_thrown_shiv_damage_debuff",
+      "kind": "ability",
+      "name": "セレイテッド・ナイフ",
+      "effect": "出血",
+      "icon": "file://{images}/hud/abilities/shiv/shiv_toss.psd",
+      "basis": "explicit native polarity flag",
+      "field": "m_DamageDebuffModifier",
+      "native_flag": "MODIFIER_DEBUFF_YES",
+      "polarity": "debuff"
+    },
+    "citadel_ability_shiv_dash/modifier_shiv_dash_debuff": {
+      "source": "citadel_ability_shiv_dash",
+      "modifier": "modifier_shiv_dash_debuff",
+      "kind": "ability",
+      "name": "スライス＆ダイス",
+      "effect": "スライス＆ダイス",
+      "icon": "file://{images}/hud/abilities/shiv/shiv_flash.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_DebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "fathom_reefdweller_harpoon/detach_buff": {
+      "source": "fathom_reefdweller_harpoon",
+      "modifier": "detach_buff",
+      "kind": "ability",
+      "name": "捕食者のハープーン",
+      "effect": "捕食者のハープーン",
+      "icon": "file://{images}/hud/abilities/haze/haze_sleep_dagger.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_DetachBuff",
+      "native_flag": null,
+      "polarity": "buff"
+    },
+    "fathom_lurkers_ambush/modifier_fathom_lurkers_ambush_debuff": {
+      "source": "fathom_lurkers_ambush",
+      "modifier": "modifier_fathom_lurkers_ambush_debuff",
+      "kind": "ability",
+      "name": "深海からの奇襲",
+      "effect": "深海からの奇襲",
+      "icon": "file://{images}/hud/abilities/slork/slork_invis.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_DebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "synth_affliction/modifier_synth_affliction_debuff": {
+      "source": "synth_affliction",
+      "modifier": "modifier_synth_affliction_debuff",
+      "kind": "ability",
+      "name": "アフリクション",
+      "effect": "アフリクテッド",
+      "icon": "file://{images}/hud/abilities/synth/synth_affliction.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_DebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "citadel_ability_tengu_airlift/modifier_citadel_silenced": {
+      "source": "citadel_ability_tengu_airlift",
+      "modifier": "modifier_citadel_silenced",
+      "kind": "ability",
+      "name": "エアドロップ",
+      "effect": "サイレンス状態",
+      "icon": "file://{images}/hud/abilities/tengu/tengu_lightning_crash.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_SilenceModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "viscous_goo_grenade/modifier_viscous_goo_grenade_debuff": {
+      "source": "viscous_goo_grenade",
+      "modifier": "modifier_viscous_goo_grenade_debuff",
+      "kind": "ability",
+      "name": "スプラッター",
+      "effect": "スプラッター",
+      "icon": "file://{images}/hud/abilities/viscous/viscous_goo_ball.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_GooGrenadeImpactModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "viscous_restorative_goo/post_cube_buff_duration_scale_function": {
+      "source": "viscous_restorative_goo",
+      "modifier": "post_cube_buff_duration_scale_function",
+      "kind": "ability",
+      "name": "ザ・キューブ",
+      "effect": "ザ・キューブ",
+      "icon": "file://{images}/hud/abilities/viscous/viscous_restorative_goo.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_subclassScaleFunction",
+      "native_flag": null,
+      "polarity": "buff"
+    },
+    "viscous_restorative_goo/modifier_restorative_goo": {
+      "source": "viscous_restorative_goo",
+      "modifier": "modifier_restorative_goo",
+      "kind": "ability",
+      "name": "ザ・キューブ",
+      "effect": "ザ・キューブ",
+      "icon": "file://{images}/hud/abilities/viscous/viscous_restorative_goo.psd",
+      "basis": "explicit native polarity flag",
+      "field": "m_RestorativeGooModifier",
+      "native_flag": "MODIFIER_DEBUFF_NO",
+      "polarity": "buff"
+    },
+    "ability_warden_lock_down/modifier_citadel_root": {
+      "source": "ability_warden_lock_down",
+      "modifier": "modifier_citadel_root",
+      "kind": "ability",
+      "name": "バインディングワード",
+      "effect": "移動不能状態",
+      "icon": "file://{images}/hud/abilities/warden/warden_lock_down.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_RootModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_warden_lock_down/modifier_citadel_silenced": {
+      "source": "ability_warden_lock_down",
+      "modifier": "modifier_citadel_silenced",
+      "kind": "ability",
+      "name": "バインディングワード",
+      "effect": "サイレンス状態",
+      "icon": "file://{images}/hud/abilities/warden/warden_lock_down.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_SilencedModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_warden_crowd_control/modifier_warden_crowd_control_fire_rate": {
+      "source": "ability_warden_crowd_control",
+      "modifier": "modifier_warden_crowd_control_fire_rate",
+      "kind": "ability",
+      "name": "アルケミカルフラスコ",
+      "effect": "アルケミカルフラスコ",
+      "icon": "file://{images}/hud/abilities/warden/warden_crowd_control.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_FireRateBuffModifier",
+      "native_flag": null,
+      "polarity": "buff"
+    },
+    "ability_warden_riot_protocol/modifier_warden_riot_protocol_enemy_debuff": {
+      "source": "ability_warden_riot_protocol",
+      "modifier": "modifier_warden_riot_protocol_enemy_debuff",
+      "kind": "ability",
+      "name": "ラストスタンド",
+      "effect": "スロウ状態",
+      "icon": "file://{images}/hud/abilities/warden/warden_riot_protocol.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_EnemyDebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "citadel_ability_psychic_lift/silence": {
+      "source": "citadel_ability_psychic_lift",
+      "modifier": "silence",
+      "kind": "ability",
+      "name": "テレキネシス",
+      "effect": "サイレンス",
+      "icon": "file://{images}/hud/abilities/wraith_lift.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_SilenceModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "citadel_ability_psychic_lift/lift_slow_modifier": {
+      "source": "citadel_ability_psychic_lift",
+      "modifier": "lift_slow_modifier",
+      "kind": "ability",
+      "name": "テレキネシス",
+      "effect": "スロウ",
+      "icon": "file://{images}/hud/abilities/wraith_lift.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_SlowModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "citadel_ability_card_toss/club_debuff": {
+      "source": "citadel_ability_card_toss",
+      "modifier": "club_debuff",
+      "kind": "ability",
+      "name": "カードトリック",
+      "effect": "カードトリック",
+      "icon": "file://{images}/hud/abilities/wraith_card_trick.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_ClubModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_wrecker_salvage/modifier_wrecker_salvage_stun": {
+      "source": "ability_wrecker_salvage",
+      "modifier": "modifier_wrecker_salvage_stun",
+      "kind": "ability",
+      "name": "コンシューム",
+      "effect": "スタン",
+      "icon": "file://{images}/hud/abilities/wrecker/salvage.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_StunEnemyModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "citadel_ability_infinity_slash/timer": {
+      "source": "citadel_ability_infinity_slash",
+      "modifier": "timer",
+      "kind": "ability",
+      "name": "トランスシャドウ",
+      "effect": "トランスシャドウ",
+      "icon": "file://{images}/hud/abilities/yamato/yamato_blinding_steel.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_BuffTimerModifier",
+      "native_flag": null,
+      "polarity": "buff"
+    },
+    "ability_viper_debuffdagger/debuff": {
+      "source": "ability_viper_debuffdagger",
+      "modifier": "debuff",
+      "kind": "ability",
+      "name": "スクリュージャブダガー",
+      "effect": "スクリュージャブダガー",
+      "icon": "file://{images}/hud/abilities/viper/viper_debuffdagger.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_DebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_magician_magicbolt/debuff_sf": {
+      "source": "ability_magician_magicbolt",
+      "modifier": "debuff_sf",
+      "kind": "ability",
+      "name": "ヴェックスボルト",
+      "effect": "ヴェックスボルト",
+      "icon": "file://{images}/hud/abilities/magician/magician_magicbolt.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_subclassScaleFunction",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_trapper_webwall/webwall_debuff_duration_sf": {
+      "source": "ability_trapper_webwall",
+      "modifier": "webwall_debuff_duration_sf",
+      "kind": "ability",
+      "name": "シルクトラップ",
+      "effect": "シルクトラップ",
+      "icon": "file://{images}/hud/abilities/trapper/trapper_web_wall.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_subclassScaleFunction",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_trapper_webwall/modifier_webwall_debuff": {
+      "source": "ability_trapper_webwall",
+      "modifier": "modifier_webwall_debuff",
+      "kind": "ability",
+      "name": "シルクトラップ",
+      "effect": "シルクトラップ",
+      "icon": "file://{images}/hud/abilities/trapper/trapper_web_wall.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_DebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "operative_revelation/modifier_glitch_debuff": {
+      "source": "operative_revelation",
+      "modifier": "modifier_glitch_debuff",
+      "kind": "ability",
+      "name": "リベレーション",
+      "effect": "リベレーション カース",
+      "icon": "file://{images}/hud/abilities/sumo/sumo_pork_bun.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_DebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_gunslinger_salvo/gunslinger_salvo_warning_modifier": {
+      "source": "ability_gunslinger_salvo",
+      "modifier": "gunslinger_salvo_warning_modifier",
+      "kind": "ability",
+      "name": "デモントリガー・ブリッツ",
+      "effect": "デモントリガー・ブリッツ",
+      "icon": "file://{images}/hud/abilities/tokamak/tokamak_hot_shot.psd",
+      "basis": "explicit native polarity flag",
+      "field": "m_VictimWarningModifier",
+      "native_flag": "MODIFIER_DEBUFF_YES",
+      "polarity": "debuff"
+    },
+    "gunslinger_demonMark/demonmark_buff": {
+      "source": "gunslinger_demonMark",
+      "modifier": "demonmark_buff",
+      "kind": "ability",
+      "name": "獄炎の烙印",
+      "effect": "獄炎の烙印",
+      "icon": "file://{images}/hud/abilities/hornet/hornet_assassinate.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_BuffModifier",
+      "native_flag": null,
+      "polarity": "buff"
+    },
+    "ability_vampirebat_batblink/buff_sf": {
+      "source": "ability_vampirebat_batblink",
+      "modifier": "buff_sf",
+      "kind": "ability",
+      "name": "サングインブリンク",
+      "effect": "サングインブリンク",
+      "icon": "file://{images}/hud/abilities/vampirebat/vampirebat_sanguine_retreat.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_subclassScaleFunction",
+      "native_flag": null,
+      "polarity": "buff"
+    },
+    "ability_vampirebat_lovebites/slowsf": {
+      "source": "ability_vampirebat_lovebites",
+      "modifier": "slowsf",
+      "kind": "ability",
+      "name": "ラヴファング",
+      "effect": "スロウ",
+      "icon": "file://{images}/hud/abilities/vampirebat/vampirebat_nox_nostra.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_SlowModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_vampirebat_lovebites/lovebites_proc": {
+      "source": "ability_vampirebat_lovebites",
+      "modifier": "lovebites_proc",
+      "kind": "ability",
+      "name": "ラヴファング",
+      "effect": "ラヴファング",
+      "icon": "file://{images}/hud/abilities/vampirebat/vampirebat_nox_nostra.psd",
+      "basis": "explicit native polarity flag",
+      "field": "m_DamageProcModifier",
+      "native_flag": "MODIFIER_DEBUFF_NO",
+      "polarity": "buff"
+    },
+    "ability_swan_leap/leapmodifier": {
+      "source": "ability_swan_leap",
+      "modifier": "leapmodifier",
+      "kind": "ability",
+      "name": "ジュテ",
+      "effect": "ジュテ",
+      "icon": "file://{images}/hud/abilities/bull_jump.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_BuffModifier",
+      "native_flag": null,
+      "polarity": "buff"
+    },
+    "ability_frank_painaura/painauradebuff": {
+      "source": "ability_frank_painaura",
+      "modifier": "painauradebuff",
+      "kind": "ability",
+      "name": "苦悶のオーラ",
+      "effect": "苦悶のオーラ",
+      "icon": "file://{images}/hud/abilities/frank/frank_aura_of_suffering.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_DebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_frank_revive/slow": {
+      "source": "ability_frank_revive",
+      "modifier": "slow",
+      "kind": "ability",
+      "name": "ショックリバイブ",
+      "effect": "スロウ",
+      "icon": "file://{images}/hud/abilities/frank/frank_shocking_reanimation.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_SlowModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_frank_revive/selfbuff": {
+      "source": "ability_frank_revive",
+      "modifier": "selfbuff",
+      "kind": "ability",
+      "name": "ショックリバイブ",
+      "effect": "ショックリバイブ",
+      "icon": "file://{images}/hud/abilities/frank/frank_shocking_reanimation.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_BuffModifier",
+      "native_flag": null,
+      "polarity": "buff"
+    },
+    "ability_frank_revive/zombie": {
+      "source": "ability_frank_revive",
+      "modifier": "zombie",
+      "kind": "ability",
+      "name": "ショックリバイブ",
+      "effect": "ショックリバイブ",
+      "icon": "file://{images}/hud/abilities/frank/frank_shocking_reanimation.psd",
+      "basis": "explicit native polarity flag",
+      "field": "m_ZombieModifier",
+      "native_flag": "MODIFIER_DEBUFF_YES",
+      "polarity": "debuff"
+    },
+    "ability_bookworm_aoemagic/root": {
+      "source": "ability_bookworm_aoemagic",
+      "modifier": "root",
+      "kind": "ability",
+      "name": "チャーミングリード",
+      "effect": "移動不能状態",
+      "icon": "file://{images}/hud/abilities/bookworm/bookworm_blindinglight.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_RootModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_bookworm_knightcharge/buff_sf": {
+      "source": "ability_bookworm_knightcharge",
+      "modifier": "buff_sf",
+      "kind": "ability",
+      "name": "ファントムチャージ",
+      "effect": "ファントムチャージ",
+      "icon": "file://{images}/hud/abilities/bookworm/bookworm_charge.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_subclassScaleFunction",
+      "native_flag": null,
+      "polarity": "buff"
+    },
+    "ability_bookworm_knightcharge/buff": {
+      "source": "ability_bookworm_knightcharge",
+      "modifier": "buff",
+      "kind": "ability",
+      "name": "ファントムチャージ",
+      "effect": "ファントムチャージ",
+      "icon": "file://{images}/hud/abilities/bookworm/bookworm_charge.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_BuffModifier",
+      "native_flag": null,
+      "polarity": "buff"
+    },
+    "ability_punkgoat_blasted/blasted": {
+      "source": "ability_punkgoat_blasted",
+      "modifier": "blasted",
+      "kind": "ability",
+      "name": "ブラスト",
+      "effect": "ブラスト",
+      "icon": "file://{images}/hud/abilities/punkgoat/goat_blasted.psd",
+      "basis": "explicit native polarity flag",
+      "field": "m_BlastedPassiveModifier",
+      "native_flag": "MODIFIER_DEBUFF_NO",
+      "polarity": "buff"
+    },
+    "ability_punkgoat_blasted/blastedactive": {
+      "source": "ability_punkgoat_blasted",
+      "modifier": "blastedactive",
+      "kind": "ability",
+      "name": "ブラスト",
+      "effect": "ブラスト",
+      "icon": "file://{images}/hud/abilities/punkgoat/goat_blasted.psd",
+      "basis": "explicit native polarity flag",
+      "field": "m_BlastedModifier",
+      "native_flag": "MODIFIER_DEBUFF_NO",
+      "polarity": "buff"
+    },
+    "ability_punkgoat_tether/tether_firerate_slow": {
+      "source": "ability_punkgoat_tether",
+      "modifier": "tether_firerate_slow",
+      "kind": "ability",
+      "name": "チェーンギャング",
+      "effect": "スロウ",
+      "icon": "file://{images}/hud/abilities/punkgoat/goat_chaingang.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_FireRateSlowModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_punkgoat_tether/waiting_for_pull": {
+      "source": "ability_punkgoat_tether",
+      "modifier": "waiting_for_pull",
+      "kind": "ability",
+      "name": "チェーンギャング",
+      "effect": "チェーンギャング",
+      "icon": "file://{images}/hud/abilities/punkgoat/goat_chaingang.psd",
+      "basis": "explicit native polarity flag",
+      "field": "m_WaitingToPullModifier",
+      "native_flag": "MODIFIER_DEBUFF_NO",
+      "polarity": "buff"
+    },
+    "ability_punkgoat_goatflip/damagebuff": {
+      "source": "ability_punkgoat_goatflip",
+      "modifier": "damagebuff",
+      "kind": "ability",
+      "name": "ライジング・ラム",
+      "effect": "ライジング・ラム",
+      "icon": "file://{images}/hud/abilities/punkgoat/goat_risingram.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_DamageBuff",
+      "native_flag": null,
+      "polarity": "buff"
+    },
+    "ability_punkgoat_goatflip/maxhealthbuff": {
+      "source": "ability_punkgoat_goatflip",
+      "modifier": "maxhealthbuff",
+      "kind": "ability",
+      "name": "ライジング・ラム",
+      "effect": "ライジング・ラム",
+      "icon": "file://{images}/hud/abilities/punkgoat/goat_risingram.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_MaxHealthBuff",
+      "native_flag": null,
+      "polarity": "buff"
+    },
+    "ability_punkgoat_ult/slow": {
+      "source": "ability_punkgoat_ult",
+      "modifier": "slow",
+      "kind": "ability",
+      "name": "バッシュダウン",
+      "effect": "スロウ",
+      "icon": "file://{images}/hud/abilities/punkgoat/goat_sigilslam.psd",
+      "basis": "explicit native polarity flag",
+      "field": "m_DiminishingSlowModifier",
+      "native_flag": "MODIFIER_DEBUFF_YES",
+      "polarity": "debuff"
+    },
+    "upgrade_non_player_bonus_sacrifice/buff_modifier": {
+      "source": "upgrade_non_player_bonus_sacrifice",
+      "modifier": "buff_modifier",
+      "kind": "item",
+      "name": "サクリファイス",
+      "effect": "サクリファイス",
+      "icon": "file://{images}/items/weapon/cultist_sacrifice.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_BuffModifier",
+      "native_flag": null,
+      "polarity": "buff"
+    },
+    "upgrade_weighted_shots/slowing_bullets_debuff": {
+      "source": "upgrade_weighted_shots",
+      "modifier": "slowing_bullets_debuff",
+      "kind": "item",
+      "name": "ヘヴィショット",
+      "effect": "スロウ",
+      "icon": "file://{images}/items/weapon/weighted_shots.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_DebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "upgrade_inhibitor/debuff": {
+      "source": "upgrade_inhibitor",
+      "modifier": "debuff",
+      "kind": "item",
+      "name": "インヒビター",
+      "effect": "インヒビター",
+      "icon": "file://{images}/items/vitality/inhibitor.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_DebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "upgrade_tech_defense_shredders/modifier_tech_defense_shredders_debuff": {
+      "source": "upgrade_tech_defense_shredders",
+      "modifier": "modifier_tech_defense_shredders_debuff",
+      "kind": "item",
+      "name": "スピリットシュレッダー",
+      "effect": "スピリットシュレッダー",
+      "icon": "file://{images}/items/weapon/spirit_shredder_bullets.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_TechDebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "upgrade_targeted_silence/modifier_citadel_silenced": {
+      "source": "upgrade_targeted_silence",
+      "modifier": "modifier_citadel_silenced",
+      "kind": "item",
+      "name": "サイレンスウェーブ",
+      "effect": "サイレンス状態",
+      "icon": "file://{images}/items/spirit/silence_glyph.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_DebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "upgrade_haunting_scream/modifier_glitch_debuff": {
+      "source": "upgrade_haunting_scream",
+      "modifier": "modifier_glitch_debuff",
+      "kind": "item",
+      "name": "ホーンテッドスクリーム",
+      "effect": "ホーンテッドスクリーム",
+      "icon": "file://{images}/items/brawl/haunting_scream.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_DebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "upgrade_proc_silence/debuff_duration_scale_function": {
+      "source": "upgrade_proc_silence",
+      "modifier": "debuff_duration_scale_function",
+      "kind": "item",
+      "name": "サイレンサー",
+      "effect": "サイレンサー",
+      "icon": "file://{images}/items/weapon/silencer.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_subclassScaleFunction",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "upgrade_proc_silence/modifier_citadel_silenced": {
+      "source": "upgrade_proc_silence",
+      "modifier": "modifier_citadel_silenced",
+      "kind": "item",
+      "name": "サイレンサー",
+      "effect": "サイレンス状態",
+      "icon": "file://{images}/items/weapon/silencer.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_SilenceModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "upgrade_proc_silence/modifier_citadel_silence_proc_debuff": {
+      "source": "upgrade_proc_silence",
+      "modifier": "modifier_citadel_silence_proc_debuff",
+      "kind": "item",
+      "name": "サイレンサー",
+      "effect": "サイレンス",
+      "icon": "file://{images}/items/weapon/silencer.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_DebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "upgrade_proc_silence/modifier_emp_immunity": {
+      "source": "upgrade_proc_silence",
+      "modifier": "modifier_emp_immunity",
+      "kind": "item",
+      "name": "サイレンサー",
+      "effect": "サイレンサー無効",
+      "icon": "file://{images}/items/weapon/silencer.psd",
+      "basis": "explicit native polarity flag",
+      "field": "m_ImmunityModifier",
+      "native_flag": "MODIFIER_DEBUFF_NO",
+      "polarity": "buff"
+    },
+    "upgrade_silencer/modifier_citadel_active_silenced": {
+      "source": "upgrade_silencer",
+      "modifier": "modifier_citadel_active_silenced",
+      "kind": "item",
+      "name": "サイレンサー",
+      "effect": "サイレンス状態",
+      "icon": "file://{images}/items/weapon/silencer.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_SilenceActiveModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "upgrade_silencer/modifier_silencer_proc_active": {
+      "source": "upgrade_silencer",
+      "modifier": "modifier_silencer_proc_active",
+      "kind": "item",
+      "name": "サイレンサー",
+      "effect": "サイレンサー",
+      "icon": "file://{images}/items/weapon/silencer.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_BuffModifier",
+      "native_flag": null,
+      "polarity": "buff"
+    },
+    "upgrade_siphon_bullets/modifier_siphon_bullets_health_gain": {
+      "source": "upgrade_siphon_bullets",
+      "modifier": "modifier_siphon_bullets_health_gain",
+      "kind": "item",
+      "name": "サイフォンバレット",
+      "effect": "サイフォンバレット",
+      "icon": "file://{images}/items/vitality/siphon_bullets.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_StatStolenBuffModifier",
+      "native_flag": null,
+      "polarity": "buff"
+    },
+    "upgrade_siphon_bullets/modifier_siphon_bullets_health_loss": {
+      "source": "upgrade_siphon_bullets",
+      "modifier": "modifier_siphon_bullets_health_loss",
+      "kind": "item",
+      "name": "サイフォンバレット",
+      "effect": "サイフォンバレット",
+      "icon": "file://{images}/items/vitality/siphon_bullets.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_StatStolenDebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "upgrade_spellslinger_headshots/modifier_spellslinger_headshots_debuff": {
+      "source": "upgrade_spellslinger_headshots",
+      "modifier": "modifier_spellslinger_headshots_debuff",
+      "kind": "item",
+      "name": "スピリットキラー",
+      "effect": "スピリットキラー",
+      "icon": "file://{images}/items/weapon/spellslinger_headshots.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_HeadshotDebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "upgrade_spellslinger_headshots/modifier_tech_defense_shredders_debuff": {
+      "source": "upgrade_spellslinger_headshots",
+      "modifier": "modifier_tech_defense_shredders_debuff",
+      "kind": "item",
+      "name": "スピリットキラー",
+      "effect": "スピリットシュレッダー",
+      "icon": "file://{images}/items/weapon/spellslinger_headshots.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_TechDebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "upgrade_close_quarter_combat/modifier_slow_base": {
+      "source": "upgrade_close_quarter_combat",
+      "modifier": "modifier_slow_base",
+      "kind": "item",
+      "name": "ポイントブランク",
+      "effect": "スロー状態",
+      "icon": "file://{images}/items/weapon/point_blank.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_DebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "upgrade_toxic_bullets/modifier_item_bleeding_bullets_damageovertime": {
+      "source": "upgrade_toxic_bullets",
+      "modifier": "modifier_item_bleeding_bullets_damageovertime",
+      "kind": "item",
+      "name": "トキシックバレット",
+      "effect": "出血状態",
+      "icon": "file://{images}/items/weapon/toxic_bullets.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_BleedModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "upgrade_escalating_exposure/modifier_debuff": {
+      "source": "upgrade_escalating_exposure",
+      "modifier": "modifier_debuff",
+      "kind": "item",
+      "name": "エクスポージャー",
+      "effect": "エクスポージャー",
+      "icon": "file://{images}/items/spirit/escalating_exposure.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_DebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "upgrade_spirit_sap/modifier_spirit_sap_debuff": {
+      "source": "upgrade_spirit_sap",
+      "modifier": "modifier_spirit_sap_debuff",
+      "kind": "item",
+      "name": "スピリットドレイン",
+      "effect": "スピリットドレイン",
+      "icon": "file://{images}/items/spirit/spirit_sap.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_DebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "upgrade_focus_lens/modifier_citadel_silenced": {
+      "source": "upgrade_focus_lens",
+      "modifier": "modifier_citadel_silenced",
+      "kind": "item",
+      "name": "フォーカスレンズ",
+      "effect": "サイレンス状態",
+      "icon": "file://{images}/items/spirit/focus_lens.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_SilenceModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "upgrade_focus_lens/modifier_spirit_sap_debuff": {
+      "source": "upgrade_focus_lens",
+      "modifier": "modifier_spirit_sap_debuff",
+      "kind": "item",
+      "name": "フォーカスレンズ",
+      "effect": "スピリットドレイン",
+      "icon": "file://{images}/items/spirit/focus_lens.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_ResistReductionModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "upgrade_withering_whip/modifier_withering_whip_debuff": {
+      "source": "upgrade_withering_whip",
+      "modifier": "modifier_withering_whip_debuff",
+      "kind": "item",
+      "name": "コロッシブバレル",
+      "effect": "-発射速度",
+      "icon": "file://{images}/items/spirit/rusted_barrel.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_DebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "upgrade_greater_withering_whip/upgrade_greater_withering_whip_debuff": {
+      "source": "upgrade_greater_withering_whip",
+      "modifier": "upgrade_greater_withering_whip_debuff",
+      "kind": "item",
+      "name": "ディスアームヘックス",
+      "effect": "ディスアーム状態",
+      "icon": "file://{images}/items/spirit/disarming_hex.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_TargetModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "upgrade_phantom_strike/modifier_slow_base": {
+      "source": "upgrade_phantom_strike",
+      "modifier": "modifier_slow_base",
+      "kind": "item",
+      "name": "ファントムストライク",
+      "effect": "-移動速度",
+      "icon": "file://{images}/items/vitality/phantom_strike.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_DebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "upgrade_rocket_booster/modifier_slow_base": {
+      "source": "upgrade_rocket_booster",
+      "modifier": "modifier_slow_base",
+      "kind": "item",
+      "name": "マジェスティックリープ",
+      "effect": "-移動速度",
+      "icon": "file://{images}/items/vitality/majestic_leap.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_DebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "upgrade_infuser/modifier_infuser": {
+      "source": "upgrade_infuser",
+      "modifier": "modifier_infuser",
+      "kind": "item",
+      "name": "インフューザー",
+      "effect": "インフューザー",
+      "icon": "file://{images}/items/vitality/infuser.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_BuffModifier",
+      "native_flag": null,
+      "polarity": "buff"
+    },
+    "upgrade_unstoppable/modifier_unstoppable": {
+      "source": "upgrade_unstoppable",
+      "modifier": "modifier_unstoppable",
+      "kind": "item",
+      "name": "アンストッパブル",
+      "effect": "アンストッパブル",
+      "icon": "file://{images}/items/vitality/unstoppable.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_BuffModifier",
+      "native_flag": null,
+      "polarity": "buff"
+    },
+    "upgrade_arctic_blast/modifier_arctic_blast_freeze": {
+      "source": "upgrade_arctic_blast",
+      "modifier": "modifier_arctic_blast_freeze",
+      "kind": "item",
+      "name": "アークティックブラスト",
+      "effect": "アークティックブラスト",
+      "icon": "file://{images}/items/spirit/arctic_blast.psd",
+      "basis": "explicit native polarity flag",
+      "field": "m_FreezeModifier",
+      "native_flag": "MODIFIER_DEBUFF_YES",
+      "polarity": "debuff"
+    },
+    "upgrade_arctic_blast/modifier_slow_base": {
+      "source": "upgrade_arctic_blast",
+      "modifier": "modifier_slow_base",
+      "kind": "item",
+      "name": "アークティックブラスト",
+      "effect": "スロー状態",
+      "icon": "file://{images}/items/spirit/arctic_blast.psd",
+      "basis": "explicit native polarity flag",
+      "field": "m_SlowModifier",
+      "native_flag": "MODIFIER_DEBUFF_YES",
+      "polarity": "debuff"
+    },
+    "upgrade_self_bubble/modifier_shifting_veil_buff": {
+      "source": "upgrade_self_bubble",
+      "modifier": "modifier_shifting_veil_buff",
+      "kind": "item",
+      "name": "エーテリアルシフト",
+      "effect": "エーテリアルシフト",
+      "icon": "file://{images}/items/spirit/ethereal_shift.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_BuffModifier",
+      "native_flag": null,
+      "polarity": "buff"
+    },
+    "upgrade_glitch/modifier_glitch_debuff": {
+      "source": "upgrade_glitch",
+      "modifier": "modifier_glitch_debuff",
+      "kind": "item",
+      "name": "呪いの遺物",
+      "effect": "呪われた！",
+      "icon": "file://{images}/items/spirit/curse.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_TargetModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "upgrade_fury_trance/modifier_citadel_silenced": {
+      "source": "upgrade_fury_trance",
+      "modifier": "modifier_citadel_silenced",
+      "kind": "item",
+      "name": "フューリートランス",
+      "effect": "サイレンス状態",
+      "icon": "file://{images}/items/vitality/fury_trance.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_SilenceModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "upgrade_crushing_fists/modifier_crushing_fists_debuff": {
+      "source": "upgrade_crushing_fists",
+      "modifier": "modifier_crushing_fists_debuff",
+      "kind": "item",
+      "name": "クラッシュフィスト",
+      "effect": "クラッシュフィスト",
+      "icon": "file://{images}/items/weapon/crushing_fists.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_StackingDebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "upgrade_spirit_burn/debuff_duration_scale_function": {
+      "source": "upgrade_spirit_burn",
+      "modifier": "debuff_duration_scale_function",
+      "kind": "item",
+      "name": "スピリットバーン",
+      "effect": "スピリットバーン",
+      "icon": "file://{images}/items/spirit/spirit_burn.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_subclassScaleFunction",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "upgrade_spirit_burn/modifier_spirit_burn_dot": {
+      "source": "upgrade_spirit_burn",
+      "modifier": "modifier_spirit_burn_dot",
+      "kind": "item",
+      "name": "スピリットバーン",
+      "effect": "スピリットバーン",
+      "icon": "file://{images}/items/spirit/spirit_burn.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_DebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "upgrade_spirit_burn/modifier_spirit_burn_immunity": {
+      "source": "upgrade_spirit_burn",
+      "modifier": "modifier_spirit_burn_immunity",
+      "kind": "item",
+      "name": "スピリットバーン",
+      "effect": "スピリットバーン 無効",
+      "icon": "file://{images}/items/spirit/spirit_burn.psd",
+      "basis": "explicit native polarity flag",
+      "field": "m_ImmunityModifier",
+      "native_flag": "MODIFIER_DEBUFF_NO",
+      "polarity": "buff"
+    },
+    "upgrade_ultimate_burst/modifier_stun": {
+      "source": "upgrade_ultimate_burst",
+      "modifier": "modifier_stun",
+      "kind": "item",
+      "name": "ライトニングスクロール",
+      "effect": "スタン",
+      "icon": "file://{images}/items/spirit/lightning_scroll.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_StunModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "upgrade_enchanted_holsters/modifier_enchanted_holsters_buff": {
+      "source": "upgrade_enchanted_holsters",
+      "modifier": "modifier_enchanted_holsters_buff",
+      "kind": "item",
+      "name": "スペルスリンガー",
+      "effect": "スペルスリンガー",
+      "icon": "file://{images}/items/weapon/spell_slinger.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_BuffModifier",
+      "native_flag": null,
+      "polarity": "buff"
+    },
+    "upgrade_unstable_concoction/modifier_unstable_concoction": {
+      "source": "upgrade_unstable_concoction",
+      "modifier": "modifier_unstable_concoction",
+      "kind": "item",
+      "name": "不安定な調合薬",
+      "effect": "不安定な調合薬",
+      "icon": "file://{images}/items/brawl/unstable_concoction.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_BuffModifier",
+      "native_flag": null,
+      "polarity": "buff"
+    },
+    "upgrade_shivas_bracelet/modifier_shivas_bracelet_freeze": {
+      "source": "upgrade_shivas_bracelet",
+      "modifier": "modifier_shivas_bracelet_freeze",
+      "kind": "item",
+      "name": "凍傷のチャーム",
+      "effect": "凍傷のチャーム",
+      "icon": "file://{images}/items/brawl/frostbite.psd",
+      "basis": "explicit native polarity flag",
+      "field": "m_FreezeModifier",
+      "native_flag": "MODIFIER_DEBUFF_YES",
+      "polarity": "debuff"
+    },
+    "ability_priest_knockback/buff": {
+      "source": "ability_priest_knockback",
+      "modifier": "buff",
+      "kind": "ability",
+      "name": "ガットショット",
+      "effect": "ガットショット",
+      "icon": "file://{images}/hud/abilities/priest/priest_shotgun.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_BuffModifier",
+      "native_flag": null,
+      "polarity": "buff"
+    },
+    "ability_priest_beartrap/debuff": {
+      "source": "ability_priest_beartrap",
+      "modifier": "debuff",
+      "kind": "ability",
+      "name": "魔呪の狩猟罠",
+      "effect": "魔呪の狩猟罠",
+      "icon": "file://{images}/hud/abilities/priest/priest_trap.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_DebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_familiar_attach/hopoutbuff": {
+      "source": "ability_familiar_attach",
+      "modifier": "hopoutbuff",
+      "kind": "ability",
+      "name": "おひるね",
+      "effect": "おひるね",
+      "icon": "file://{images}/hud/abilities/familiar/familiar_tag_along.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_HopOffBuffModifier",
+      "native_flag": null,
+      "polarity": "buff"
+    },
+    "ability_familiar_attach/attached": {
+      "source": "ability_familiar_attach",
+      "modifier": "attached",
+      "kind": "ability",
+      "name": "おひるね",
+      "effect": "おひるね",
+      "icon": "file://{images}/hud/abilities/familiar/familiar_tag_along.psd",
+      "basis": "explicit native polarity flag",
+      "field": "m_AttachedModifier",
+      "native_flag": "MODIFIER_DEBUFF_NO",
+      "polarity": "buff"
+    },
+    "ability_fencer_throwblade/fencer_sigil_slow": {
+      "source": "ability_fencer_throwblade",
+      "modifier": "fencer_sigil_slow",
+      "kind": "ability",
+      "name": "退避の五芒星",
+      "effect": "スロウ",
+      "icon": "file://{images}/hud/abilities/fencer/fencer_sigil.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_DebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_fencer_throwblade/upgrade_greater_withering_whip_debuff": {
+      "source": "ability_fencer_throwblade",
+      "modifier": "upgrade_greater_withering_whip_debuff",
+      "kind": "ability",
+      "name": "退避の五芒星",
+      "effect": "ディスアーム状態",
+      "icon": "file://{images}/hud/abilities/fencer/fencer_sigil.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_DisarmModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_necro_zombiewall/buff": {
+      "source": "ability_necro_zombiewall",
+      "modifier": "buff",
+      "kind": "ability",
+      "name": "グラスプハンド",
+      "effect": "グラスプハンド",
+      "icon": "file://{images}/hud/abilities/necro/necro_hands.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_BuffModifier",
+      "native_flag": null,
+      "polarity": "buff"
+    },
+    "ability_necro_hauntingskull/summonbuff": {
+      "source": "ability_necro_hauntingskull",
+      "modifier": "summonbuff",
+      "kind": "ability",
+      "name": "死者の魔瓶",
+      "effect": "死者の魔瓶",
+      "icon": "file://{images}/hud/abilities/necro/necro_skull.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_SummonBuffModifier",
+      "native_flag": null,
+      "polarity": "buff"
+    },
+    "ability_necro_hauntingskull/debuff": {
+      "source": "ability_necro_hauntingskull",
+      "modifier": "debuff",
+      "kind": "ability",
+      "name": "死者の魔瓶",
+      "effect": "死者の魔瓶",
+      "icon": "file://{images}/hud/abilities/necro/necro_skull.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_StackingDebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_necro_hauntingskull/slow": {
+      "source": "ability_necro_hauntingskull",
+      "modifier": "slow",
+      "kind": "ability",
+      "name": "死者の魔瓶",
+      "effect": "スロウ",
+      "icon": "file://{images}/hud/abilities/necro/necro_skull.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_SlowModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_necro_fear/debuff": {
+      "source": "ability_necro_fear",
+      "modifier": "debuff",
+      "kind": "ability",
+      "name": "生気吸収",
+      "effect": "生気吸収",
+      "icon": "file://{images}/hud/abilities/necro/necro_siphon.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_DebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_werewolf_kickflip/disarm": {
+      "source": "ability_werewolf_kickflip",
+      "modifier": "disarm",
+      "kind": "ability",
+      "name": "ブーツキック",
+      "effect": "ディスアーム状態",
+      "icon": "file://{images}/hud/abilities/werewolf/werewolf_jumpback.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_DisarmModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_werewolf_netshot/debuff": {
+      "source": "ability_werewolf_netshot",
+      "modifier": "debuff",
+      "kind": "ability",
+      "name": "バインドボーラ",
+      "effect": "バインドボーラ",
+      "icon": "file://{images}/hud/abilities/werewolf/werewolf_bola.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_DebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_werewolf_transformation/stackingbuff": {
+      "source": "ability_werewolf_transformation",
+      "modifier": "stackingbuff",
+      "kind": "ability",
+      "name": "人狼の呪い",
+      "effect": "人狼の呪い",
+      "icon": "file://{images}/hud/abilities/werewolf/werewolf_lycancurse.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_StackingBuffModifier",
+      "native_flag": null,
+      "polarity": "buff"
+    },
+    "ability_unicorn_radiantblast/unicorn_radiantblast_debuff": {
+      "source": "ability_unicorn_radiantblast",
+      "modifier": "unicorn_radiantblast_debuff",
+      "kind": "ability",
+      "name": "ライトイーター",
+      "effect": "ライトイーター",
+      "icon": "file://{images}/hud/abilities/unicorn/unicorn_flare.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_DebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_unicorn_prismaticguard/modifier_unicorn_prismatic_guard_buff": {
+      "source": "ability_unicorn_prismaticguard",
+      "modifier": "modifier_unicorn_prismatic_guard_buff",
+      "kind": "ability",
+      "name": "ダズリングトリック",
+      "effect": "ダズリングトリック",
+      "icon": "file://{images}/hud/abilities/unicorn/unicorn_shield.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_BuffModifier",
+      "native_flag": null,
+      "polarity": "buff"
+    },
+    "ability_unicorn_prismaticguard/modifier_unicorn_prismatic_guard_debuff": {
+      "source": "ability_unicorn_prismaticguard",
+      "modifier": "modifier_unicorn_prismatic_guard_debuff",
+      "kind": "ability",
+      "name": "ダズリングトリック",
+      "effect": "サイレンス状態",
+      "icon": "file://{images}/hud/abilities/unicorn/unicorn_shield.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_DebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_unicorn_dazzlingorb/dazzling_orb_slow_modifier": {
+      "source": "ability_unicorn_dazzlingorb",
+      "modifier": "dazzling_orb_slow_modifier",
+      "kind": "ability",
+      "name": "シャイニングワンダー",
+      "effect": "スロウ",
+      "icon": "file://{images}/hud/abilities/unicorn/unicorn_orb.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_SlowModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_unicorn_luminousstrike/luminous_strike_buff_duration_sf": {
+      "source": "ability_unicorn_luminousstrike",
+      "modifier": "luminous_strike_buff_duration_sf",
+      "kind": "ability",
+      "name": "レディアントダガー",
+      "effect": "レディアントダガー",
+      "icon": "file://{images}/hud/abilities/unicorn/unicorn_luminousflux.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_subclassScaleFunction",
+      "native_flag": null,
+      "polarity": "buff"
+    },
+    "ability_unicorn_luminousstrike/luminous_strike_buff": {
+      "source": "ability_unicorn_luminousstrike",
+      "modifier": "luminous_strike_buff",
+      "kind": "ability",
+      "name": "レディアントダガー",
+      "effect": "レディアントダガー",
+      "icon": "file://{images}/hud/abilities/unicorn/unicorn_luminousflux.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_BuffModifier",
+      "native_flag": null,
+      "polarity": "buff"
+    },
+    "ability_artist_homingbrush/slow": {
+      "source": "ability_artist_homingbrush",
+      "modifier": "slow",
+      "kind": "ability",
+      "name": "リビングインク",
+      "effect": "スロウ",
+      "icon": "file://{images}/hud/abilities/artist/artist_livingink.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_SlowModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_artist_rollingprojectile/slow": {
+      "source": "ability_artist_rollingprojectile",
+      "modifier": "slow",
+      "kind": "ability",
+      "name": "一意専心",
+      "effect": "スロウ",
+      "icon": "file://{images}/hud/abilities/artist/artist_brush.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_SlowModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_artist_rollingprojectile/debuff": {
+      "source": "ability_artist_rollingprojectile",
+      "modifier": "debuff",
+      "kind": "ability",
+      "name": "一意専心",
+      "effect": "一意専心",
+      "icon": "file://{images}/hud/abilities/artist/artist_brush.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_DebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_artist_tether/buff": {
+      "source": "ability_artist_tether",
+      "modifier": "buff",
+      "kind": "ability",
+      "name": "スティルライフ",
+      "effect": "スティルライフ",
+      "icon": "file://{images}/hud/abilities/artist/artist_portrait.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_BuffModifier",
+      "native_flag": null,
+      "polarity": "buff"
+    },
+    "ability_artist_tether/slow": {
+      "source": "ability_artist_tether",
+      "modifier": "slow",
+      "kind": "ability",
+      "name": "スティルライフ",
+      "effect": "スロウ",
+      "icon": "file://{images}/hud/abilities/artist/artist_portrait.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_SlowModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_artist_tether/stunned": {
+      "source": "ability_artist_tether",
+      "modifier": "stunned",
+      "kind": "ability",
+      "name": "スティルライフ",
+      "effect": "スタン状態",
+      "icon": "file://{images}/hud/abilities/artist/artist_portrait.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_StunModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_artist_bamboogrove/buff": {
+      "source": "ability_artist_bamboogrove",
+      "modifier": "buff",
+      "kind": "ability",
+      "name": "アブストラクト・ランドスケープ",
+      "effect": "アブストラクト・ランドスケープ",
+      "icon": "file://{images}/hud/abilities/artist/artist_landscape.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_modifierProvidedByAura",
+      "native_flag": null,
+      "polarity": "buff"
+    },
+    "ability_baba_bubbling_brew/modifier_baba_bubbling_brew_debuff": {
+      "source": "ability_baba_bubbling_brew",
+      "modifier": "modifier_baba_bubbling_brew_debuff",
+      "kind": "ability",
+      "name": "スレッドサップ",
+      "effect": "スレッドサップ",
+      "icon": "file://{images}/hud/abilities/baba/threadsap.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_DebuffModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_baba_hexing_brew/modifier_baba_brew_fire": {
+      "source": "ability_baba_hexing_brew",
+      "modifier": "modifier_baba_brew_fire",
+      "kind": "ability",
+      "name": "バーバの特製紅茶",
+      "effect": "灼熱の紅茶",
+      "icon": "file://{images}/hud/abilities/baba/teapot_brew.psd",
+      "basis": "explicit native polarity flag",
+      "field": "m_FireModifier",
+      "native_flag": "MODIFIER_DEBUFF_YES",
+      "polarity": "debuff"
+    },
+    "ability_baba_hexing_brew/modifier_baba_brew_silence": {
+      "source": "ability_baba_hexing_brew",
+      "modifier": "modifier_baba_brew_silence",
+      "kind": "ability",
+      "name": "バーバの特製紅茶",
+      "effect": "サイレンス状態",
+      "icon": "file://{images}/hud/abilities/baba/teapot_brew.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_SilenceModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_baba_ultimate_2/modifier_baba_ult2_mark": {
+      "source": "ability_baba_ultimate_2",
+      "modifier": "modifier_baba_ult2_mark",
+      "kind": "ability",
+      "name": "鳥の餌付け",
+      "effect": "マークされた",
+      "icon": null,
+      "basis": "explicit native polarity flag",
+      "field": "m_TargetModifier",
+      "native_flag": "MODIFIER_DEBUFF_YES",
+      "polarity": "debuff"
+    },
+    "ability_chessmaster_throwbishop/dimslow": {
+      "source": "ability_chessmaster_throwbishop",
+      "modifier": "dimslow",
+      "kind": "ability",
+      "name": "セットアップ・ビショップ",
+      "effect": "スロウ",
+      "icon": "file://{images}/hud/abilities/chess/chessmaster_bishop.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_SlowModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_chessmaster_throwbishop/movingpiecedamage": {
+      "source": "ability_chessmaster_throwbishop",
+      "modifier": "movingpiecedamage",
+      "kind": "ability",
+      "name": "セットアップ・ビショップ",
+      "effect": "セットアップ・ビショップ",
+      "icon": "file://{images}/hud/abilities/chess/chessmaster_bishop.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_MoveBuffModifier",
+      "native_flag": null,
+      "polarity": "buff"
+    },
+    "ability_chessmaster_throwbishop/slow": {
+      "source": "ability_chessmaster_throwbishop",
+      "modifier": "slow",
+      "kind": "ability",
+      "name": "セットアップ・ビショップ",
+      "effect": "スロウ",
+      "icon": "file://{images}/hud/abilities/chess/chessmaster_bishop.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_SlowModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_chessmaster_knightbuff/rookbuff": {
+      "source": "ability_chessmaster_knightbuff",
+      "modifier": "rookbuff",
+      "kind": "ability",
+      "name": "キングサイド・ナイト",
+      "effect": "キングサイド・ナイト",
+      "icon": "file://{images}/hud/abilities/chess/chessmaster_knight.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_BuffModifier",
+      "native_flag": null,
+      "polarity": "buff"
+    },
+    "ability_chessmaster_knightbuff/dimslow": {
+      "source": "ability_chessmaster_knightbuff",
+      "modifier": "dimslow",
+      "kind": "ability",
+      "name": "キングサイド・ナイト",
+      "effect": "スロウ",
+      "icon": "file://{images}/hud/abilities/chess/chessmaster_knight.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_SlowModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_chessmaster_forkpiece/slow": {
+      "source": "ability_chessmaster_forkpiece",
+      "modifier": "slow",
+      "kind": "ability",
+      "name": "ルーク・バッテリー",
+      "effect": "スロウ",
+      "icon": "file://{images}/hud/abilities/chess/chessmaster_rook.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_SlowModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_deadpack_chargeblast/coated_buff": {
+      "source": "ability_deadpack_chargeblast",
+      "modifier": "coated_buff",
+      "kind": "ability",
+      "name": "ストリクス・サルヴォ",
+      "effect": "ストリクス・サルヴォ",
+      "icon": "file://{images}/hud/abilities/deadpack/deadpack_salvo.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_BuffModifier",
+      "native_flag": null,
+      "polarity": "buff"
+    },
+    "ability_deadpack_flamethrower/firerate_buff": {
+      "source": "ability_deadpack_flamethrower",
+      "modifier": "firerate_buff",
+      "kind": "ability",
+      "name": "燃料噴射",
+      "effect": "燃料噴射",
+      "icon": "file://{images}/hud/abilities/deadpack/deadpack_thermalmass.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_BuffModifier",
+      "native_flag": null,
+      "polarity": "buff"
+    },
+    "ability_ratking_scrap_grenade/ratking_scrap_grenade_slow": {
+      "source": "ability_ratking_scrap_grenade",
+      "modifier": "ratking_scrap_grenade_slow",
+      "kind": "ability",
+      "name": "スクラップグレネード",
+      "effect": "スロウ",
+      "icon": "file://{images}/hud/abilities/ratking/ratking_grenade.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_SlowModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    },
+    "ability_ratking_scrap_grenade/ratking_scrap_grenade_big_slow": {
+      "source": "ability_ratking_scrap_grenade",
+      "modifier": "ratking_scrap_grenade_big_slow",
+      "kind": "ability",
+      "name": "スクラップグレネード",
+      "effect": "スロウ",
+      "icon": "file://{images}/hud/abilities/ratking/ratking_grenade.psd",
+      "basis": "reviewed native buff/debuff field/key semantics",
+      "field": "m_BigExplosionSlowModifier",
+      "native_flag": null,
+      "polarity": "debuff"
+    }
+  },
+  "policy": "Exact source/modifier pair only. Explicit YES/NO or reviewed field/key semantics; intrinsic/hidden and unknown pairs excluded. Native polarity flags and semantic inference remain distinguished.",
+  "sale_items": {
+    "7409189": {
+      "name": "グレータースピリット",
+      "source": "upgrade_soaring_spirit",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "26002154": {
+      "name": "メレーチャージ",
+      "source": "upgrade_melee_charge",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "64550694": {
+      "name": "ルーンガントレット",
+      "source": "upgrade_runed_gauntlets",
+      "icon_png": null,
+      "color": "#a7a7a0"
+    },
+    "84321454": {
+      "name": "クイックシルバーリロード",
+      "source": "upgrade_quick_silver",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "98582110": {
+      "name": "Stalker",
+      "source": "upgrade_weapon_backstabber"
+    },
+    "112198670": {
+      "name": "Spirit Bubble",
+      "source": "upgrade_spirit_bubble"
+    },
+    "138320648": {
+      "name": "パトロンヒーリング",
+      "source": "upgrade_heal_on_level"
+    },
+    "194116661": {
+      "name": "サモンミサイル",
+      "source": "upgrade_magic_missile"
+    },
+    "223594321": {
+      "name": "スピリットアーマー",
+      "source": "upgrade_tech_armor"
+    },
+    "230297145": {
+      "name": "エターナルギフト",
+      "source": "upgrade_eternal_gift",
+      "icon_png": null,
+      "color": "#a7a7a0"
+    },
+    "334300056": {
+      "name": "スタミナマスタリー",
+      "source": "upgrade_superior_stamina",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "339443430": {
+      "name": "フレンジー",
+      "source": "upgrade_fervor",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "343572757": {
+      "name": "スピリットバーン",
+      "source": "upgrade_spirit_burn",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "365620721": {
+      "name": "グラスキャノン",
+      "source": "upgrade_glass_cannon",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "380806748": {
+      "name": "コンプレッサー",
+      "source": "upgrade_magic_tempo",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "381961617": {
+      "name": "アクティブリロード",
+      "source": "upgrade_active_reload",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "393974127": {
+      "name": "スロウバレット",
+      "source": "upgrade_slowing_bullets",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "395867183": {
+      "name": "ミスティックショット",
+      "source": "upgrade_crackshot",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "395944548": {
+      "name": "トーメントパルス",
+      "source": "upgrade_tech_damage_pulse",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "424779525": {
+      "name": "オムニチャージ",
+      "source": "upgrade_omnicharge_pendant",
+      "icon_png": null,
+      "color": "#a7a7a0"
+    },
+    "465043967": {
+      "name": "スピリットストライク",
+      "source": "upgrade_acolytes_glove",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "493591231": {
+      "name": "ライトニングスクロール",
+      "source": "upgrade_ultimate_burst",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "499683006": {
+      "name": "バレットライフスティール",
+      "source": "upgrade_vampire",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "558396679": {
+      "name": "スピリットサステイン",
+      "source": "upgrade_resilience"
+    },
+    "564937160": {
+      "name": "エアリアルマスタリー",
+      "source": "upgrade_aerial_supremacy"
+    },
+    "600033864": {
+      "name": "マジェスティックリープ",
+      "source": "upgrade_rocket_booster",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "619484391": {
+      "name": "サイレンスウェーブ",
+      "source": "upgrade_targeted_silence",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "630839635": {
+      "name": "エコーシャード",
+      "source": "upgrade_ability_power_shard",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "668299740": {
+      "name": "ラピッドラウンド",
+      "source": "upgrade_rapid_rounds",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "673001892": {
+      "name": "アーマーピアサー",
+      "source": "upgrade_aprounds",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "677738769": {
+      "name": "リフレッシャー",
+      "source": "upgrade_ability_refresher",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "690458959": {
+      "name": "Express Shot",
+      "source": "upgrade_express_shot"
+    },
+    "709540378": {
+      "name": "Cultlist Sacrifice",
+      "source": "upgrade_non_player_bonus_sacrifice"
+    },
+    "710436191": {
+      "name": "Capacitor",
+      "source": "upgrade_capacitor"
+    },
+    "754480263": {
+      "name": "ミスティックエクスパンダー",
+      "source": "upgrade_magic_reach",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "787198704": {
+      "name": "ラピッドリチャージ",
+      "source": "upgrade_rapid_recharge",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "800008313": {
+      "name": "Crushing Fists",
+      "source": "upgrade_crushing_fists"
+    },
+    "805079544": {
+      "name": "Weapon Shielding",
+      "source": "upgrade_weapon_shielding"
+    },
+    "811521119": {
+      "name": "テスラバレット",
+      "source": "upgrade_chain_lightning",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "857669956": {
+      "name": "ガーディアンワード",
+      "source": "upgrade_guardian_ward",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "865846625": {
+      "name": "ライフドレイン",
+      "source": "upgrade_damage_recycler",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "865958998": {
+      "name": "ベールウォーカー",
+      "source": "upgrade_veil_walker",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "876563814": {
+      "name": "スピリットライフスティール",
+      "source": "upgrade_health_stealing_magic",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "915014646": {
+      "name": "トランセンデント",
+      "source": "upgrade_transcendent_cooldown",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "951866250": {
+      "name": "インドミタブル",
+      "source": "upgrade_auto_cleanse",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "968099481": {
+      "name": "エクストラスピリット",
+      "source": "upgrade_improved_spirit",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "989206714": {
+      "name": "ブラッドトリビュート",
+      "source": "upgrade_blood_tribute",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "1009965641": {
+      "name": "モンスターラウンド",
+      "source": "upgrade_non_player_bonus",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "1047818222": {
+      "name": "デバフリデューサー",
+      "source": "upgrade_debuff_reducer",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "1055679805": {
+      "name": "ヴァンパイアバースト",
+      "source": "upgrade_surging_power",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "1102081447": {
+      "name": "ミスティックスロウ",
+      "source": "upgrade_magic_slow",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "1113837674": {
+      "name": "サイレンサー",
+      "source": "upgrade_proc_silence",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "1132564516": {
+      "name": "プリズムブラスト",
+      "source": "upgrade_prism_blast",
+      "icon_png": null,
+      "color": "#a7a7a0"
+    },
+    "1144549437": {
+      "name": "スピリットシュレッダー",
+      "source": "upgrade_tech_defense_shredders",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "1150006784": {
+      "name": "アーケインサージ",
+      "source": "upgrade_arcane_surge",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "1152158042": {
+      "name": "ボルテックスウェブ",
+      "source": "upgrade_aoe_root",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "1193964439": {
+      "name": "グレーターエクスパンダー",
+      "source": "upgrade_tech_range",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "1200177229": {
+      "name": "ヘクサフォイルワード",
+      "source": "upgrade_spellshield"
+    },
+    "1219329868": {
+      "name": "スピリットドレイン",
+      "source": "upgrade_spirit_sap",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "1235347618": {
+      "name": "バトルベスト",
+      "source": "upgrade_regenerating_bullet_shield",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "1248737459": {
+      "name": "アモ・スカベンジャー",
+      "source": "upgrade_ammo_scavenger"
+    },
+    "1250307611": {
+      "name": "ジャガーノート",
+      "source": "upgrade_juggernaut",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "1252627263": {
+      "name": "ライフストライク",
+      "source": "upgrade_boxing_glove",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "1254091416": {
+      "name": "ノックダウン",
+      "source": "upgrade_target_stun",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "1282141666": {
+      "name": "サイフォンバレット",
+      "source": "upgrade_siphon_bullets",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "1292979587": {
+      "name": "パワーサージ",
+      "source": "upgrade_magic_storm",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "1342610602": {
+      "name": "クローズクォーター",
+      "source": "upgrade_close_range",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "1371725689": {
+      "name": "ファントムストライク",
+      "source": "upgrade_phantom_strike",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "1378931225": {
+      "name": "メタルスキン",
+      "source": "upgrade_metal_skin",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "1396247347": {
+      "name": "ラッキーショット",
+      "source": "upgrade_critshot",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "1409190604": {
+      "name": "フューリートランス",
+      "source": "upgrade_fury_trance",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "1414025773": {
+      "name": "カウンタースペル",
+      "source": "upgrade_counterspell",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "1414319208": {
+      "name": "バーサーカー",
+      "source": "upgrade_berserker",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "1427630806": {
+      "name": "ヒーリングテンポ",
+      "source": "upgrade_healbuff",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "1437614329": {
+      "name": "メレーライフスティール",
+      "source": "upgrade_lifestrike_gauntlets",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "1439347412": {
+      "name": "Mystic Regeneration",
+      "source": "upgrade_mystic_regeneration"
+    },
+    "1497973293": {
+      "name": "グラスキャノン v2",
+      "source": "upgrade_glass_cannon2"
+    },
+    "1548066885": {
+      "name": "基礎拡張マガジン",
+      "source": "upgrade_clip_size",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "1558545403": {
+      "name": "不安定な調合薬",
+      "source": "upgrade_unstable_concoction",
+      "icon_png": null,
+      "color": "#a7a7a0"
+    },
+    "1644605047": {
+      "name": "リアクティブバリア",
+      "source": "upgrade_vex_barrier",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "1662311306": {
+      "name": "ディバインバリア",
+      "source": "upgrade_divine_barrier",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "1672893796": {
+      "name": "Grit",
+      "source": "upgrade_grit"
+    },
+    "1710079648": {
+      "name": "ヒーリングリチュアル",
+      "source": "upgrade_health_stimpak",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "1736094134": {
+      "name": "セラフィムウィング",
+      "source": "upgrade_icarus_wings",
+      "icon_png": null,
+      "color": "#a7a7a0"
+    },
+    "1763073141": {
+      "name": "リチャージラッシュ",
+      "source": "upgrade_rechargingbullets",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "1770441818": {
+      "name": "イグゾーストヘッドショット",
+      "source": "upgrade_headshot_booster2",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "1797283378": {
+      "name": "インフューザー",
+      "source": "upgrade_infuser",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "1798666702": {
+      "name": "シャドウウィーブ",
+      "source": "upgrade_cloaking_device_active",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "1804594021": {
+      "name": "レスキュービーム",
+      "source": "upgrade_rescue_beam",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "1813726886": {
+      "name": "スロウヘックス",
+      "source": "upgrade_containment",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "1825399334": {
+      "name": "エレクトリックブーツ",
+      "source": "upgrade_electric_slippers",
+      "icon_png": null,
+      "color": "#a7a7a0"
+    },
+    "1925087134": {
+      "name": "サプレッサー",
+      "source": "upgrade_suppressor",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "1932939246": {
+      "name": "アルケミカルファイア",
+      "source": "upgrade_thermal_detonator",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "1955841979": {
+      "name": "スペルブレイカー",
+      "source": "upgrade_spellbreaker",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "1976391348": {
+      "name": "コールドフロント",
+      "source": "upgrade_cold_front",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "1998374645": {
+      "name": "ミスティックバースト",
+      "source": "upgrade_magic_burst",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "2010028405": {
+      "name": "ヘッドショットブースター",
+      "source": "upgrade_headshot_booster",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "2037039379": {
+      "name": "インヒビター",
+      "source": "upgrade_inhibitor",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "2054088113": {
+      "name": "ミスティカルピアノ",
+      "source": "upgrade_mystical_piano",
+      "icon_png": null,
+      "color": "#a7a7a0"
+    },
+    "2059712766": {
+      "name": "ヒーリングロケット",
+      "source": "upgrade_restorative_locket",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "2061878743": {
+      "name": "ディスアームヘックス",
+      "source": "upgrade_greater_withering_whip",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "2064029594": {
+      "name": "オープニングラウンド",
+      "source": "upgrade_pristine_emblem",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "2068250483": {
+      "name": "凍傷のチャーム",
+      "source": "upgrade_shivas_bracelet",
+      "icon_png": null,
+      "color": "#a7a7a0"
+    },
+    "2081037738": {
+      "name": "ヴァルネラビリティ",
+      "source": "upgrade_magic_vulnerability",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "2095565695": {
+      "name": "ポイントブランク",
+      "source": "upgrade_close_quarter_combat",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "2108215830": {
+      "name": "ヒロイックオーラ",
+      "source": "upgrade_dps_aura",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "2121044373": {
+      "name": "タンクバスター",
+      "source": "upgrade_magic_shock",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "2142980412": {
+      "name": "フォーカスレンズ",
+      "source": "upgrade_focus_lens",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "2152872419": {
+      "name": "シャープシューター",
+      "source": "upgrade_sharpshooter",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "2163598980": {
+      "name": "スピリットレジリエンス",
+      "source": "upgrade_tech_purge",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "2221211450": {
+      "name": "Enchanted Holsters",
+      "source": "upgrade_enchanted_holsters"
+    },
+    "2226497419": {
+      "name": "スピリットオーバーフロー",
+      "source": "upgrade_tech_overflow",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "2319629810": {
+      "name": "シャドウストライク",
+      "source": "upgrade_shadow_strike",
+      "icon_png": null,
+      "color": "#a7a7a0"
+    },
+    "2329546537": {
+      "name": "リザレクション",
+      "source": "upgrade_personal_rejuvenator"
+    },
+    "2331566268": {
+      "name": "ヘックスシールドナックル",
+      "source": "upgrade_superacolytes_glove"
+    },
+    "2356412290": {
+      "name": "巨大拡張マガジン",
+      "source": "upgrade_titan_round",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "2407033488": {
+      "name": "連射強化マガジン",
+      "source": "upgrade_intensifying_clip",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "2407781327": {
+      "name": "コロッサス",
+      "source": "upgrade_colossus",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "2417568017": {
+      "name": "スカージ",
+      "source": "upgrade_discord",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "2447176615": {
+      "name": "ウィングブーツ",
+      "source": "upgrade_cardio_calibrator",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "2462046703": {
+      "name": "ガチョウの黄金の卵",
+      "source": "upgrade_goose_egg",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "2463960640": {
+      "name": "エスカレートレジリエンス",
+      "source": "upgrade_reinforcing_casings",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "2480592370": {
+      "name": "リコシェ",
+      "source": "upgrade_ricochet",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "2481177645": {
+      "name": "ハンターオーラ",
+      "source": "upgrade_bullet_armor_reduction_aura",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "2519598785": {
+      "name": "バウンドレススピリット",
+      "source": "upgrade_boundless_spirit",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "2533252781": {
+      "name": "エーテリアルシフト",
+      "source": "upgrade_self_bubble",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "2566692615": {
+      "name": "ヒーリングブースター",
+      "source": "upgrade_healing_booster",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "2603935618": {
+      "name": "ヒールベイン",
+      "source": "upgrade_healbane",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "2617435668": {
+      "name": "呪いの遺物",
+      "source": "upgrade_glitch",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "2678489038": {
+      "name": "ホロウポイント",
+      "source": "upgrade_hollow_point_rounds",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "2717651715": {
+      "name": "スーパーエクステンダー",
+      "source": "upgrade_imbued_duration_extender",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "2739107182": {
+      "name": "バーストファイア",
+      "source": "upgrade_burst_fire",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "2800629741": {
+      "name": "マジックカーペット",
+      "source": "upgrade_magic_carpet",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "2820116164": {
+      "name": "ディバイナーズケブラー",
+      "source": "upgrade_diviners_kevlar",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "2829638276": {
+      "name": "エクストラリジェネ",
+      "source": "upgrade_endurance",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "2858617477": {
+      "name": "タフネス",
+      "source": "upgrade_health_2"
+    },
+    "2922054143": {
+      "name": "コロッシブバレル",
+      "source": "upgrade_withering_whip",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "2947183272": {
+      "name": "レディアントリジェネ",
+      "source": "upgrade_resonant_healing",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "2951612397": {
+      "name": "エクステンダー",
+      "source": "upgrade_arcane_extension",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "2956256701": {
+      "name": "ヒーリングノヴァ",
+      "source": "upgrade_health_nova",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "2971868509": {
+      "name": "レジストシュレッダー",
+      "source": "upgrade_bullet_resist_shredder",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "3005970438": {
+      "name": "エクスポージャー",
+      "source": "upgrade_escalating_exposure",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "3028234315": {
+      "name": "ウィッチメイル",
+      "source": "upgrade_absorbing_armor",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "3074274290": {
+      "name": "トロフィーコレクター",
+      "source": "upgrade_trophy_collector",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "3077079169": {
+      "name": "ハイスピードラウンド",
+      "source": "upgrade_high_velocity_mag",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "3133167885": {
+      "name": "サイレンサー",
+      "source": "upgrade_silencer",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "3140772621": {
+      "name": "バレットレジリエンス",
+      "source": "upgrade_improved_bullet_armor",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "3144988365": {
+      "name": "ディケイ",
+      "source": "upgrade_rupture",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "3190916303": {
+      "name": "スピリットスナッチ",
+      "source": "upgrade_spirit_snatch",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "3261353684": {
+      "name": "クールダウンブースト",
+      "source": "upgrade_cooldown_reduction",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "3269957497": {
+      "name": "インフィニットラウンド",
+      "source": "upgrade_infinite_rounds",
+      "icon_png": null,
+      "color": "#a7a7a0"
+    },
+    "3270001687": {
+      "name": "ワープストーン",
+      "source": "upgrade_warp_stone",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "3294954488": {
+      "name": "バリスティックエンチャント",
+      "source": "upgrade_bulletshredimbue",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "3331811235": {
+      "name": "ロングレンジ",
+      "source": "upgrade_long_range",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "3346798998": {
+      "name": "エンドレスマガジン",
+      "source": "upgrade_infinitemagazine"
+    },
+    "3357231760": {
+      "name": "アンストッパブル",
+      "source": "upgrade_unstoppable",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "3361075077": {
+      "name": "リターンファイア",
+      "source": "upgrade_return_fire",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "3361811174": {
+      "name": "デスチーター",
+      "source": "upgrade_cheat_death",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "3399065363": {
+      "name": "スプリントブーツ",
+      "source": "upgrade_sprint_booster",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "3403085434": {
+      "name": "フリートフット",
+      "source": "upgrade_fleetfoot_boots",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "3456645009": {
+      "name": "シャドウステップ",
+      "source": "upgrade_shadow_step"
+    },
+    "3491236900": {
+      "name": "プレートアーマー",
+      "source": "upgrade_deflecting_armor",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "3523480953": {
+      "name": "加護のマント",
+      "source": "upgrade_cloak_of_opportunity",
+      "icon_png": null,
+      "color": "#a7a7a0"
+    },
+    "3568217437": {
+      "name": "ホーンテッドショット",
+      "source": "upgrade_eldritch_shot",
+      "icon_png": null,
+      "color": "#a7a7a0"
+    },
+    "3577481646": {
+      "name": "ミスティックリバーブ",
+      "source": "upgrade_mystic_reverb",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "3585132399": {
+      "name": "フォルティチュード",
+      "source": "upgrade_chonky",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "3633614685": {
+      "name": "エクストラヘルス",
+      "source": "upgrade_health",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "3647584222": {
+      "name": "Split Shot",
+      "source": "upgrade_split_shot"
+    },
+    "3696726732": {
+      "name": "トキシックバレット",
+      "source": "upgrade_toxic_bullets",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "3713423303": {
+      "name": "バレットアーマー",
+      "source": "upgrade_bullet_armor"
+    },
+    "3729138568": {
+      "name": "天の祝福",
+      "source": "upgrade_celestial_guidance",
+      "icon_png": null,
+      "color": "#a7a7a0"
+    },
+    "3731635960": {
+      "name": "ディスペルマジック",
+      "source": "upgrade_reduce_debuff_duration",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "3776945997": {
+      "name": "エクストラチャージ",
+      "source": "upgrade_extra_charge",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "3791587546": {
+      "name": "ヘヴィショット",
+      "source": "upgrade_weighted_shots",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "3812615317": {
+      "name": "アークティックブラスト",
+      "source": "upgrade_arctic_blast",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "3830846077": {
+      "name": "マジェスティックリープ - 無効",
+      "source": "upgrade_rocket_boots"
+    },
+    "3862866912": {
+      "name": "ヒーリングショット",
+      "source": "upgrade_medic_bullets",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "3884003354": {
+      "name": "クリップリングショット",
+      "source": "upgrade_banshee_slugs",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "3893702034": {
+      "name": "不朽の紋章",
+      "source": "upgrade_timeless_emblem"
+    },
+    "3913864662": {
+      "name": "ソウルエクスプロージョン",
+      "source": "upgrade_corpse_explosion"
+    },
+    "3919289022": {
+      "name": "マーキュリーマグナム",
+      "source": "upgrade_ethereal_bullets",
+      "icon_png": null,
+      "color": "#b599d9"
+    },
+    "3927044172": {
+      "name": "ホーンテッドスクリーム",
+      "source": "upgrade_haunting_scream"
+    },
+    "3949773228": {
+      "name": "虚無の波動",
+      "source": "upgrade_nullification_aura",
+      "icon_png": null,
+      "color": "#a7a7a0"
+    },
+    "3970837787": {
+      "name": "妖術師の紋章",
+      "source": "upgrade_magic_shield",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "3977876567": {
+      "name": "キネティックダッシュ",
+      "source": "upgrade_kinetic_sash",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "4003032160": {
+      "name": "ソウルリザレクション",
+      "source": "upgrade_rebirth"
+    },
+    "4050602737": {
+      "name": "ミスティックコンジット",
+      "source": "upgrade_patrons_blessing",
+      "icon_png": null,
+      "color": "#a7a7a0"
+    },
+    "4053935515": {
+      "name": "ヘッドハンター",
+      "source": "upgrade_headhunter",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "4075861416": {
+      "name": "スピリットキラー",
+      "source": "upgrade_spellslinger_headshots",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "4104549924": {
+      "name": "スイフトストライカー",
+      "source": "upgrade_blitz_bullets",
+      "icon_png": null,
+      "color": "#d9aa53"
+    },
+    "4121584236": {
+      "name": "シュリンクレイ",
+      "source": "upgrade_shrink_ray",
+      "icon_png": null,
+      "color": "#a7a7a0"
+    },
+    "4139877411": {
+      "name": "エクストラスタミナ",
+      "source": "upgrade_improved_stamina",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "4149380528": {
+      "name": "エーペックスコンバット",
+      "source": "upgrade_apex_combat"
+    },
+    "4204808176": {
+      "name": "プロテスト",
+      "source": "upgrade_melee_rebuttal",
+      "icon_png": null,
+      "color": "#8fbc67"
+    },
+    "4238249888": {
+      "name": "エンシェントシールド",
+      "source": "upgrade_ancient_shield"
+    }
+  }
+}

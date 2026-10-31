@@ -1,0 +1,57 @@
+{
+  "schema": 1,
+  "rules": [
+    {
+      "type": "gun",
+      "label": "武器",
+      "path": "gun_powerup_pickup/gun_powerup_pickup",
+      "hash": 2161948557,
+      "color": [
+        218,
+        148,
+        65
+      ],
+      "icon": "bridge-gun.png",
+      "native_icon": "panorama/images/hud/icons/powerup_gun.vsvg_c"
+    },
+    {
+      "type": "survival",
+      "label": "生存",
+      "path": "survival_powerup_pickup/survival_powerup_pickup",
+      "hash": 2661205816,
+      "color": [
+        122,
+        184,
+        29
+      ],
+      "icon": "bridge-survival.png",
+      "native_icon": "panorama/images/hud/icons/powerup_survival.vsvg_c"
+    },
+    {
+      "type": "spirit",
+      "label": "詠唱",
+      "path": "casting_powerup_pickup/casting_powerup_pickup",
+      "hash": 323340124,
+      "color": [
+        185,
+        103,
+        253
+      ],
+      "icon": "bridge-spirit.png",
+      "native_icon": "panorama/images/hud/icons/powerup_spirit.vsvg_c"
+    },
+    {
+      "type": "movement",
+      "label": "移動",
+      "path": "movement_powerup_pickup/movement_powerup_pickup",
+      "hash": 1166470543,
+      "color": [
+        50,
+        50,
+        255
+      ],
+      "icon": "bridge-movement.png",
+      "native_icon": "panorama/images/hud/icons/powerup_movement.vsvg_c"
+    }
+  ]
+}

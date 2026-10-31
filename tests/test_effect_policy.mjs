@@ -1,0 +1,27 @@
+import assert from 'node:assert/strict';
+import {buildCatalog,eligibleApplication} from '../parser/extract-replay-effects.mjs';
+import {LiveReceiptLedger} from '../parser/live-receipt-ledger.mjs';
+const c=buildCatalog(),path='citadel_ability_melee_parry/modifier_citadel_parried_stun',owner={handle:100,hero:1,team:2};
+assert.equal(c.approved.get(path).effect,'パリースタン');
+assert.equal(eligibleApplication(c,path,owner,{...owner},null),false);
+assert.equal(eligibleApplication(c,path,owner,{handle:101,team:2},null),false);
+assert.equal(eligibleApplication(c,path,owner,{handle:102,team:3},null),true);
+assert.equal(eligibleApplication(c,'unknown',owner,null,null),false);
+assert.equal(eligibleApplication(c,'upgrade_unstoppable/modifier_unstoppable',owner,owner,null),true);
+const rows=Array.from({length:12},(_,i)=>({handle:100+i,hero:1+i,team:i<6?2:3})),hash=[...c.map].find(([,v])=>v.length===1&&v[0].path===path)[0];
+const ledger=new LiveReceiptLedger(c),context=t=>({tick:t*64,roster:rows,gameStart:10,gameState:8});ledger.packet(context(100),[]);ledger.packet(context(102),[]);
+const event={entryType:1,parent:100,serialNumber:1,modifierSubclass:hash,abilitySubclass:0,caster:106,lastAppliedTime:103,duration:2};
+assert.equal(ledger.packet(context(103),[event])[0].effect,'パリースタン');
+assert.equal(ledger.packet(context(104),[{...event,serialNumber:2,lastAppliedTime:104,caster:100}]).length,0);
+for(const k of c.approved.keys())assert.ok([...c.map.values()].some(v=>v.length===1&&v[0].path===k));
+console.log(JSON.stringify({policy_paths:c.approved.size,shared_live_replay:true,enemy_self_guard:true,exact_native_hashes:true}));
+
+const warp='citadel_ability_void_sphere/modifier_void_sphere';
+assert.equal(c.approved.get(warp).polarity,'buff');
+assert.equal(eligibleApplication(c,warp,owner,owner,null),true);
+assert.equal(eligibleApplication(c,warp,owner,{handle:102,team:2},null),true);
+assert.equal(eligibleApplication(c,warp,owner,{handle:103,team:3},null),false);
+assert.equal(eligibleApplication(c,warp,owner,null,null),false);
+assert.ok(!c.approved.has('upgrade_target_stun/modifier_citadel_delayed_stun'));
+assert.ok(!c.approved.has('ability_baba_ultimate_2/modifier_baba_ult2_mark'));
+assert.ok(!c.approved.has('citadel_ability_self_vacuum/modifier_vacuumaura'));

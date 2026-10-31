@@ -1,0 +1,4 @@
+/* Only empty native column wrappers are collapsed while the same item panels occupy the detail grid. */
+.spec_mode .SpecBuildDetailsOpen CitadelHudTopBarPlayer #ModIconsContainer { width: 70px; height: fit-children; flow-children: right-wrap; }
+.spec_mode .SpecBuildDetailsOpen CitadelHudTopBarPlayer #ModIconsContainer .ModIconColumn { width: 100%; height: fit-children; flow-children: right; }
+.spec_mode .SpecBuildDetailsOpen #PlayerModsContainer.SpecThreeColumnInventory CitadelModsPurchasedPanel { opacity: 0; }

@@ -1,0 +1,23 @@
+ゲーム更新時の確認 — 0.5.12 / Game update checks
+
+利用者向け
+画像だけの変更は「困ったとき」→「画像を読み直す」で再準備できます。同じ対象の保存画像があれば利用し、なければ画像なしで継続します。
+「標準UIが更新されています」と表示された場合は、画像更新だけで直すことはできません。ゲームを終了し、対応する新しいHUD版をReleaseから展開してください。古い版へ戻すだけで新しいゲームへ対応できるとは限りません。
+標準UIは有効化時、補助アプリ開始時、待機後のゲーム起動時に照合します。未確認の標準UIでは追加取得を開始しません。通常モードのゲーム起動は利用できます。
+起動済みゲームのUIをその場で差し替えません。Steamの更新や他の変更で復旧対象が一致しない場合は、記録を保全して確認し、以前のゲーム原本を強制的に上書きしません。
+
+開発・更新の手順
+1. 更新前のソースcommit、HUD版、ゲームビルド、標準9資源のSHA、設定／通常復帰記録を保全。現行と履歴を区別する。
+2. 利用中ゲームのVPKを読み、9資源を比較。バイナリ不一致だけで構造変更と決めつけず、変換後のXML／CSSを旧原本と比較する。
+3. パネルID、親子関係、イベント、スタイル、モードクラス、使用するデータ項目を確認。標準の新しい変更を保って自作の最小差分を適用する。
+4. native SHA、decoded SHA、splice、生成XML、テンプレートSHA、生成VPKを再生成して照合。期待SHAだけを新しい値へ置換しない。
+5. 自動検査に加え、無効状態からの有効化、有効状態でのゲーム更新、補助待機後の起動、不適合時の通常起動／通常復帰、失敗時の設定保全を検査する。
+6. 更新前の対応リプレイと最新版のライブを区別。利用可能なら最新版リプレイも検査。途中参加、ポーズ、観戦先切替、終了保持、ロビー復帰、別試合の初期化を記録する。
+7. 日本語／英語で名前・金額・通知・効果・所持バフ・HP・タイマー・詳細・描画を確認。過去の写真を今回の証拠と扱わない。合成／実機／物理別PC／OBSの範囲を明記する。
+8. 取得周期やネットワーク／ディスク処理の増加を確認。高負荷処理は準備／起動時に限定し、観戦中の応答を測る。
+9. docs/PORTABLE.txtの検査、素材なしのクリーンソース再生成、日本語／空白パス、設定引継ぎ、通常復帰を確認する。
+10. 同じソースcommit、版、README、ZIP、SHA256SUMSをGitHubへ登録し、main／tag／配布ZIPの一致を確認する。公開範囲は変更しない。
+
+English
+Image-only changes can be refreshed from Help. A native UI resource change requires a reviewed compatible HUD release. Do not bypass the check or merely replace expected hashes. Native changes are compared before rebuilding the scoped additions. Compatibility is checked at enable, companion startup and game-start transitions; no per-frame archive scans are added. Normal-mode game launch remains available.
+Close the game before updating or restoring. An older HUD release may also be incompatible with the updated game. Do not overwrite a changed game original with an old backup. Real replay/live tests, simulated tests, second-PC and OBS testing must be reported separately. Source, release notes, asset-free ZIP and checksums must refer to the same reviewed version.

@@ -1,0 +1,10 @@
+/* Keep native purchase data and timing; suppress only its spectator popup. */
+.spec_mode .QuickbuyPurchaseToast { visibility: collapse; }
+
+/* Keep native pause state/text, in a compact spectator-only notice. */
+.spec_mode CitadelPaused { width: 240px; height: fit-children; }
+.spec_mode CitadelPaused #PausedContainer { width: 240px; height: fit-children; min-height: 40px; padding: 6px 10px; border-radius: 2px; background-color: #171915cc; world-blur: none; }
+.spec_mode CitadelPaused .PausedTextContainer { flow-children: down; margin: 0px; }
+.spec_mode CitadelPaused #PausedLabel { font-family: sans; font-size: 16px; line-height: 22px; font-weight: semi-bold; max-width: 220px; text-align: center; transform: none; transition-duration: 0s; }
+.spec_mode CitadelPaused #PauserLabel, .spec_mode CitadelPaused #UnpauseButtonLabel { font-size: 12px; line-height: 16px; margin: 0px; text-align: center; }
+.spec_mode CitadelPaused #PausedCountdownLabel { font-size: 20px; margin: 0px; horizontal-align: right; animation-name: none; }

@@ -1,0 +1,21 @@
+import fs from 'node:fs';
+import vm from 'node:vm';
+import assert from 'node:assert/strict';
+const src=fs.readFileSync(new URL('../mod-src/spectator_probe.js',import.meta.url),'utf8');
+const body=src.slice(src.indexOf('function playerRejuvenator('),src.indexOf('function controlHints('));
+const parent={actuallayoutwidth:1920,actualuiscale_x:1,GetPositionWithinWindow:()=>({x:0,y:0})};
+const charges={visible:true,icons:3};const logs=[];
+const c={ctx:{GetParent:()=>parent},overlays:[],nameOwners:[],rejuvenatorPanels:[],clock:x=>String(x),$:{CreatePanel(type,p,id){return {id,parent:p,style:{},visible:false,SetImage(x){this.image=x;}};},Msg:x=>logs.push(JSON.parse(x.split('] ')[1]))}};vm.createContext(c);vm.runInContext(body,c);
+function player(center,held=false){return {classes:new Set(held?['HasRejuvenator']:[]),actuallayoutwidth:148,actualuiscale_x:1,GetPositionWithinWindow:()=>({x:center-74,y:54}),BHasClass(k){return this.classes.has(k);},FindChildTraverse(k){return k==='HeroBadge'?{heroid:12}:null;}};}
+const left=player(224,true),right=player(1696,true);c.nameOwners=[left,right];let l=c.playerRejuvenator(left,600),r=c.playerRejuvenator(right,600);assert(l.visible&&r.visible);assert.equal(l.style.width,'20px');assert.equal(l.style.height,'20px');assert.equal(l.style.position,'236px 179px 0px');assert.equal(r.style.position,'1664px 179px 0px');assert.equal(l.image,'s2r://panorama/images/hud/icons/rejuvenator.vsvg');assert.equal(l.style.washColor,'#FFCC00');assert.equal(c.playerRejuvenator(left,601),l);assert.equal(c.overlays.length,2);
+// Consumption and individual identity: only the player whose native class clears loses the badge.
+left.classes.clear();c.playerRejuvenator(left,602);assert(!l.visible&&r.visible);left.classes.add('HasRebirth');c.playerRejuvenator(left,603);assert(!l.visible);left.classes.add('HasRebirthAndRejuv');c.playerRejuvenator(left,604);assert(l.visible);left.classes.add('Dead');c.playerRejuvenator(left,605);assert(!l.visible);left.classes.delete('Dead');left.classes.delete('HasRebirthAndRejuv');c.playerRejuvenator(left,606);assert(!l.visible);
+// Native ultimate anchor governs placement when a live-sized panel is available.
+left.classes.add('HasRejuvenator');left.FindChildTraverse=k=>k==='UltimateStatus'?{actuallayoutwidth:22,actuallayoutheight:22,GetPositionWithinWindow:()=>({x:213,y:181})}:null;c.playerRejuvenator(left,607);assert.equal(l.style.position,'235px 181px 0px');
+parent.actualuiscale_x=2;left.actualuiscale_x=2;left.FindChildTraverse=k=>k==='UltimateStatus'?{actuallayoutwidth:22,actuallayoutheight:22,GetPositionWithinWindow:()=>({x:426,y:362})}:null;left.GetPositionWithinWindow=()=>({x:300,y:108});c.playerRejuvenator(left,608);assert.equal(l.style.position,'235px 181px 0px');assert.equal(l.style.width,'20px');parent.actualuiscale_x=1;left.actualuiscale_x=1;left.FindChildTraverse=()=>null;left.GetPositionWithinWindow=()=>({x:NaN,y:54});c.playerRejuvenator(left,609);assert(!l.visible);
+assert.equal(charges.visible,true);assert.equal(charges.icons,3);assert(!body.includes('RejuvenatorCharges'));assert(!body.includes('RejuvenatorFriendly'));assert(!body.includes('RejuvenatorEnemy'));assert(!body.includes('RejuvenatorTimer'));const css=fs.readFileSync(new URL('../mod-src/debug-override.css',import.meta.url),'utf8');assert(css.includes('CitadelHudTopBarPlayer { width: 140px; }'));assert(css.includes('CitadelHudTopBarTeam { width: 840px; }'));assert(css.includes('#RejuvenatorCharges {width: 130px; margin-right: 0px;}'));
+console.log('PASS:20px mirrored native ownership,individual consumption/death,rebirth excluded,combined ownership,scaling,invalid hide,panel reuse,central charges untouched');
+
+
+// Reconcile owners just as the top-bar scan does: old held badges must not survive match replacement.
+c.hidePlayerBadges();assert(!l.visible&&!r.visible);const replacement=player(224,false);c.nameOwners=[replacement];const reused=c.playerRejuvenator(replacement,700);assert.equal(reused,l);assert(!reused.visible);assert.equal(c.playerRejuvenator(left,701),null);replacement.classes.add('HasRejuvenator');assert(c.playerRejuvenator(replacement,702).visible);assert.equal(c.rejuvenatorPanels.length,2);console.log('PASS current-roster badge pool;old owners excluded;no icon allocation growth');

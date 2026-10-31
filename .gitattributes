@@ -1,0 +1,7 @@
+* text=auto eol=lf
+# Preserve upstream license bytes used by the integrity index.
+licenses/** -text whitespace=-trailing-space
+mod-src/THIRD-PARTY-LICENSE.txt -text whitespace=-trailing-space
+*.png binary
+*.ttf binary
+*.vcss_c binary

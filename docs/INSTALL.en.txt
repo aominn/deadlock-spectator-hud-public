@@ -1,0 +1,39 @@
+Source preparation: no runnable release is published here yet.
+
+Deadlock Spectator HUD 0.5.12 — Quick guide
+
+SETUP
+Close Deadlock. Extract the complete release ZIP, open HudManager.exe, select the
+Deadlock/game/citadel folder containing gameinfo.gi, then Set up → Enable HUD → Launch game.
+Steam and Deadlock are required. Other runtimes are bundled.
+Images are prepared from the installed game; missing images do not stop the other features.
+
+WINDOW
+Keep the manager open while spectating. Minimize to continue, or close to stop the
+companion and analysis. To remove the HUD, close the game and choose Restore normal mode.
+Closing the manager by itself stops the companion; use Restore normal mode to remove the MOD.
+
+UPDATE
+Close both the game and manager. Download the latest runnable ZIP from the
+GitHub Releases page, extract to a new folder, and open that folder's HudManager.exe.
+Newer versions retain settings and the previous version. Do not mix individual files.
+
+HELP
+Verify files checks the package. Refresh images prepares images again from your game.
+Restore previous version uses the retained installation. Close the game before these operations.
+If a game update changes the original UI, wait for a compatible HUD release.
+
+LANGUAGE
+Manager and drawing toolbar: Windows display language (Japanese, otherwise English).
+HUD additions: Deadlock client language (Japanese, otherwise English).
+The original game UI language is not changed. Unknown or ambiguous identities are not guessed.
+
+DRAWING
+Enable Drawing in the manager. F8 toggles the toolbar; Draw / Watch switches input.
+Esc returns to game controls and keeps drawings. Changing apps keeps drawings too.
+Normal mode, tool shutdown, a different match or a detected seek clears drawings.
+
+Unofficial spectator/replay tool. Not approved or supported by Valve.
+See README.en.md and docs/STATUS.txt for coverage and remaining limitations.
+
+If recovery is pending or an existing file prevents enabling the HUD, close the game, return to normal mode, then enable the HUD again. If recovery detects other changes, stop and keep the files rather than deleting them manually.

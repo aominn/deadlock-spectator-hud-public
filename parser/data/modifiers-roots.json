@@ -1,0 +1,335 @@
+{
+  "modifier_citadel_in_fountain": {
+    "_class": "modifier_citadel_in_fountain"
+  },
+  "modifier_hero_upgrade_bonuses": {
+    "_class": "modifier_hero_upgrade_bonuses"
+  },
+  "modifier_citadel_stunned": {
+    "_class": "modifier_citadel_stunned"
+  },
+  "modifier_citadel_stunned_no_cc_diminish": {
+    "_class": "modifier_citadel_stunned"
+  },
+  "modifier_citadel_knockdown": {
+    "_class": "modifier_citadel_knockdown"
+  },
+  "modifier_life_steal": {
+    "_class": "modifier_life_steal"
+  },
+  "modifier_life_steal_watcher": {
+    "_class": "modifier_life_steal_watcher"
+  },
+  "modifier_delayed_apply": {
+    "_class": "modifier_delayed_apply"
+  },
+  "modifier_boss_invuln": {
+    "_class": "modifier_boss_invuln"
+  },
+  "modifier_zipline_speed_trooper_first_wave": {
+    "_class": "modifier_zipline_speed"
+  },
+  "modifier_zipline_speed_trooper_reinforcement": {
+    "_class": "modifier_zipline_speed"
+  },
+  "modifier_zipline_speed_player_generator_kill": {
+    "_class": "modifier_zipline_speed"
+  },
+  "modifier_control_point_capturer_aura": {
+    "_class": "modifier_control_point_capturer_aura"
+  },
+  "modifier_control_point_blocker_aura": {
+    "_class": "modifier_control_point_blocker_aura"
+  },
+  "modifier_idol_pickup_aura": {
+    "_class": "modifier_base_aura"
+  },
+  "modifier_citadel_idol_return": {
+    "_class": "modifier_citadel_idol_return"
+  },
+  "modifier_citadel_in_shoptunnel_amber": {
+    "_class": "modifier_citadel_in_shoptunnel"
+  },
+  "modifier_citadel_in_shoptunnel_sapphire": {
+    "_class": "modifier_citadel_in_shoptunnel"
+  },
+  "modifier_rejuv_pickup_aura": {
+    "_class": "modifier_item_pickup_aura"
+  },
+  "citadel_modifier_teleport": {},
+  "citadel_modifier_hideout_teleport": {},
+  "modifier_neutral_gold_pickup_aura": {
+    "_class": "modifier_item_pickup_aura"
+  },
+  "modifier_early_gold_pickup_aura": {
+    "_class": "modifier_item_pickup_aura"
+  },
+  "modifier_citadel_disarmed": {
+    "_class": "modifier_citadel_disarmed"
+  },
+  "modifier_citadel_idol_walkback": {
+    "_class": "modifier_citadel_idol_walkback"
+  },
+  "modifier_hero_testing_damage_aura": {
+    "_class": "modifier_hero_testing_damage_aura"
+  },
+  "modifier_hide_health": {
+    "_class": "modifier_base"
+  },
+  "modifier_hero_testing_fast_movespeed": {
+    "_class": "modifier_base"
+  },
+  "modifier_citadel_in_shop": {
+    "_class": "modifier_base"
+  },
+  "modifier_debug_is_visible_to_enemy_team": {
+    "_class": "modifier_debug_is_visible_to_enemy_team"
+  },
+  "modifier_debug_slow": {
+    "_class": "modifier_slow_base"
+  },
+  "modifier_citadel_power_generator": {
+    "_class": "modifier_citadel_power_generator"
+  },
+  "modifier_tier2boss_laser_charge": {
+    "_class": "modifier_tier2boss_laser_charge"
+  },
+  "modifier_tier2boss_electric_beam": {
+    "_class": "modifier_tier2boss_electric_beam"
+  },
+  "modifier_t3boss_phase1": {
+    "_class": "modifier_t3boss_phase1"
+  },
+  "modifier_tier3_damage_pulse": {
+    "_class": "modifier_tier3_damage_pulse"
+  },
+  "modifier_tier3_boss_invuln": {
+    "_class": "modifier_tier3_boss_invuln"
+  },
+  "modifier_citadel_can_damage_tier3phase2_boss": {
+    "_class": "modifier_citadel_can_damage_tier3phase2_boss"
+  },
+  "modifier_player_disconnected": {
+    "_class": "modifier_player_disconnected"
+  },
+  "modifier_citadel_in_friendly_base": {
+    "_class": "modifier_base_server_only"
+  },
+  "modifier_citadel_in_enemy_base": {
+    "_class": "modifier_base_server_only"
+  },
+  "modifier_citadel_ignore_out_of_play_area": {
+    "_class": "modifier_base_server_only"
+  },
+  "modifier_citadel_in_mid_boss_temple": {
+    "_class": "modifier_base_server_only"
+  },
+  "modifier_obscured_by_steam": {
+    "_class": "modifier_obscured"
+  },
+  "modifier_barrier_tracker": {
+    "_class": "modifier_barrier_tracker"
+  },
+  "modifier_low_health_glow": {
+    "_class": "modifier_low_health_glow"
+  },
+  "modifier_trigger_push": {
+    "_class": "modifier_trigger_push"
+  },
+  "modifier_speed_boost": {
+    "_class": "modifier_citadel_speed_boost"
+  },
+  "modifier_force_duck": {
+    "_class": "modifier_base"
+  },
+  "modifier_in_tunnel": {
+    "_class": "modifier_base"
+  },
+  "modifier_no_teleport": {
+    "_class": "modifier_base"
+  },
+  "modifier_near_climbable_rope": {
+    "_class": "modifier_near_climbable_rope"
+  },
+  "modifier_citadel_cheater_curse": {
+    "_class": "modifier_citadel_cheater_curse"
+  },
+  "modifier_inside_interior_small": {
+    "_class": "modifier_base"
+  },
+  "modifier_inside_interior_medium": {
+    "_class": "modifier_base"
+  },
+  "modifier_escalating_exposure_tech_armor_debuff": {
+    "_class": "modifier_base"
+  },
+  "modifier_citadel_pulldown_to_ground": {
+    "_class": "modifier_citadel_pulldown_to_ground"
+  },
+  "modifier_citadel_no_catapult": {
+    "_class": "modifier_citadel_no_catapult"
+  },
+  "modifier_citadel_delayed_catapult_launch": {
+    "_class": "modifier_citadel_delayed_catapult_launch"
+  },
+  "modifier_citadel_catapult_damage_watcher": {
+    "_class": "modifier_citadel_catapult_damage_watcher"
+  },
+  "modifier_citadel_halloween_mask": {
+    "_class": "modifier_citadel_halloween_mask"
+  },
+  "modifier_citadel_unstick": {
+    "_class": "modifier_citadel_unstick"
+  },
+  "modifier_bodygroup_choice": {
+    "_class": "modifier_bodygroup_choice"
+  },
+  "modifier_citadel_in_hideout_map": {
+    "_class": "modifier_citadel_in_hideout_map"
+  },
+  "modifier_citadel_in_hideout_zone": {
+    "_class": "modifier_citadel_in_hideout_zone"
+  },
+  "modifier_citadel_hideout_intro": {
+    "_class": "modifier_citadel_hideout_intro"
+  },
+  "modifier_citadel_hideout_intro_exit": {
+    "_class": "modifier_citadel_hideout_intro_exit"
+  },
+  "modifier_citadel_orbit_camera": {
+    "_class": "modifier_citadel_orbit_camera"
+  },
+  "modifier_nearby_ally_resist": {
+    "_class": "modifier_nearby_ally_resist"
+  },
+  "modifier_citadel_trooper_in_enemy_base_resist": {
+    "_class": "modifier_citadel_trooper_in_enemy_base_resist"
+  },
+  "modifier_combat_status_bullet_hit": {
+    "_class": "modifier_combat_status_bullet_hit"
+  },
+  "modifier_combat_status": {
+    "_class": "modifier_combat_status"
+  },
+  "modifier_crowd_control_diminish_watcher": {
+    "_class": "modifier_crowd_control_diminish_watcher"
+  },
+  "modifier_street_brawl_round_start_zipline_boost": {
+    "_class": "modifier_zipline_boost"
+  },
+  "modifier_cinematic_intro_player": {
+    "_class": "modifier_cinematic_intro_player"
+  },
+  "modifier_cinematic_intro_npc": {
+    "_class": "modifier_base"
+  },
+  "modifier_cinematic_intro_shrine": {
+    "_class": "modifier_cinematic_intro_shrine"
+  },
+  "modifier_pause_unpause": {
+    "_class": "modifier_pause_unpause"
+  },
+  "modifier_street_brawl_intro_player": {
+    "_class": "modifier_cinematic_intro_player"
+  },
+  "modifier_streetbrawl_trooper": {
+    "_class": "modifier_street_brawl_trooper"
+  },
+  "modifier_streetbrawl_buyphase_drafting": {
+    "_class": "modifier_streetbrawl_phase"
+  },
+  "modifier_streetbrawl_buyphase_finished": {
+    "_class": "modifier_streetbrawl_phase"
+  },
+  "modifier_citadel_feared": {
+    "_class": "modifier_feared"
+  },
+  "modifier_citadel_charmed": {
+    "_class": "modifier_charmed"
+  },
+  "modifier_secure_souls": {
+    "_class": "modifier_secure_souls"
+  },
+  "modifier_invis_bush": {
+    "_class": "modifier_invis_bush"
+  },
+  "modifier_corrupted_penalty": {
+    "_class": "modifier_corrupted_penalty"
+  },
+  "citadel_neutral_burstfire_primary_weapon": {
+    "_class": "citadel_neutral_burstfire_primary_weapon"
+  },
+  "citadel_neutral_attack_bullet_to_pointmodifier": {
+    "_class": "citadel_neutral_attack_bullet_to_pointmodifier"
+  },
+  "citadel_neutral_light_melee_base": {},
+  "citadel_neutral_light_melee_weak": {
+    "_class": "citadel_neutral_light_melee"
+  },
+  "citadel_neutral_light_melee_normal": {
+    "_class": "citadel_neutral_light_melee"
+  },
+  "citadel_neutral_light_melee_strong": {
+    "_class": "citadel_neutral_light_melee"
+  },
+  "citadel_neutral_laser_beam_base": {
+    "_class": "citadel_neutral_laser_beam"
+  },
+  "citadel_neutral_laser_beam_underhand": {
+    "_class": "citadel_neutral_laser_beam"
+  },
+  "citadel_neutral_laser_beam_underhand_strong": {
+    "_class": "citadel_neutral_laser_beam"
+  },
+  "citadel_neutral_laser_beam_theater": {
+    "_class": "citadel_neutral_laser_beam"
+  },
+  "citadel_neutral_laser_beam_theater_strong": {
+    "_class": "citadel_neutral_laser_beam"
+  },
+  "citadel_neutral_attack_lobfire": {
+    "_class": "citadel_neutral_attack_lobfire"
+  },
+  "citadel_neutral_curved_bomb_attack": {
+    "_class": "citadel_neutral_curved_bomb_attack"
+  },
+  "citadel_neutral_curved_bomb_attack_strong": {
+    "_class": "citadel_neutral_curved_bomb_attack"
+  },
+  "citadel_neutral_breakable_melee_shield": {
+    "_class": "citadel_neutral_self_cast_modifier"
+  },
+  "citadel_neutral_self_bomb": {
+    "_class": "citadel_neutral_self_cast_bomb"
+  },
+  "citadel_neutral_self_bomb_metal": {
+    "_class": "citadel_neutral_self_cast_bomb"
+  },
+  "citadel_neutral_plant_self_cast_melee_aoe": {
+    "_class": "citadel_neutral_self_cast_aoe"
+  },
+  "citadel_neutral_plant_self_cast_melee_aoe_strong": {
+    "_class": "citadel_neutral_self_cast_aoe"
+  },
+  "citadel_neutral_attack_lob_book": {
+    "_class": "citadel_neutral_attack_lob_book"
+  },
+  "citadel_neutral_attack_sludge": {
+    "_class": "citadel_neutral_attack_sludge"
+  },
+  "citadel_neutral_attack_sludge_strong": {
+    "_class": "citadel_neutral_attack_sludge"
+  },
+  "citadel_neutral_attack_lob_spores": {
+    "_class": "citadel_neutral_attack_lob_spores"
+  },
+  "citadel_neutral_attack_lob_spores_strong": {
+    "_class": "citadel_neutral_attack_lob_spores"
+  },
+  "modifier_neutral_attack_explode_on_death": {
+    "_class": "modifier_neutral_attack_explode_on_death"
+  },
+  "modifier_neutral_attack_explode_on_death_strong": {
+    "_class": "modifier_neutral_attack_explode_on_death"
+  }
+}

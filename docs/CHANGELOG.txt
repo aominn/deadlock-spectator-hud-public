@@ -1,0 +1,7 @@
+Public source preparation / based on0.5.12
+
+Initial history-free source snapshot. Previous development history and generated game materials are not imported. Full extracted modifier tables are reduced to lookup identifiers/classes with catalog equality checked.
+
+0.5.12 behavior: normal/lobby mode signals on change only; spectator/replay signals remain periodic. Inactive deepclock lookups and repeated normal restoration are reduced. Replay/live/normal restoration and user CPU testing are recorded in STATUS.txt.
+
+Earlier internal changelogs are retained separately by the maintainer.

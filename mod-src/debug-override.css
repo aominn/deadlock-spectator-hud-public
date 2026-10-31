@@ -1,0 +1,86 @@
+/* Normal spectator layout; no forced detail-panel presentation. */
+.spec_mode #SpecCompactAdvantage { opacity:1; }
+
+
+/* Spectator prototype: Mirrored corner badges; expanded team span, unchanged portrait art; portrait art stays88px. */
+.spec_mode #TeamsContainer { width: 1812px; padding-top: 46px; }
+.spec_mode CitadelHudTopBarTeam { width: 840px; }
+.spec_mode CitadelHudTopBarPlayer { width: 140px; }
+.spec_mode CitadelHudTopBarPlayer #PlayerDetailsContainer { width: 88px; horizontal-align: center; }
+.spec_mode .ChatContainer { width: 1812px; }
+.spec_mode .ChatContainer CitadelHudTopBarChat { width: 906px; }
+
+
+
+/* Portrait callouts are hidden only while spectating. */
+.spec_mode .ChatContainer {visibility: collapse;}
+
+/* Compact native team totals: match the small per-player soul tags. */
+.spec_mode .TeamNetworth {width: 160px;}
+.spec_mode .TeamNetworth .TeamScore {width: 72px; height: 26px;}
+.spec_mode .TeamNetworth .ScoreBG {padding: 0px; opacity-mask: none; wash-color: none; border-radius: 3px;}
+.spec_mode .TeamNetworth #TeamScoreFriendly .ScoreBG {background-color: #d5a33d;}
+.spec_mode .TeamNetworth #TeamScoreEnemy .ScoreBG {background-color: #5c7dc2;}
+.spec_mode .TeamNetworth .ScoreContainer {horizontal-align: center; padding: 0px; wash-color: none;}
+.spec_mode .TeamNetworth .ScoreLabel {font-family: numericBlock; font-size: 16px;}
+.spec_mode .TeamNetworth #TeamScoreFriendly .ScoreLabel {color: #171914;}
+.spec_mode .TeamNetworth #TeamScoreEnemy .ScoreLabel {color: #f4f1e8;}
+.spec_mode .TeamNetworth .TeamIcon {width: 16px; height: 16px; margin: 0px 3px;}
+
+/* Move each full six-player group, preserving internal spacing. */
+.spec_mode #TeamFriendly {transform: translateX(-42px);}
+.spec_mode #TeamEnemy {transform: translateX(42px);}
+
+/* Shifted outer purchase cards stay inside the screen, outside the old root clip. */
+.spec_mode CitadelHudTopBar {overflow: noclip;}
+.spec_mode #TeamsContainer {overflow: noclip;}
+
+/* Compact status row; preserve88px portrait art and notification typography. */
+.spec_mode CitadelHudTopBarPlayer .UltimateStatus {width: 20px; height: 20px;}
+/* Center the native three-slot group; team counters stay outside30px state icon. */
+.spec_mode #RejuvenatorCharges {width: 130px; margin-right: 0px;}
+.spec_mode #RejuvenatorCharges #RejuvenatorFriendly, .spec_mode #RejuvenatorCharges #RejuvenatorEnemy {width: 48px;}
+.spec_mode #RejuvenatorCharges #RejuvenatorTimer {width: 34px;}
+
+/* Compact clock padding, preserving native14px time metrics and vertical padding; no automatic font shrink. */
+.spec_mode .GameClock {padding: 5px 4px;}
+.spec_mode .GameTime {width: 64px; height: 20px; padding: 2px 6px; font-size: 14px; white-space: nowrap;}
+
+/* Keep native money paint; remove padding that otherwise covers the portrait. */
+.spec_mode .SoulsValueContainer.SpecNativeMoneyActive { padding-top: 0px; margin-top: 96px; }
+
+/* Normal money stays fully visible; receipts use a separate row below status icons. */
+
+/* Build comparison is separate from the approved normal spectator layout. */
+.spec_mode .SpecBuildDetailsOpen #PlayerNameNWContainer { width: 128px; height: fit-children; min-height: 280px; margin-top: 150px; padding: 8px 6px; opacity: 1; transition-duration: 0s; background-color: #20221ff5; border: 1px solid #55574f; border-radius: 3px; flow-children: down; }
+.spec_mode .SpecBuildDetailsOpen #BackgroundStrip { visibility: collapse; }
+.spec_mode .SpecBuildDetailsOpen #PlayerNameNWContainer .PlayerInfoContainer { padding-top: 0px; padding-bottom: 0px; }
+.spec_mode .SpecBuildDetailsOpen #PlayerNameNWContainer .PlayerName { visibility: collapse; height: 0px; margin-top: 0px; }
+.spec_mode .SpecBuildDetailsOpen #PlayerNameNWContainer .HeroName { visibility: collapse; height: 0px; margin-bottom: 0px; }
+.spec_mode .SpecBuildDetailsOpen #PlayerNameNWContainer #KDAContainer { visibility: collapse; height: 0px; }
+.spec_mode .SpecBuildDetailsOpen .KDALabels { height: 12px; }
+.spec_mode .SpecBuildDetailsOpen .KDALabels Label { font-family: sans; font-size: 10px; opacity: 0.7; }
+.spec_mode .SpecBuildDetailsOpen .KDAStats { height: 22px; }
+.spec_mode .SpecBuildDetailsOpen .KDAStats Label { font-size: 16px; }
+.spec_mode .SpecBuildDetailsOpen CitadelHudItemBarGraph { height: 24px; margin: 4px 0px; }
+.spec_mode .SpecBuildDetailsOpen CitadelTopBarPlayerDetails { height: 46px; opacity: 1; margin-top: 0px; }
+.spec_mode .SpecBuildDetailsOpen #PlayerAbilitiesContainer { width: 112px; height: 44px; margin: 4px 0px 6px; opacity: 1; }
+.spec_mode .SpecBuildDetailsOpen #PlayerAbilitiesContainer CitadelAbilityIcon { width: 26px; height: 42px; margin: 0px 1px; }
+.spec_mode .SpecBuildDetailsOpen #PlayerAbilitiesContainer .button_container { width: 24px; height: 24px; margin: 0px; }
+.spec_mode .SpecBuildDetailsOpen #PlayerAbilitiesContainer .ability_image { width: 18px; height: 18px; horizontal-align: center; vertical-align: center; }
+.spec_mode .SpecBuildDetailsOpen #PlayerModsContainer { width: 100%; padding-top: 4px; margin-left: 0px; margin-bottom: 0px; }
+.spec_mode .SpecBuildDetailsOpen #PlayerModsContainer #ModsContent { width: 100%; padding: 0px; }
+.spec_mode .SpecBuildDetailsOpen #PlayerModsContainer #ModIconsContainer { width: 70px; height: fit-children; flow-children: right-wrap; }
+.spec_mode .SpecBuildDetailsOpen #PlayerModsContainer .ModIconColumn { width: 100%; height: fit-children; flow-children: right; }
+
+/* Three columns share the existing detail card width; normal layout is untouched. */
+.spec_mode .SpecBuildDetailsOpen #PlayerModsContainer.SpecThreeColumnInventory { height: 140px; width: 105px; horizontal-align: center; overflow: noclip; }
+
+/* Preserve native ultimate availability, cooldown and death styling in build details. */
+.spec_mode .SpecBuildDetailsOpen #UltimateStatus { opacity: 0.6; }
+.spec_mode .SpecBuildDetailsOpen .UltimateCooldownReady #UltimateStatus { opacity: 1; }
+.spec_mode .SpecBuildDetailsOpen .Dead #UltimateStatus { opacity: 0.3; }
+
+/* Objective HP must disappear immediately when the detail inventory opens. */
+.spec_mode .SpecBuildDetailsOpen #SpecBaseGuardianHP,
+.spec_mode.SpecBuildDetailsOpen #SpecBaseGuardianHP { opacity: 0; }

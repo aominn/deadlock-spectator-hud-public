@@ -1,0 +1,6 @@
+/* Scale only native bonus/stat groups. Item grid andwallet are separate panels. */
+.spec_mode #StatList {ui-scale:80%; margin-bottom:312px;}
+.spec_mode #HudStatBlock {ui-scale:80%; margin-bottom:241px;}
+
+/* The lower item grid remains visible; only secondary stats pause during build comparison. */
+.spec_mode.SpecBuildDetailsOpen #StatList, .spec_mode.SpecBuildDetailsOpen #HudStatBlock {visibility: collapse;}

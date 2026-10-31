@@ -1,0 +1,11 @@
+import fs from 'node:fs';import vm from 'node:vm';import assert from 'node:assert/strict';
+let source=fs.readFileSync(new URL('../parser/base-guardian-parser.mjs',import.meta.url),'utf8').replace(/^import .*;$/gm,'').replace(/export /g,'');const c={};vm.createContext(c);vm.runInContext(source+';this.GuardianCohort=GuardianCohort;',c);
+function entity(id,team=2,hp=4000,max=4000,life=0,lane=1){const fields={m_iTeamNum:team,m_iLane:lane,m_iHealth:hp,m_iMaxHealth:max,m_lifeState:life};return {handle:id,active:true,class:{name:'CNPC_BarrackBoss'},getField:n=>fields[n]};}
+const es=Array.from({length:12},(_,i)=>entity(i+1,i<6?2:3,4000,4000,0,[1,4,6][Math.floor(i%6/2)]));assert.equal(c.guardianIndividuals(es).length,12);
+let rows=c.guardianIndividuals([entity(1,2,1000,5000),...es.slice(1)]);assert.deepEqual(Array.from(rows[0]),[2,1,1,1000,5000]);assert.deepEqual(Array.from(rows[1]),[2,1,2,4000,4000]);
+assert.equal(c.guardianIndividuals(es.slice(1)).length,11,'one known entity does not require the other');assert.equal(c.guardianIndividuals([...es,es[0]]).length,10,'duplicate lane cohort rejected');assert.equal(c.guardianIndividuals([entity(1,2,4001),...es.slice(1)]).length,11);assert.equal(c.guardianIndividuals([entity(1,2,4000,4000,0,0)]).length,0,'unknown lane never inferred');
+assert.deepEqual(JSON.stringify(c.guardianIndividuals(es)),JSON.stringify(c.guardianIndividuals([...es].reverse())),'order by stable entity ID');
+const cohort=new c.GuardianCohort();cohort.update(es);rows=cohort.update(es.slice(1),[{entityKilled:1,objectiveTeam:2}]);assert.deepEqual(Array.from(rows[0]),[2,1,1,0,4000],'confirmed death keeps individual identity');
+rows=cohort.update(es.slice(2),[{entityKilled:2,objectiveTeam:2}]);assert.deepEqual(Array.from(rows[1]),[2,1,2,0,4000]);
+const unknown=new c.GuardianCohort();unknown.update(es);assert.equal(unknown.update(es.slice(1)).length,11,'unknown disappearance hides only the missing entity');const wrong=new c.GuardianCohort();wrong.update(es);assert.equal(wrong.update(es.slice(1),[{entityKilled:1,objectiveTeam:3}]).length,11);
+console.log('PASS individual HP/entity identity;enum1/3/4/6;partial cohort supported;duplicate/invalid rejected;confirmed death;stable ID order');

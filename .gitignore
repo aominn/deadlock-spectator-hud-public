@@ -1,0 +1,51 @@
+# Build outputs and local state never belong in Git.
+**/__pycache__/
+**/*.pyc
+manager/bin/
+manager/obj/
+mod-src/compiled/
+mod-src/pak99_dir.vpk
+mod-src/build-evidence.json
+parser/node_modules/
+dist/
+local/
+*.log
+*.dem
+*.db
+*.sqlite
+*.pfx
+*.key
+.env
+credentials.json
+token.json
+
+# Local asset converter build outputs
+tools/asset-reader/bin/
+tools/asset-reader/obj/
+
+# Game assets are generated locally; source/release never re-embed them.
+engine/icons/
+mod-src/native-base/
+mod-src/citadel_hud_top_bar.xml
+mod-src/citadel_hud_hero_shop.xml
+mod-src/unit_status_overlay_v2.xml
+mod-src/hud_escape_menu.xml
+
+# Drawing validation harness outputs
+tests/drawing-harness/bin/
+tests/drawing-harness/obj/
+
+# Language validation harness outputs
+tests/locale-harness/bin/
+tests/locale-harness/obj/
+
+# Public source: generated game materials and local research stay out.
+Research/
+*.vpk
+*.vtex_c
+*.vsvg_c
+*.vcss_c
+*.vxml_c
+*.dmp
+.env.*
+*.pem

@@ -1,0 +1,408 @@
+{
+  "decoder": "7f8767ca797e122034c866d51c5dbcc3d96bb3b05a5c27dd5b1bb74d553da344",
+  "runtime": "Microsoft.NETCore.App.Runtime.win-x64/10.0.12",
+  "dependencies": [
+    {
+      "package": "Blake3/3.0.2",
+      "files": [
+        {
+          "file": "Blake3-3.0.2/UPSTREAM-LICENSE.txt",
+          "sha256": "7f7d75677fb85a9a2cb8146e5a96eec2d574654ce54e5c70a820531ece14b073",
+          "source": "https://raw.githubusercontent.com/xoofx/Blake3.NET/bc622edf7faa06d1a63c0f2f165c5f7c567a2e32/license.txt"
+        }
+      ]
+    },
+    {
+      "package": "K4os.Compression.LZ4/1.3.8",
+      "license": [],
+      "files": [
+        {
+          "file": "K4os.Compression.LZ4-1.3.8/UPSTREAM-LICENSE.txt",
+          "sha256": "ef5a021fc2ae3658f4ad8d2526c87fb2cf394285f47abfb784cf73a27ffd9522",
+          "source": "https://raw.githubusercontent.com/MiloszKrajewski/K4os.Compression.LZ4/master/LICENSE"
+        }
+      ],
+      "metadata_copyright": [
+        {
+          "text": "Milosz Krajewski"
+        }
+      ]
+    },
+    {
+      "package": "KeyValues2/0.8.0",
+      "license": [
+        {
+          "type": "file",
+          "text": "COPYING"
+        }
+      ],
+      "files": [
+        {
+          "file": "KeyValues2-0.8.0/COPYING",
+          "sha256": "28762bd1e2393dc04904f1153660a3f1388c03f6976a94c765d99876058081cc",
+          "source": "NuGet KeyValues2/0.8.0 COPYING"
+        }
+      ],
+      "metadata_copyright": []
+    },
+    {
+      "package": "Microsoft.NET.ILLink.Tasks/10.0.12",
+      "license": [
+        {
+          "type": "expression",
+          "text": "MIT"
+        }
+      ],
+      "build_only": true,
+      "files": [
+        {
+          "file": "Microsoft.NET.ILLink.Tasks-10.0.12/THIRD-PARTY-NOTICES.TXT",
+          "sha256": "6d15e10a101c6bfff2ab4429ed061bf76c456fc4b23ad6b03e0d0f8377148a21",
+          "source": "NuGet Microsoft.NET.ILLink.Tasks/10.0.12 THIRD-PARTY-NOTICES.TXT"
+        }
+      ]
+    },
+    {
+      "package": "SharpGLTF.Core/1.0.6",
+      "license": [
+        {
+          "type": "expression",
+          "text": "MIT"
+        }
+      ],
+      "files": [
+        {
+          "file": "SharpGLTF.Core-1.0.6/UPSTREAM-LICENSE.txt",
+          "sha256": "5e720094b3423cc2c1aef53325f2b99145d45155e36b81adb9063d18a552e469",
+          "source": "https://raw.githubusercontent.com/vpenades/SharpGLTF/5153478a209ca2e276d8092f7166ff9d7ae4974f/LICENSE"
+        }
+      ],
+      "metadata_copyright": [
+        {
+          "text": "Copyright (c) 2025 Vicente Penades"
+        }
+      ]
+    },
+    {
+      "package": "SharpGLTF.Runtime/1.0.6",
+      "license": [
+        {
+          "type": "expression",
+          "text": "MIT"
+        }
+      ],
+      "files": [
+        {
+          "file": "SharpGLTF.Runtime-1.0.6/UPSTREAM-LICENSE.txt",
+          "sha256": "5e720094b3423cc2c1aef53325f2b99145d45155e36b81adb9063d18a552e469",
+          "source": "https://raw.githubusercontent.com/vpenades/SharpGLTF/5153478a209ca2e276d8092f7166ff9d7ae4974f/LICENSE"
+        }
+      ],
+      "metadata_copyright": [
+        {
+          "text": "Copyright (c) 2025 Vicente Penades"
+        }
+      ]
+    },
+    {
+      "package": "SharpGLTF.Toolkit/1.0.6",
+      "license": [
+        {
+          "type": "expression",
+          "text": "MIT"
+        }
+      ],
+      "files": [
+        {
+          "file": "SharpGLTF.Toolkit-1.0.6/UPSTREAM-LICENSE.txt",
+          "sha256": "5e720094b3423cc2c1aef53325f2b99145d45155e36b81adb9063d18a552e469",
+          "source": "https://raw.githubusercontent.com/vpenades/SharpGLTF/5153478a209ca2e276d8092f7166ff9d7ae4974f/LICENSE"
+        }
+      ],
+      "metadata_copyright": [
+        {
+          "text": "Copyright (c) 2025 Vicente Penades"
+        }
+      ]
+    },
+    {
+      "package": "SkiaSharp/4.151.1",
+      "license": [
+        {
+          "type": "expression",
+          "text": "MIT"
+        }
+      ],
+      "files": [
+        {
+          "file": "SkiaSharp-4.151.1/LICENSE.txt",
+          "sha256": "89101e35a8c66fd4d6dffc1763259161d35cb564c169714ec227a768c89f2938",
+          "source": "NuGet SkiaSharp/4.151.1 LICENSE.txt"
+        }
+      ],
+      "metadata_copyright": [
+        {
+          "text": "© Microsoft Corporation. All rights reserved."
+        }
+      ]
+    },
+    {
+      "package": "SkiaSharp.NativeAssets.Linux.NoDependencies/4.151.1",
+      "license": [
+        {
+          "type": "expression",
+          "text": "MIT"
+        }
+      ],
+      "files": [
+        {
+          "file": "SkiaSharp.NativeAssets.Linux.NoDependencies-4.151.1/LICENSE.txt",
+          "sha256": "89101e35a8c66fd4d6dffc1763259161d35cb564c169714ec227a768c89f2938",
+          "source": "NuGet SkiaSharp.NativeAssets.Linux.NoDependencies/4.151.1 LICENSE.txt"
+        },
+        {
+          "file": "SkiaSharp.NativeAssets.Linux.NoDependencies-4.151.1/THIRD-PARTY-NOTICES.txt",
+          "sha256": "21504c46c4c58aa64c1055bd2dcbc5f9a136b4b8c412ed3cc6740e22c5b127f5",
+          "source": "NuGet SkiaSharp.NativeAssets.Linux.NoDependencies/4.151.1 THIRD-PARTY-NOTICES.txt"
+        }
+      ],
+      "metadata_copyright": [
+        {
+          "text": "© Microsoft Corporation. All rights reserved."
+        }
+      ]
+    },
+    {
+      "package": "SkiaSharp.NativeAssets.macOS/4.151.1",
+      "license": [
+        {
+          "type": "expression",
+          "text": "MIT"
+        }
+      ],
+      "files": [
+        {
+          "file": "SkiaSharp.NativeAssets.macOS-4.151.1/LICENSE.txt",
+          "sha256": "89101e35a8c66fd4d6dffc1763259161d35cb564c169714ec227a768c89f2938",
+          "source": "NuGet SkiaSharp.NativeAssets.macOS/4.151.1 LICENSE.txt"
+        },
+        {
+          "file": "SkiaSharp.NativeAssets.macOS-4.151.1/THIRD-PARTY-NOTICES.txt",
+          "sha256": "21504c46c4c58aa64c1055bd2dcbc5f9a136b4b8c412ed3cc6740e22c5b127f5",
+          "source": "NuGet SkiaSharp.NativeAssets.macOS/4.151.1 THIRD-PARTY-NOTICES.txt"
+        }
+      ],
+      "metadata_copyright": [
+        {
+          "text": "© Microsoft Corporation. All rights reserved."
+        }
+      ]
+    },
+    {
+      "package": "SkiaSharp.NativeAssets.Win32/4.151.1",
+      "license": [
+        {
+          "type": "expression",
+          "text": "MIT"
+        }
+      ],
+      "files": [
+        {
+          "file": "SkiaSharp.NativeAssets.Win32-4.151.1/LICENSE.txt",
+          "sha256": "89101e35a8c66fd4d6dffc1763259161d35cb564c169714ec227a768c89f2938",
+          "source": "NuGet SkiaSharp.NativeAssets.Win32/4.151.1 LICENSE.txt"
+        },
+        {
+          "file": "SkiaSharp.NativeAssets.Win32-4.151.1/THIRD-PARTY-NOTICES.txt",
+          "sha256": "21504c46c4c58aa64c1055bd2dcbc5f9a136b4b8c412ed3cc6740e22c5b127f5",
+          "source": "NuGet SkiaSharp.NativeAssets.Win32/4.151.1 THIRD-PARTY-NOTICES.txt"
+        }
+      ],
+      "metadata_copyright": [
+        {
+          "text": "© Microsoft Corporation. All rights reserved."
+        }
+      ]
+    },
+    {
+      "package": "System.IO.Hashing/10.0.10",
+      "files": [
+        {
+          "file": "System.IO.Hashing-10.0.10/THIRD-PARTY-NOTICES.TXT",
+          "sha256": "6d15e10a101c6bfff2ab4429ed061bf76c456fc4b23ad6b03e0d0f8377148a21",
+          "source": "NuGet System.IO.Hashing/10.0.10 THIRD-PARTY-NOTICES.TXT"
+        },
+        {
+          "file": "System.IO.Hashing-10.0.10/UPSTREAM-LICENSE.txt",
+          "sha256": "ae48df11a335dc1a615f4f938b69cba73bcf4485c4f97af49b38efb0f216353b",
+          "source": "https://raw.githubusercontent.com/dotnet/dotnet/f7d90799ce4ef09a0bb257852a57248d2a8fb8dd/LICENSE.TXT"
+        }
+      ]
+    },
+    {
+      "package": "TinyBCSharp/0.1.2",
+      "license": [
+        {
+          "type": "expression",
+          "text": "MIT"
+        }
+      ],
+      "files": [
+        {
+          "file": "TinyBCSharp-0.1.2/UPSTREAM-LICENSE.txt",
+          "sha256": "ca95d5d74a4cd4704cc19863d9141fd3fc1775f2a51106468801a85df4f6cd7c",
+          "source": "https://raw.githubusercontent.com/jandk/TinyBCSharp/5eef47a45c603f00376c4f9c358c730309d058cf/LICENSE"
+        }
+      ],
+      "metadata_copyright": []
+    },
+    {
+      "package": "TinyEXR.NET/1.1.0",
+      "license": [
+        {
+          "type": "expression",
+          "text": "MIT"
+        }
+      ],
+      "files": [
+        {
+          "file": "TinyEXR.NET-1.1.0/UPSTREAM-LICENSE.txt",
+          "sha256": "30ec59c966331b7f029a579410fbd69577456eaeb078c752e0b274e9fbdc0345",
+          "source": "https://raw.githubusercontent.com/ksgfk/TinyEXR.NET/9a55e13d9dca6a3d347d901a777ad04bccb444a9/LICENSE"
+        }
+      ],
+      "metadata_copyright": [
+        {
+          "text": "Copyright (c) 2023-2026 ksgfk"
+        }
+      ]
+    },
+    {
+      "package": "ValveKeyValue/0.70.0.499",
+      "license": [
+        {
+          "type": "expression",
+          "text": "MIT"
+        }
+      ],
+      "files": [
+        {
+          "file": "ValveKeyValue-0.70.0.499/UPSTREAM-LICENSE.txt",
+          "sha256": "9b7097b8aeaea38ffe59e3e5de30879064332c9477384851e5df300825764958",
+          "source": "https://raw.githubusercontent.com/ValveResourceFormat/ValveKeyValue/b0f2917f8c09697e9fd41c4f23647a34c5803f0d/LICENSE"
+        }
+      ],
+      "metadata_copyright": [
+        {
+          "text": "Copyright © ValveKeyValue Contributors"
+        }
+      ]
+    },
+    {
+      "package": "ValvePak/5.0.2.177",
+      "license": [
+        {
+          "type": "expression",
+          "text": "MIT"
+        }
+      ],
+      "files": [
+        {
+          "file": "ValvePak-5.0.2.177/UPSTREAM-LICENSE.txt",
+          "sha256": "f254d7ab2ba0281da8510d69de18693d592391beae254d46e3dd75376bc389f7",
+          "source": "https://raw.githubusercontent.com/ValveResourceFormat/ValvePak/2adb4b00ed950b5ced012d8b6ac83d2d3a95ec29/LICENSE"
+        }
+      ],
+      "metadata_copyright": [
+        {
+          "text": "Copyright © ValvePak Contributors"
+        }
+      ]
+    },
+    {
+      "package": "ValveResourceFormat/20.1.7467",
+      "license": [
+        {
+          "type": "expression",
+          "text": "MIT"
+        }
+      ],
+      "files": [
+        {
+          "file": "ValveResourceFormat-20.1.7467/UPSTREAM-LICENSE.txt",
+          "sha256": "19549e9b3203eaf3938f35f98e63fc6b166a16af29936affa3df6ec7e2ae7f8d",
+          "source": "https://raw.githubusercontent.com/ValveResourceFormat/ValveResourceFormat/9e2e6c7f67e3c4e5a5f443a60c3a5d841ba8f304/LICENSE"
+        }
+      ],
+      "metadata_copyright": [
+        {
+          "text": "Copyright © ValveResourceFormat Contributors"
+        }
+      ]
+    },
+    {
+      "package": "Vortice.SPIRV/1.0.5",
+      "license": [
+        {
+          "type": "expression",
+          "text": "MIT"
+        }
+      ],
+      "files": [
+        {
+          "file": "Vortice.SPIRV-1.0.5/UPSTREAM-LICENSE.txt",
+          "sha256": "82bd4e84d144bebbb519ed05899f0ceaeaf2e0f95160ac32fd8cc388710c76d0",
+          "source": "https://raw.githubusercontent.com/amerkoleci/Vortice.Vulkan/b9b56b6bf23bd119a22f519631d88b911bf9fa4e/LICENSE"
+        }
+      ],
+      "metadata_copyright": [
+        {
+          "text": "Copyright (c) Amer Koleci and Contributors"
+        }
+      ]
+    },
+    {
+      "package": "Vortice.SpirvCross/1.5.4",
+      "license": [
+        {
+          "type": "expression",
+          "text": "MIT"
+        }
+      ],
+      "files": [
+        {
+          "file": "Vortice.SpirvCross-1.5.4/UPSTREAM-LICENSE.txt",
+          "sha256": "82bd4e84d144bebbb519ed05899f0ceaeaf2e0f95160ac32fd8cc388710c76d0",
+          "source": "https://raw.githubusercontent.com/amerkoleci/Vortice.Vulkan/b9b56b6bf23bd119a22f519631d88b911bf9fa4e/LICENSE"
+        }
+      ],
+      "metadata_copyright": [
+        {
+          "text": "Copyright (c) Amer Koleci and Contributors"
+        }
+      ]
+    },
+    {
+      "package": "ZstdSharp.Port/0.8.8",
+      "license": [
+        {
+          "type": "expression",
+          "text": "MIT"
+        }
+      ],
+      "files": [
+        {
+          "file": "ZstdSharp.Port-0.8.8/UPSTREAM-LICENSE.txt",
+          "sha256": "9a6a7216e532c4ee4f78881d31fb641c27148eb01b2d0e8e3235ffe9a70a662c",
+          "source": "https://raw.githubusercontent.com/oleg-st/ZstdSharp/2cd0c019693bc786a5fe5c3be94e107b24e7267e/LICENSE"
+        }
+      ],
+      "metadata_copyright": [
+        {
+          "text": "Copyright Oleg Stepanischev 2026"
+        }
+      ]
+    }
+  ],
+  "all_dependency_license_texts_collected": true
+}

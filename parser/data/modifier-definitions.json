@@ -1,0 +1,2513 @@
+[
+  {
+    "source": "ability_golden_idol"
+  },
+  {
+    "source": "ability_item_pickup_effects"
+  },
+  {
+    "source": "citadel_ability_zip_line"
+  },
+  {
+    "source": "citadel_ability_zipline_boost"
+  },
+  {
+    "source": "citadel_ability_mantle"
+  },
+  {
+    "source": "citadel_ability_climb_rope"
+  },
+  {
+    "source": "citadel_ability_jump"
+  },
+  {
+    "source": "citadel_ability_sprint"
+  },
+  {
+    "source": "citadel_ability_dash"
+  },
+  {
+    "source": "citadel_ability_slide"
+  },
+  {
+    "source": "citadel_ability_melee_parry"
+  },
+  {
+    "source": "common_properties"
+  },
+  {
+    "source": "ability_trigger_base"
+  },
+  {
+    "source": "inherent_base"
+  },
+  {
+    "source": "held_base"
+  },
+  {
+    "source": "npc_base"
+  },
+  {
+    "source": "npc_ultimate_base"
+  },
+  {
+    "source": "signature_base"
+  },
+  {
+    "source": "ultimate_base"
+  },
+  {
+    "source": "melee_base"
+  },
+  {
+    "source": "weapon_base"
+  },
+  {
+    "source": "hero_weapon_base"
+  },
+  {
+    "source": "hero_shotgun_base"
+  },
+  {
+    "source": "citadel_hold_melee"
+  },
+  {
+    "source": "citadel_ability_melee_genericperson"
+  },
+  {
+    "source": "weapon_alternative_rmb_activate"
+  },
+  {
+    "source": "citadel_weapon_rutger_set"
+  },
+  {
+    "source": "citadel_weapon_kali_set"
+  },
+  {
+    "source": "citadel_weapon_gunslinger_set"
+  },
+  {
+    "source": "citadel_weapon_yakuza_set"
+  },
+  {
+    "source": "citadel_weapon_architect_set"
+  },
+  {
+    "source": "citadel_weapon_thumper_set"
+  },
+  {
+    "source": "ability_melee_butcher"
+  },
+  {
+    "source": "citadel_ability_melee_kali"
+  },
+  {
+    "source": "citadel_ability_melee_butcher"
+  },
+  {
+    "source": "citadel_ability_melee_gunslinger"
+  },
+  {
+    "source": "citadel_ability_melee_yakuza"
+  },
+  {
+    "source": "citadel_ability_melee_thumper"
+  },
+  {
+    "source": "citadel_ability_melee_architect"
+  },
+  {
+    "source": "rutger_rocket"
+  },
+  {
+    "source": "rutger_force_field"
+  },
+  {
+    "source": "rutger_cheat_death"
+  },
+  {
+    "source": "rutger_pulse"
+  },
+  {
+    "source": "citadel_ability_kali_spinning_blade"
+  },
+  {
+    "source": "ability_kali_dust_storm"
+  },
+  {
+    "source": "citadel_ability_kali_disruptive_charge"
+  },
+  {
+    "source": "ability_kali_trappers_bolo"
+  },
+  {
+    "source": "gunslinger_rapid_fire"
+  },
+  {
+    "source": "gunslinger_rocket_launcher"
+  },
+  {
+    "source": "gunslinger_tenacity"
+  },
+  {
+    "source": "gunslinger_sleep_bomb"
+  },
+  {
+    "source": "yakuza_kobun"
+  },
+  {
+    "source": "yakuza_shakedown_target"
+  },
+  {
+    "source": "yakuza_shakedown"
+  },
+  {
+    "source": "yakuza_setting_sun"
+  },
+  {
+    "source": "yakuza_gang_activity"
+  },
+  {
+    "source": "yakuza_gang_activity_cancel"
+  },
+  {
+    "source": "yakuza_summon_gangster"
+  },
+  {
+    "source": "yakuza_teleport_to_gangster"
+  },
+  {
+    "source": "yakuza_fealty"
+  },
+  {
+    "source": "yakuza_protection_racket"
+  },
+  {
+    "source": "thumper_ability_1"
+  },
+  {
+    "source": "thumper_ability_2"
+  },
+  {
+    "source": "thumper_ability_3"
+  },
+  {
+    "source": "thumper_ability_4"
+  },
+  {
+    "source": "citadel_weapon_base_defense_turret"
+  },
+  {
+    "source": "citadel_weapon_bosstier2_set"
+  },
+  {
+    "source": "citadel_weapon_bosstier3_set"
+  },
+  {
+    "source": "ability_medic_trooper_heal"
+  },
+  {
+    "source": "super_neutral_shield"
+  },
+  {
+    "source": "super_neutral_charge"
+  },
+  {
+    "source": "trooper_grenade"
+  },
+  {
+    "source": "trooper_boss_grenade"
+  },
+  {
+    "source": "citadel_ability_trooper_zip_line"
+  },
+  {
+    "source": "citadel_ability_tier2boss_rocket_barrage"
+  },
+  {
+    "source": "citadel_ability_tier2boss_laser_beam"
+  },
+  {
+    "source": "citadel_ability_tier2boss_stomp"
+  },
+  {
+    "source": "citadel_ability_tier2boss_aoe_wave"
+  },
+  {
+    "source": "citadel_ability_tier3boss_laser_beam"
+  },
+  {
+    "source": "citadel_ability_tier3boss_aoe_wave"
+  },
+  {
+    "source": "citadel_ability_tier3boss_drop_bombs"
+  },
+  {
+    "source": "citadel_ability_tier3boss_rocket_barrage"
+  },
+  {
+    "source": "vanguard_aoe_buff"
+  },
+  {
+    "source": "ability_npc_shield"
+  },
+  {
+    "source": "citadel_weapon_astro_set"
+  },
+  {
+    "source": "ability_melee_astro"
+  },
+  {
+    "source": "ability_explosive_barrel"
+  },
+  {
+    "source": "ability_bounce_pad"
+  },
+  {
+    "source": "ability_gravity_lasso"
+  },
+  {
+    "source": "ability_crackshot"
+  },
+  {
+    "source": "citadel_weapon_bull_set"
+  },
+  {
+    "source": "citadel_ability_melee_bull"
+  },
+  {
+    "source": "citadel_ability_bull_charge"
+  },
+  {
+    "source": "citadel_ability_passive_beefy"
+  },
+  {
+    "source": "citadel_ability_bull_leap"
+  },
+  {
+    "source": "citadel_ability_bull_heal"
+  },
+  {
+    "source": "citadel_weapon_bebop_set"
+  },
+  {
+    "source": "citadel_ability_melee_bebop"
+  },
+  {
+    "source": "citadel_ability_uppercut"
+  },
+  {
+    "source": "citadel_ability_sticky_bomb"
+  },
+  {
+    "source": "citadel_ability_bebop_laser_beam"
+  },
+  {
+    "source": "citadel_ability_hook"
+  },
+  {
+    "source": "ability_bebop_stickybomb2"
+  },
+  {
+    "source": "citadel_weapon_bomber_set"
+  },
+  {
+    "source": "ability_melee_bomber"
+  },
+  {
+    "source": "ability_charged_bomb"
+  },
+  {
+    "source": "ability_charged_bomb_throw"
+  },
+  {
+    "source": "ability_bomber_ability02"
+  },
+  {
+    "source": "ability_bomber_ability03"
+  },
+  {
+    "source": "ability_bomber_ult"
+  },
+  {
+    "source": "citadel_weapon_cadence_set"
+  },
+  {
+    "source": "citadel_ability_melee_cadence"
+  },
+  {
+    "source": "cadence_ability_anthem"
+  },
+  {
+    "source": "cadence_ability_lullaby"
+  },
+  {
+    "source": "cadence_ability_silencecontraptions"
+  },
+  {
+    "source": "cadence_ability_grandfinale"
+  },
+  {
+    "source": "cadence_ability_crescendo"
+  },
+  {
+    "source": "citadel_weapon_chrono_set"
+  },
+  {
+    "source": "citadel_ability_melee_chrono"
+  },
+  {
+    "source": "citadel_ability_chrono_pulse_grenade"
+  },
+  {
+    "source": "citadel_ability_chrono_time_wall"
+  },
+  {
+    "source": "citadel_ability_chrono_kinetic_carbine"
+  },
+  {
+    "source": "citadel_ability_chrono_swap"
+  },
+  {
+    "source": "citadel_weapon_sumo_set"
+  },
+  {
+    "source": "citadel_ability_melee_sumo"
+  },
+  {
+    "source": "citadel_ability_stomp"
+  },
+  {
+    "source": "citadel_ability_void_sphere"
+  },
+  {
+    "source": "citadel_ability_charged_tackle"
+  },
+  {
+    "source": "citadel_ability_nikuman"
+  },
+  {
+    "source": "citadel_ability_self_vacuum"
+  },
+  {
+    "source": "citadel_weapon_engineer_set"
+  },
+  {
+    "source": "citadel_ability_melee_engineer"
+  },
+  {
+    "source": "citadel_ability_mobile_resupply"
+  },
+  {
+    "source": "citadel_ability_shieldedsentry"
+  },
+  {
+    "source": "citadel_ability_fissure_wall"
+  },
+  {
+    "source": "citadel_ability_fissure_wall_trigger"
+  },
+  {
+    "source": "citadel_ability_fissure_wall_cancel"
+  },
+  {
+    "source": "citadel_ability_rocket_barrage"
+  },
+  {
+    "source": "citadel_weapon_genericperson_set"
+  },
+  {
+    "source": "genericperson_ability_1"
+  },
+  {
+    "source": "genericperson_ability_2"
+  },
+  {
+    "source": "genericperson_ability_3"
+  },
+  {
+    "source": "genericperson_ability_4"
+  },
+  {
+    "source": "citadel_weapon_targetdummy_set"
+  },
+  {
+    "source": "citadel_ability_melee_targetdummy"
+  },
+  {
+    "source": "targetdummy_ability_1"
+  },
+  {
+    "source": "targetdummy_ability_2"
+  },
+  {
+    "source": "targetdummy_ability_3"
+  },
+  {
+    "source": "targetdummy_ability_4"
+  },
+  {
+    "source": "citadel_weapon_ghost_set"
+  },
+  {
+    "source": "ability_melee_ghost"
+  },
+  {
+    "source": "ability_blood_bomb"
+  },
+  {
+    "source": "ability_blood_shards"
+  },
+  {
+    "source": "ability_life_drain"
+  },
+  {
+    "source": "ability_death_tax"
+  },
+  {
+    "source": "ability_health_swap"
+  },
+  {
+    "source": "citadel_weapon_gigawatt_set"
+  },
+  {
+    "source": "citadel_ability_melee_gigawatt"
+  },
+  {
+    "source": "citadel_ability_lightning_ball"
+  },
+  {
+    "source": "citadel_ability_static_charge"
+  },
+  {
+    "source": "citadel_ability_static_charge_v2"
+  },
+  {
+    "source": "citadel_ability_chain_lightning"
+  },
+  {
+    "source": "ability_power_surge"
+  },
+  {
+    "source": "citadel_ability_storm_cloud"
+  },
+  {
+    "source": "citadel_weapon_haze_set"
+  },
+  {
+    "source": "ability_melee_haze"
+  },
+  {
+    "source": "ability_sleep_dagger"
+  },
+  {
+    "source": "ability_smoke_bomb"
+  },
+  {
+    "source": "ability_stacking_damage"
+  },
+  {
+    "source": "ability_bullet_flurry"
+  },
+  {
+    "source": "citadel_weapon_hornet_set"
+  },
+  {
+    "source": "citadel_ability_melee_hornet"
+  },
+  {
+    "source": "citadel_ability_hornet_chain"
+  },
+  {
+    "source": "citadel_ability_hornet_leap"
+  },
+  {
+    "source": "citadel_ability_hornet_sting"
+  },
+  {
+    "source": "citadel_ability_hornet_snipe"
+  },
+  {
+    "source": "citadel_weapon_inferno_set"
+  },
+  {
+    "source": "ability_melee_inferno"
+  },
+  {
+    "source": "ability_fire_bomb"
+  },
+  {
+    "source": "ability_flame_dash"
+  },
+  {
+    "source": "ability_incendiary_projectile"
+  },
+  {
+    "source": "ability_afterburn"
+  },
+  {
+    "source": "citadel_weapon_kelvin_set"
+  },
+  {
+    "source": "ability_melee_kelvin"
+  },
+  {
+    "source": "ability_icebeam"
+  },
+  {
+    "source": "ability_icepath"
+  },
+  {
+    "source": "ability_ice_grenade"
+  },
+  {
+    "source": "ability_ice_dome"
+  },
+  {
+    "source": "ability_ice_dome_trigger"
+  },
+  {
+    "source": "citadel_weapon_lash_set"
+  },
+  {
+    "source": "ability_melee_lash"
+  },
+  {
+    "source": "citadel_ability_lash"
+  },
+  {
+    "source": "citadel_ability_lash_down_strike"
+  },
+  {
+    "source": "citadel_ability_lash_ultimate"
+  },
+  {
+    "source": "ability_lash_flog"
+  },
+  {
+    "source": "citadel_weapon_mirage_set"
+  },
+  {
+    "source": "ability_melee_mirage"
+  },
+  {
+    "source": "mirage_tornado"
+  },
+  {
+    "source": "mirage_sand_phantom"
+  },
+  {
+    "source": "mirage_fire_beetles"
+  },
+  {
+    "source": "mirage_teleport"
+  },
+  {
+    "source": "citadel_weapon_digger_set"
+  },
+  {
+    "source": "ability_digger_entertunnel"
+  },
+  {
+    "source": "ability_melee_digger"
+  },
+  {
+    "source": "ability_intimidate"
+  },
+  {
+    "source": "ability_burrow"
+  },
+  {
+    "source": "ability_throw_sand"
+  },
+  {
+    "source": "ability_ult_combo"
+  },
+  {
+    "source": "citadel_weapon_digger_set2"
+  },
+  {
+    "source": "citadel_weapon_nano_set"
+  },
+  {
+    "source": "citadel_weapon_nano_alt"
+  },
+  {
+    "source": "ability_melee_nano"
+  },
+  {
+    "source": "ability_perched_predator"
+  },
+  {
+    "source": "ability_perched_predator_trigger"
+  },
+  {
+    "source": "ability_rolling_fireball"
+  },
+  {
+    "source": "ability_nano_pounce"
+  },
+  {
+    "source": "ability_nano_pounce_instant"
+  },
+  {
+    "source": "ability_nano_proximity_ritual"
+  },
+  {
+    "source": "ability_nano_shadow_step"
+  },
+  {
+    "source": "ability_nano_catform"
+  },
+  {
+    "source": "ability_nano_catform_trigger"
+  },
+  {
+    "source": "ability_nano_catform_pounce"
+  },
+  {
+    "source": "ability_nano_clustergrenade"
+  },
+  {
+    "source": "ability_nano_shadow_pulse"
+  },
+  {
+    "source": "ability_nano_dash"
+  },
+  {
+    "source": "citadel_weapon_archer_set"
+  },
+  {
+    "source": "ability_melee_archer"
+  },
+  {
+    "source": "ability_charged_shot"
+  },
+  {
+    "source": "ability_power_jump"
+  },
+  {
+    "source": "ability_immobilize_trap"
+  },
+  {
+    "source": "ability_guided_arrow"
+  },
+  {
+    "source": "citadel_weapon_shiv_set"
+  },
+  {
+    "source": "citadel_weapon_shiv_alt"
+  },
+  {
+    "source": "citadel_ability_melee_shiv"
+  },
+  {
+    "source": "citadel_ability_shiv_dagger"
+  },
+  {
+    "source": "citadel_ability_shiv_dash"
+  },
+  {
+    "source": "citadel_ability_shiv_defer_damage"
+  },
+  {
+    "source": "citadel_ability_shiv_killing_blow"
+  },
+  {
+    "source": "citadel_weapon_shieldguy_set"
+  },
+  {
+    "source": "ability_melee_shieldguy"
+  },
+  {
+    "source": "ability_shieldguy_ability01"
+  },
+  {
+    "source": "ability_shieldguy_ability02"
+  },
+  {
+    "source": "ability_shieldguy_ability03"
+  },
+  {
+    "source": "ability_shieldguy_ult"
+  },
+  {
+    "source": "citadel_weapon_slork_set"
+  },
+  {
+    "source": "fathom_scalding_spray"
+  },
+  {
+    "source": "fathom_breach"
+  },
+  {
+    "source": "fathom_defer_damage"
+  },
+  {
+    "source": "fathom_reefdweller_harpoon"
+  },
+  {
+    "source": "fathom_lurkers_ambush"
+  },
+  {
+    "source": "citadel_weapon_synth_set"
+  },
+  {
+    "source": "synth_plasma_flux"
+  },
+  {
+    "source": "synth_plasma_flux_trigger"
+  },
+  {
+    "source": "synth_pulse"
+  },
+  {
+    "source": "synth_barrage"
+  },
+  {
+    "source": "synth_affliction"
+  },
+  {
+    "source": "citadel_weapon_tengu_set"
+  },
+  {
+    "source": "citadel_ability_melee_tengu"
+  },
+  {
+    "source": "citadel_ability_tangotether"
+  },
+  {
+    "source": "citadel_ability_tangotether_trigger"
+  },
+  {
+    "source": "citadel_ability_tengu_urn"
+  },
+  {
+    "source": "citadel_ability_tengu_stone_form"
+  },
+  {
+    "source": "citadel_ability_tengu_airlift"
+  },
+  {
+    "source": "citadel_weapon_viscous_set"
+  },
+  {
+    "source": "citadel_weapon_viscous_set_2"
+  },
+  {
+    "source": "ability_melee_viscous"
+  },
+  {
+    "source": "viscous_goo_grenade"
+  },
+  {
+    "source": "viscous_restorative_goo"
+  },
+  {
+    "source": "viscous_goo_bowling_ball"
+  },
+  {
+    "source": "viscous_telepunch"
+  },
+  {
+    "source": "citadel_weapon_warden_set"
+  },
+  {
+    "source": "citadel_ability_melee_warden"
+  },
+  {
+    "source": "ability_warden_lock_down"
+  },
+  {
+    "source": "ability_warden_high_alert"
+  },
+  {
+    "source": "ability_warden_crowd_control"
+  },
+  {
+    "source": "ability_warden_riot_protocol"
+  },
+  {
+    "source": "citadel_weapon_wraith_set"
+  },
+  {
+    "source": "citadel_ability_melee_wraith"
+  },
+  {
+    "source": "citadel_ability_psychic_lift"
+  },
+  {
+    "source": "citadel_ability_projectmind"
+  },
+  {
+    "source": "citadel_ability_wraith_rapidfire"
+  },
+  {
+    "source": "citadel_ability_card_toss"
+  },
+  {
+    "source": "citadel_weapon_wrecker_set"
+  },
+  {
+    "source": "ability_melee_wrecker"
+  },
+  {
+    "source": "ability_wrecking_ball"
+  },
+  {
+    "source": "ability_wrecking_ball_throw"
+  },
+  {
+    "source": "ability_wrecker_salvage"
+  },
+  {
+    "source": "ability_scrap_blast"
+  },
+  {
+    "source": "ability_wrecker_ultimate"
+  },
+  {
+    "source": "ability_wrecker_teleport"
+  },
+  {
+    "source": "citadel_ability_wrecker_garbage_suck"
+  },
+  {
+    "source": "citadel_ability_wrecker_bouldergrenade"
+  },
+  {
+    "source": "citadel_weapon_yamato_set"
+  },
+  {
+    "source": "citadel_weapon_yamato_alt"
+  },
+  {
+    "source": "ability_melee_yamato"
+  },
+  {
+    "source": "citadel_ability_power_slash"
+  },
+  {
+    "source": "citadel_ability_flying_strike"
+  },
+  {
+    "source": "citadel_ability_healing_slash"
+  },
+  {
+    "source": "citadel_ability_infinity_slash"
+  },
+  {
+    "source": "citadel_weapon_viper_set"
+  },
+  {
+    "source": "ability_melee_viper"
+  },
+  {
+    "source": "ability_viper_hookdagger"
+  },
+  {
+    "source": "ability_viper_snakedash"
+  },
+  {
+    "source": "ability_viper_venom"
+  },
+  {
+    "source": "ability_viper_ult"
+  },
+  {
+    "source": "ability_viper_slide"
+  },
+  {
+    "source": "ability_viper_debuffdagger"
+  },
+  {
+    "source": "ability_viper_petrifybola"
+  },
+  {
+    "source": "citadel_weapon_vandal_set"
+  },
+  {
+    "source": "ability_melee_vandal"
+  },
+  {
+    "source": "citadel_ability_vandal_surge"
+  },
+  {
+    "source": "ability_vandal_pillar"
+  },
+  {
+    "source": "ability_haunt"
+  },
+  {
+    "source": "citadel_ability_vandal_overflow"
+  },
+  {
+    "source": "citadel_weapon_magician_set"
+  },
+  {
+    "source": "ability_melee_magician"
+  },
+  {
+    "source": "ability_magician_magicbolt"
+  },
+  {
+    "source": "citadel_ability_magewalk"
+  },
+  {
+    "source": "ability_magician_animalcurse"
+  },
+  {
+    "source": "ability_magician_shadowclone"
+  },
+  {
+    "source": "ability_magician_cloneturret"
+  },
+  {
+    "source": "ability_magician_stage"
+  },
+  {
+    "source": "ability_magician_bigbolt"
+  },
+  {
+    "source": "ability_magician_escape"
+  },
+  {
+    "source": "ability_magician_copyult"
+  },
+  {
+    "source": "ability_magician_animalhexarea"
+  },
+  {
+    "source": "citadel_weapon_trapper_set"
+  },
+  {
+    "source": "ability_melee_trapper"
+  },
+  {
+    "source": "ability_trapper_poisonjar"
+  },
+  {
+    "source": "ability_trapper_spiderwave"
+  },
+  {
+    "source": "ability_trapper_spidershield"
+  },
+  {
+    "source": "ability_trapper_fear"
+  },
+  {
+    "source": "ability_trapper_webwall"
+  },
+  {
+    "source": "ability_trapper_fear1"
+  },
+  {
+    "source": "citadel_weapon_operative_set"
+  },
+  {
+    "source": "operative_umbrella_maneuver"
+  },
+  {
+    "source": "operative_blindside"
+  },
+  {
+    "source": "operative_revelation"
+  },
+  {
+    "source": "citadel_weapon_gunslinger2_set"
+  },
+  {
+    "source": "ability_gunslinger_spreadingfire"
+  },
+  {
+    "source": "ability_empowerbullet"
+  },
+  {
+    "source": "ability_gunslinger_demon_carbine"
+  },
+  {
+    "source": "ability_gunslinger_salvo"
+  },
+  {
+    "source": "gunslinger_demonMark"
+  },
+  {
+    "source": "gunslinger_knockbackblast"
+  },
+  {
+    "source": "citadel_weapon_vampirebat_set"
+  },
+  {
+    "source": "ability_melee_vampirebat"
+  },
+  {
+    "source": "ability_vampirebat_batblink"
+  },
+  {
+    "source": "ability_vampirebat_lovebites"
+  },
+  {
+    "source": "ability_vampirebat_batswarm"
+  },
+  {
+    "source": "ability_vampirebat_batblink_trigger"
+  },
+  {
+    "source": "ability_vampirebat_batcloud"
+  },
+  {
+    "source": "ability_vampirebat_steallife"
+  },
+  {
+    "source": "citadel_weapon_vampirebat_set2"
+  },
+  {
+    "source": "citadel_weapon_boho_set"
+  },
+  {
+    "source": "ability_melee_boho"
+  },
+  {
+    "source": "ability_boho_damageshare"
+  },
+  {
+    "source": "ability_boho_bouncyprojectile"
+  },
+  {
+    "source": "ability_boho_doublehit"
+  },
+  {
+    "source": "ability_boho_channeltether"
+  },
+  {
+    "source": "ability_boho_skipgrenade"
+  },
+  {
+    "source": "ability_boho_ability02"
+  },
+  {
+    "source": "ability_boho_ability03"
+  },
+  {
+    "source": "ability_boho_ability04"
+  },
+  {
+    "source": "ability_boho_ridebroom"
+  },
+  {
+    "source": "citadel_weapon_swan_set"
+  },
+  {
+    "source": "ability_melee_swan"
+  },
+  {
+    "source": "ability_swan_featherboomerang"
+  },
+  {
+    "source": "ability_swan_leap"
+  },
+  {
+    "source": "ability_swan_acrobat"
+  },
+  {
+    "source": "ability_swan_ult"
+  },
+  {
+    "source": "citadel_weapon_skyrunner_set"
+  },
+  {
+    "source": "ability_melee_skyrunner"
+  },
+  {
+    "source": "ability_skyrunner_flakshot"
+  },
+  {
+    "source": "ability_skyrunner_magic_beam"
+  },
+  {
+    "source": "ability_skyrunner_swingline"
+  },
+  {
+    "source": "ability_skyrunner_ult"
+  },
+  {
+    "source": "citadel_weapon_skyrunner_alt"
+  },
+  {
+    "source": "citadel_weapon_druid_set"
+  },
+  {
+    "source": "ability_melee_druid"
+  },
+  {
+    "source": "ability_druid_leech_seed"
+  },
+  {
+    "source": "ability_druid_helicopter_seeds"
+  },
+  {
+    "source": "ability_druid_sprout"
+  },
+  {
+    "source": "ability_druid_ult"
+  },
+  {
+    "source": "ability_druid_base_plant"
+  },
+  {
+    "source": "ability_druid_plant_invis_bush"
+  },
+  {
+    "source": "ability_druid_plant_branch_wall"
+  },
+  {
+    "source": "ability_druid_plant_healing_tree"
+  },
+  {
+    "source": "ability_druid_plant_something"
+  },
+  {
+    "source": "citadel_weapon_graf_set"
+  },
+  {
+    "source": "ability_melee_graf"
+  },
+  {
+    "source": "ability_graf_ability01"
+  },
+  {
+    "source": "ability_graf_ability02"
+  },
+  {
+    "source": "ability_graf_ability03"
+  },
+  {
+    "source": "ability_graf_ult"
+  },
+  {
+    "source": "citadel_weapon_fortuna_set"
+  },
+  {
+    "source": "ability_melee_fortuna"
+  },
+  {
+    "source": "ability_fortuna_ability01"
+  },
+  {
+    "source": "ability_fortuna_ability02"
+  },
+  {
+    "source": "ability_fortuna_ability03"
+  },
+  {
+    "source": "ability_fortuna_ult"
+  },
+  {
+    "source": "citadel_weapon_frank_set2"
+  },
+  {
+    "source": "ability_melee_frank"
+  },
+  {
+    "source": "ability_frank_selfzap"
+  },
+  {
+    "source": "ability_frank_painaura"
+  },
+  {
+    "source": "ability_frank_revive"
+  },
+  {
+    "source": "ability_frank_shocktarget2"
+  },
+  {
+    "source": "citadel_weapon_bookworm_set"
+  },
+  {
+    "source": "ability_melee_bookworm"
+  },
+  {
+    "source": "ability_bookworm_dragonfire"
+  },
+  {
+    "source": "ability_bookworm_aoemagic"
+  },
+  {
+    "source": "ability_bookworm_knightbarrier"
+  },
+  {
+    "source": "ability_bookworm_knightcharge"
+  },
+  {
+    "source": "citadel_weapon_bookworm_set2"
+  },
+  {
+    "source": "citadel_weapon_doorman_set"
+  },
+  {
+    "source": "citadel_weapon_doorman_alt"
+  },
+  {
+    "source": "ability_melee_doorman"
+  },
+  {
+    "source": "ability_doorman_doorway"
+  },
+  {
+    "source": "ability_doorman_doorway_close"
+  },
+  {
+    "source": "ability_doorman_luggage_cart"
+  },
+  {
+    "source": "ability_doorman_bomb"
+  },
+  {
+    "source": "ability_doorman_hotel"
+  },
+  {
+    "source": "citadel_weapon_punkgoat_set"
+  },
+  {
+    "source": "ability_punkgoat_slide"
+  },
+  {
+    "source": "ability_melee_punkgoat"
+  },
+  {
+    "source": "ability_punkgoat_blasted"
+  },
+  {
+    "source": "ability_punkgoat_tether"
+  },
+  {
+    "source": "ability_punkgoat_goatflip"
+  },
+  {
+    "source": "ability_punkgoat_ult"
+  },
+  {
+    "source": "citadel_weapon_drifter_set"
+  },
+  {
+    "source": "citadel_weapon_drifter_alt"
+  },
+  {
+    "source": "ability_melee_drifter"
+  },
+  {
+    "source": "drifter_blood_blast"
+  },
+  {
+    "source": "drifter_shadow_mark"
+  },
+  {
+    "source": "drifter_shadow_mark_teleport"
+  },
+  {
+    "source": "ability_drifter_hunger"
+  },
+  {
+    "source": "drifter_darkness"
+  },
+  {
+    "source": "citadel_weapon_opera_set"
+  },
+  {
+    "source": "ability_melee_opera"
+  },
+  {
+    "source": "ability_opera_ability01"
+  },
+  {
+    "source": "ability_opera_ability02"
+  },
+  {
+    "source": "ability_opera_ability03"
+  },
+  {
+    "source": "ability_opera_ult"
+  },
+  {
+    "source": "upgrade_base"
+  },
+  {
+    "source": "armor_upgrade_base"
+  },
+  {
+    "source": "armor_upgrade_t1"
+  },
+  {
+    "source": "armor_upgrade_t2"
+  },
+  {
+    "source": "armor_upgrade_t3"
+  },
+  {
+    "source": "armor_upgrade_t4"
+  },
+  {
+    "source": "armor_upgrade_t5"
+  },
+  {
+    "source": "weapon_upgrade_base"
+  },
+  {
+    "source": "weapon_upgrade_t1"
+  },
+  {
+    "source": "weapon_upgrade_t2"
+  },
+  {
+    "source": "weapon_upgrade_t3"
+  },
+  {
+    "source": "weapon_upgrade_t4"
+  },
+  {
+    "source": "weapon_upgrade_t5"
+  },
+  {
+    "source": "tech_upgrade_base"
+  },
+  {
+    "source": "tech_upgrade_t1"
+  },
+  {
+    "source": "tech_upgrade_t2"
+  },
+  {
+    "source": "tech_upgrade_t3"
+  },
+  {
+    "source": "tech_upgrade_t4"
+  },
+  {
+    "source": "tech_upgrade_t5"
+  },
+  {
+    "source": "item_projectile_test_01"
+  },
+  {
+    "source": "item_projectile_test_02"
+  },
+  {
+    "source": "item_projectile_test_03"
+  },
+  {
+    "source": "item_projectile_test_04"
+  },
+  {
+    "source": "item_projectile_test_05"
+  },
+  {
+    "source": "item_projectile_test_06"
+  },
+  {
+    "source": "upgrade_clip_size"
+  },
+  {
+    "source": "upgrade_non_player_bonus"
+  },
+  {
+    "source": "upgrade_non_player_bonus_sacrifice"
+  },
+  {
+    "source": "upgrade_ammo_scavenger"
+  },
+  {
+    "source": "upgrade_clip_size_fixed"
+  },
+  {
+    "source": "upgrade_clip_size_fixed_t3"
+  },
+  {
+    "source": "upgrade_chain_lightning"
+  },
+  {
+    "source": "upgrade_capacitor"
+  },
+  {
+    "source": "upgrade_galvanic_storm"
+  },
+  {
+    "source": "upgrade_hollow_point_rounds"
+  },
+  {
+    "source": "upgrade_pristine_emblem"
+  },
+  {
+    "source": "upgrade_stabilizer"
+  },
+  {
+    "source": "upgrade_high_velocity_mag"
+  },
+  {
+    "source": "upgrade_lifestrike_gauntlets"
+  },
+  {
+    "source": "upgrade_melee_rebuttal"
+  },
+  {
+    "source": "upgrade_counterspell"
+  },
+  {
+    "source": "upgrade_weighted_shots"
+  },
+  {
+    "source": "upgrade_ancient_shield"
+  },
+  {
+    "source": "upgrade_close_range"
+  },
+  {
+    "source": "upgrade_long_range"
+  },
+  {
+    "source": "upgrade_slowing_bullets"
+  },
+  {
+    "source": "upgrade_inhibitor"
+  },
+  {
+    "source": "upgrade_small_attack_speed"
+  },
+  {
+    "source": "upgrade_tech_defense_shredders"
+  },
+  {
+    "source": "upgrade_attack_speed_1"
+  },
+  {
+    "source": "upgrade_nearby_enemy_boost"
+  },
+  {
+    "source": "upgrade_dps_aura"
+  },
+  {
+    "source": "upgrade_weapon_detention_ammo"
+  },
+  {
+    "source": "upgrade_targeted_silence"
+  },
+  {
+    "source": "upgrade_haunting_scream"
+  },
+  {
+    "source": "upgrade_proc_silence"
+  },
+  {
+    "source": "upgrade_silencer"
+  },
+  {
+    "source": "upgrade_proc_disarm"
+  },
+  {
+    "source": "upgrade_berserker"
+  },
+  {
+    "source": "upgrade_fervor"
+  },
+  {
+    "source": "upgrade_siphon_bullets"
+  },
+  {
+    "source": "upgrade_headshot_booster"
+  },
+  {
+    "source": "upgrade_headshot_booster2"
+  },
+  {
+    "source": "upgrade_sharpshooter"
+  },
+  {
+    "source": "upgrade_headhunter"
+  },
+  {
+    "source": "upgrade_spellslinger_headshots"
+  },
+  {
+    "source": "upgrade_banshee_slugs"
+  },
+  {
+    "source": "upgrade_proc_tech_damage"
+  },
+  {
+    "source": "upgrade_crackshot"
+  },
+  {
+    "source": "upgrade_critshot"
+  },
+  {
+    "source": "upgrade_close_quarter_combat"
+  },
+  {
+    "source": "upgrade_clip_size_2"
+  },
+  {
+    "source": "upgrade_clip_size_3"
+  },
+  {
+    "source": "upgrade_toxic_bullets"
+  },
+  {
+    "source": "upgrade_attack_speed_2"
+  },
+  {
+    "source": "upgrade_drum_magazine"
+  },
+  {
+    "source": "upgrade_ricochet"
+  },
+  {
+    "source": "upgrade_apex_combat"
+  },
+  {
+    "source": "upgrade_health"
+  },
+  {
+    "source": "upgrade_health_2"
+  },
+  {
+    "source": "upgrade_toughness_3"
+  },
+  {
+    "source": "upgrade_bullet_armor"
+  },
+  {
+    "source": "upgrade_tech_armor"
+  },
+  {
+    "source": "upgrade_health_regen_1"
+  },
+  {
+    "source": "upgrade_vampire"
+  },
+  {
+    "source": "upgrade_double_jump"
+  },
+  {
+    "source": "upgrade_health_regen_aura"
+  },
+  {
+    "source": "upgrade_debuff_reducer"
+  },
+  {
+    "source": "upgrade_reduce_debuff_duration"
+  },
+  {
+    "source": "upgrade_high_impact_armor"
+  },
+  {
+    "source": "upgrade_slow_immunity"
+  },
+  {
+    "source": "upgrade_weapon_power_and_health_drain"
+  },
+  {
+    "source": "upgrade_active_bullet_shield"
+  },
+  {
+    "source": "upgrade_tech_purge"
+  },
+  {
+    "source": "upgrade_improved_bullet_armor"
+  },
+  {
+    "source": "upgrade_metal_skin"
+  },
+  {
+    "source": "upgrade_healing_booster"
+  },
+  {
+    "source": "upgrade_chonky"
+  },
+  {
+    "source": "upgrade_damage_recycler"
+  },
+  {
+    "source": "upgrade_bullet_damage_reduction_aura"
+  },
+  {
+    "source": "upgrade_sprint_booster"
+  },
+  {
+    "source": "upgrade_trophy_collector"
+  },
+  {
+    "source": "upgrade_cardio_calibrator"
+  },
+  {
+    "source": "upgrade_superior_stamina"
+  },
+  {
+    "source": "upgrade_aerial_supremacy"
+  },
+  {
+    "source": "upgrade_rapid_rounds"
+  },
+  {
+    "source": "upgrade_improved_stamina"
+  },
+  {
+    "source": "upgrade_bullet_armor_reduction_aura"
+  },
+  {
+    "source": "upgrade_camouflage"
+  },
+  {
+    "source": "upgrade_regenerative_armor"
+  },
+  {
+    "source": "upgrade_grit"
+  },
+  {
+    "source": "upgrade_weapon_shielding"
+  },
+  {
+    "source": "upgrade_spirit_bubble"
+  },
+  {
+    "source": "upgrade_regenerating_bullet_shield"
+  },
+  {
+    "source": "upgrade_magic_shield"
+  },
+  {
+    "source": "upgrade_improved_spirit"
+  },
+  {
+    "source": "upgrade_mystic_regeneration"
+  },
+  {
+    "source": "upgrade_soaring_spirit"
+  },
+  {
+    "source": "upgrade_tech_overflow"
+  },
+  {
+    "source": "upgrade_return_fire"
+  },
+  {
+    "source": "upgrade_tech_range"
+  },
+  {
+    "source": "upgrade_magic_reach"
+  },
+  {
+    "source": "upgrade_extra_charge"
+  },
+  {
+    "source": "upgrade_health_stealing_magic"
+  },
+  {
+    "source": "upgrade_disarm"
+  },
+  {
+    "source": "upgrade_bullet_resist_shredder"
+  },
+  {
+    "source": "upgrade_mystic_reverb"
+  },
+  {
+    "source": "upgrade_magic_burst"
+  },
+  {
+    "source": "upgrade_magic_shock"
+  },
+  {
+    "source": "upgrade_arcane_medallion"
+  },
+  {
+    "source": "upgrade_magic_vulnerability"
+  },
+  {
+    "source": "upgrade_healbane"
+  },
+  {
+    "source": "upgrade_magic_slow"
+  },
+  {
+    "source": "upgrade_escalating_exposure"
+  },
+  {
+    "source": "upgrade_rapid_recharge"
+  },
+  {
+    "source": "upgrade_omnicharge_pendant"
+  },
+  {
+    "source": "upgrade_magic_tempo"
+  },
+  {
+    "source": "upgrade_cooldown_reduction"
+  },
+  {
+    "source": "upgrade_transcendent_cooldown"
+  },
+  {
+    "source": "upgrade_timeless_emblem"
+  },
+  {
+    "source": "upgrade_shadow_step"
+  },
+  {
+    "source": "upgrade_duration_extender"
+  },
+  {
+    "source": "upgrade_slowing_tech"
+  },
+  {
+    "source": "upgrade_containment"
+  },
+  {
+    "source": "upgrade_spirit_sap"
+  },
+  {
+    "source": "upgrade_focus_lens"
+  },
+  {
+    "source": "upgrade_withering_whip"
+  },
+  {
+    "source": "upgrade_greater_withering_whip"
+  },
+  {
+    "source": "upgrade_rescue_beam"
+  },
+  {
+    "source": "upgrade_personal_rejuvenator"
+  },
+  {
+    "source": "upgrade_rebirth"
+  },
+  {
+    "source": "upgrade_long_range_slowing_tech"
+  },
+  {
+    "source": "upgrade_full_spectrum"
+  },
+  {
+    "source": "upgrade_tech_cleave"
+  },
+  {
+    "source": "upgrade_bonus_ability_charge_3"
+  },
+  {
+    "source": "upgrade_charge_mastery"
+  },
+  {
+    "source": "upgrade_rupture"
+  },
+  {
+    "source": "upgrade_discord"
+  },
+  {
+    "source": "upgrade_aoe_tech_shield"
+  },
+  {
+    "source": "upgrade_target_stun"
+  },
+  {
+    "source": "upgrade_phantom_strike"
+  },
+  {
+    "source": "upgrade_warp_stone"
+  },
+  {
+    "source": "upgrade_aoe_root"
+  },
+  {
+    "source": "upgrade_ability_refresher"
+  },
+  {
+    "source": "upgrade_ability_power_shard"
+  },
+  {
+    "source": "upgrade_tech_damage_pulse"
+  },
+  {
+    "source": "upgrade_cheat_death"
+  },
+  {
+    "source": "upgrade_reload_speed"
+  },
+  {
+    "source": "upgrade_cloaking_device"
+  },
+  {
+    "source": "upgrade_cloaking_device_active"
+  },
+  {
+    "source": "upgrade_fire_rate_aura"
+  },
+  {
+    "source": "upgrade_weapon_overdrive_clip"
+  },
+  {
+    "source": "upgrade_rocket_boots"
+  },
+  {
+    "source": "upgrade_rocket_booster"
+  },
+  {
+    "source": "upgrade_aerial_assault"
+  },
+  {
+    "source": "upgrade_health_nova"
+  },
+  {
+    "source": "upgrade_restorative_locket"
+  },
+  {
+    "source": "upgrade_health_stimpak"
+  },
+  {
+    "source": "upgrade_shrink_ray"
+  },
+  {
+    "source": "upgrade_infuser"
+  },
+  {
+    "source": "upgrade_guardian_ward"
+  },
+  {
+    "source": "upgrade_divine_barrier"
+  },
+  {
+    "source": "upgrade_aoe_smoke_bomb"
+  },
+  {
+    "source": "upgrade_thermal_detonator"
+  },
+  {
+    "source": "upgrade_blood_tribute"
+  },
+  {
+    "source": "upgrade_fleetfoot_boots"
+  },
+  {
+    "source": "upgrade_kinetic_sash"
+  },
+  {
+    "source": "upgrade_arcane_surge"
+  },
+  {
+    "source": "upgrade_weapon_eater"
+  },
+  {
+    "source": "upgrade_weapon_instant_reload"
+  },
+  {
+    "source": "upgrade_unstoppable"
+  },
+  {
+    "source": "upgrade_colossus"
+  },
+  {
+    "source": "upgrade_cold_front"
+  },
+  {
+    "source": "upgrade_arctic_blast"
+  },
+  {
+    "source": "upgrade_aoe_silence"
+  },
+  {
+    "source": "upgrade_self_bubble"
+  },
+  {
+    "source": "upgrade_stasis_bomb"
+  },
+  {
+    "source": "upgrade_quarantine"
+  },
+  {
+    "source": "upgrade_glitch"
+  },
+  {
+    "source": "upgrade_imbued_ability"
+  },
+  {
+    "source": "upgrade_arcane_extension"
+  },
+  {
+    "source": "upgrade_imbued_duration_extender"
+  },
+  {
+    "source": "upgrade_glass_cannon"
+  },
+  {
+    "source": "upgrade_fury_trance"
+  },
+  {
+    "source": "upgrade_surging_power"
+  },
+  {
+    "source": "upgrade_mod_disruptor"
+  },
+  {
+    "source": "upgrade_frenzy"
+  },
+  {
+    "source": "upgrade_burst_fire_actuator"
+  },
+  {
+    "source": "upgrade_boxing_glove"
+  },
+  {
+    "source": "upgrade_acolytes_glove"
+  },
+  {
+    "source": "upgrade_spirit_snatch"
+  },
+  {
+    "source": "upgrade_melee_charge"
+  },
+  {
+    "source": "upgrade_crushing_fists"
+  },
+  {
+    "source": "upgrade_charmed_wraps"
+  },
+  {
+    "source": "upgrade_belt_fed_magazine"
+  },
+  {
+    "source": "upgrade_diviners_kevlar"
+  },
+  {
+    "source": "upgrade_resonant_healing"
+  },
+  {
+    "source": "upgrade_boundless_spirit"
+  },
+  {
+    "source": "upgrade_burst_fire"
+  },
+  {
+    "source": "upgrade_resilience"
+  },
+  {
+    "source": "upgrade_endurance"
+  },
+  {
+    "source": "upgrade_magic_clarity"
+  },
+  {
+    "source": "upgrade_magic_storm"
+  },
+  {
+    "source": "upgrade_suppressor"
+  },
+  {
+    "source": "upgrade_quick_silver"
+  },
+  {
+    "source": "upgrade_ethereal_bullets"
+  },
+  {
+    "source": "upgrade_arcane_eater"
+  },
+  {
+    "source": "upgrade_predator_precision"
+  },
+  {
+    "source": "upgrade_intensifying_clip"
+  },
+  {
+    "source": "upgrade_reinforcing_casings"
+  },
+  {
+    "source": "upgrade_blitz_bullets"
+  },
+  {
+    "source": "upgrade_veil_walker"
+  },
+  {
+    "source": "upgrade_vex_barrier"
+  },
+  {
+    "source": "upgrade_auto_cleanse"
+  },
+  {
+    "source": "upgrade_medic_bullets"
+  },
+  {
+    "source": "upgrade_titan_round"
+  },
+  {
+    "source": "upgrade_split_shot"
+  },
+  {
+    "source": "upgrade_active_reload"
+  },
+  {
+    "source": "upgrade_magic_carpet"
+  },
+  {
+    "source": "upgrade_spellshield"
+  },
+  {
+    "source": "upgrade_superacolytes_glove"
+  },
+  {
+    "source": "upgrade_magic_missile"
+  },
+  {
+    "source": "upgrade_heal_on_level"
+  },
+  {
+    "source": "upgrade_spirit_burn"
+  },
+  {
+    "source": "upgrade_ultimate_burst"
+  },
+  {
+    "source": "upgrade_corpse_explosion"
+  },
+  {
+    "source": "upgrade_absorbing_armor"
+  },
+  {
+    "source": "upgrade_healbuff"
+  },
+  {
+    "source": "upgrade_infinitemagazine"
+  },
+  {
+    "source": "upgrade_glass_cannon2"
+  },
+  {
+    "source": "upgrade_aprounds"
+  },
+  {
+    "source": "upgrade_infinite_rounds"
+  },
+  {
+    "source": "upgrade_deflecting_armor"
+  },
+  {
+    "source": "upgrade_spellbreaker"
+  },
+  {
+    "source": "upgrade_juggernaut"
+  },
+  {
+    "source": "upgrade_enchanted_holsters"
+  },
+  {
+    "source": "upgrade_weapon_backstabber"
+  },
+  {
+    "source": "upgrade_express_shot"
+  },
+  {
+    "source": "upgrade_icarus_wings"
+  },
+  {
+    "source": "upgrade_mystical_piano"
+  },
+  {
+    "source": "upgrade_nullification_aura"
+  },
+  {
+    "source": "upgrade_celestial_guidance"
+  },
+  {
+    "source": "upgrade_eternal_gift"
+  },
+  {
+    "source": "upgrade_patrons_blessing"
+  },
+  {
+    "source": "upgrade_eldritch_shot"
+  },
+  {
+    "source": "upgrade_cloak_of_opportunity"
+  },
+  {
+    "source": "upgrade_runed_gauntlets"
+  },
+  {
+    "source": "upgrade_electric_slippers"
+  },
+  {
+    "source": "upgrade_prism_blast"
+  },
+  {
+    "source": "upgrade_unstable_concoction"
+  },
+  {
+    "source": "upgrade_shivas_bracelet"
+  },
+  {
+    "source": "upgrade_shadow_strike"
+  },
+  {
+    "source": "upgrade_bulletshredimbue"
+  },
+  {
+    "source": "upgrade_rechargingbullets"
+  },
+  {
+    "source": "upgrade_goose_egg"
+  },
+  {
+    "source": "cosmetic_base"
+  },
+  {
+    "source": "cosmetic_ability_snowball"
+  },
+  {
+    "source": "cosmetic_ability_voting_poster"
+  },
+  {
+    "source": "cosmetic_ability_emote"
+  },
+  {
+    "source": "citadel_weapon_priest_set"
+  },
+  {
+    "source": "ability_melee_priest"
+  },
+  {
+    "source": "ability_priest_knockback"
+  },
+  {
+    "source": "ability_priest_selfheal"
+  },
+  {
+    "source": "ability_priest_stackingdefense"
+  },
+  {
+    "source": "citadel_weapon_priest_crossbow"
+  },
+  {
+    "source": "ability_priest_weaponswap"
+  },
+  {
+    "source": "ability_priest_smokegrenade"
+  },
+  {
+    "source": "ability_priest_antispiritvest"
+  },
+  {
+    "source": "ability_priest_silencebomb"
+  },
+  {
+    "source": "ability_priest_flashbang"
+  },
+  {
+    "source": "ability_priest_beartrap"
+  },
+  {
+    "source": "ability_familiar_alt_weapon"
+  },
+  {
+    "source": "ability_familiar_primary_weapon_bubblegun"
+  },
+  {
+    "source": "ability_melee_familiar"
+  },
+  {
+    "source": "ability_familiar_ability02"
+  },
+  {
+    "source": "ability_familiar_ability01"
+  },
+  {
+    "source": "ability_familiar_helpinghands"
+  },
+  {
+    "source": "ability_familiar_attach"
+  },
+  {
+    "source": "ability_familiar_attach_trigger"
+  },
+  {
+    "source": "citadel_weapon_fencer_set"
+  },
+  {
+    "source": "citadel_weapon_fencer_alt"
+  },
+  {
+    "source": "ability_melee_fencer"
+  },
+  {
+    "source": "ability_fencer_throwblade"
+  },
+  {
+    "source": "ability_fencer_riposte_target_select"
+  },
+  {
+    "source": "ability_fencer_riposte"
+  },
+  {
+    "source": "ability_fencer_lunge"
+  },
+  {
+    "source": "ability_fencer_ultimate"
+  },
+  {
+    "source": "citadel_weapon_necro_set"
+  },
+  {
+    "source": "ability_melee_necro"
+  },
+  {
+    "source": "ability_necro_zombiewall"
+  },
+  {
+    "source": "ability_necro_hauntingskull"
+  },
+  {
+    "source": "ability_necro_gravestone"
+  },
+  {
+    "source": "ability_necro_killsummon"
+  },
+  {
+    "source": "ability_necro_nukemap"
+  },
+  {
+    "source": "ability_necro_killsummon_trigger"
+  },
+  {
+    "source": "ability_necro_coffin"
+  },
+  {
+    "source": "ability_necro_fear"
+  },
+  {
+    "source": "ability_necro_haunt"
+  },
+  {
+    "source": "ability_necro_wither"
+  },
+  {
+    "source": "ability_melee_werewolf"
+  },
+  {
+    "source": "citadel_weapon_werewolf_rifle"
+  },
+  {
+    "source": "citadel_weapon_werewolf_claws"
+  },
+  {
+    "source": "ability_werewolf_unloadgun"
+  },
+  {
+    "source": "ability_werewolf_kickflip"
+  },
+  {
+    "source": "ability_werewolf_maulingleap"
+  },
+  {
+    "source": "ability_werewolf_netshot"
+  },
+  {
+    "source": "ability_werewolf_cripplingslash"
+  },
+  {
+    "source": "ability_werewolf_trackingbomb"
+  },
+  {
+    "source": "ability_werewolf_transformation"
+  },
+  {
+    "source": "ability_werewolf_hunt"
+  },
+  {
+    "source": "ability_werewolf_passive"
+  },
+  {
+    "source": "ability_werewolf_onthehunt"
+  },
+  {
+    "source": "ability_werewolf_transformation_trigger"
+  },
+  {
+    "source": "ability_werewolf_frenzy"
+  },
+  {
+    "source": "ability_werewolf_leap"
+  },
+  {
+    "source": "citadel_weapon_unicorn_set"
+  },
+  {
+    "source": "ability_melee_unicorn"
+  },
+  {
+    "source": "ability_unicorn_radiantblast"
+  },
+  {
+    "source": "ability_unicorn_prismaticguard"
+  },
+  {
+    "source": "ability_unicorn_dazzlingorb"
+  },
+  {
+    "source": "ability_unicorn_luminousstrike"
+  },
+  {
+    "source": "citadel_weapon_artist_set"
+  },
+  {
+    "source": "citadel_weapon_artist_projectile"
+  },
+  {
+    "source": "ability_melee_artist"
+  },
+  {
+    "source": "ability_artist_homingbrush"
+  },
+  {
+    "source": "ability_artist_pullbrush"
+  },
+  {
+    "source": "ability_artist_rollingprojectile"
+  },
+  {
+    "source": "ability_artist_rollingprojectile_trigger"
+  },
+  {
+    "source": "ability_artist_tether"
+  },
+  {
+    "source": "ability_artist_bamboogrove"
+  },
+  {
+    "source": "ability_artist_bamboogrove_trigger"
+  },
+  {
+    "source": "citadel_weapon_baba_set"
+  },
+  {
+    "source": "ability_melee_baba"
+  },
+  {
+    "source": "ability_baba_bench_melee"
+  },
+  {
+    "source": "ability_baba_bubbling_brew"
+  },
+  {
+    "source": "ability_baba_bench_run"
+  },
+  {
+    "source": "ability_baba_hexing_brew"
+  },
+  {
+    "source": "ability_baba_hexing_brew_throw"
+  },
+  {
+    "source": "ability_baba_ultimate_2"
+  },
+  {
+    "source": "citadel_weapon_chessmaster_shotgun"
+  },
+  {
+    "source": "citadel_weapon_chessmaster_set"
+  },
+  {
+    "source": "ability_melee_chessmaster"
+  },
+  {
+    "source": "ability_chessmaster_movechesspiece"
+  },
+  {
+    "source": "ability_chessmaster_throwbishop"
+  },
+  {
+    "source": "ability_chessmaster_throwbishop_trigger"
+  },
+  {
+    "source": "ability_chessmaster_knightbuff"
+  },
+  {
+    "source": "ability_chessmaster_knightbuff_trigger"
+  },
+  {
+    "source": "ability_chessmaster_forkpiece"
+  },
+  {
+    "source": "ability_chessmaster_forkpiece_trigger"
+  },
+  {
+    "source": "ability_chessmaster_queen"
+  },
+  {
+    "source": "ability_chessmaster_queen_trigger"
+  },
+  {
+    "source": "ability_deadpack_zip_line"
+  },
+  {
+    "source": "ability_deadpack_primary_weapon_charge"
+  },
+  {
+    "source": "ability_melee_deadpack"
+  },
+  {
+    "source": "ability_deadpack_rocketeer"
+  },
+  {
+    "source": "ability_deadpack_chargeblast"
+  },
+  {
+    "source": "ability_deadpack_ultimate"
+  },
+  {
+    "source": "ability_deadpack_flamethrower"
+  },
+  {
+    "source": "citadel_weapon_nurse_set"
+  },
+  {
+    "source": "citadel_weapon_nurse_healing_needles"
+  },
+  {
+    "source": "ability_melee_nurse"
+  },
+  {
+    "source": "ability_nurse_leech_therapy"
+  },
+  {
+    "source": "ability_nurse_fear"
+  },
+  {
+    "source": "ability_nurse_healing_needles"
+  },
+  {
+    "source": "ability_nurse_adrenaline_rush"
+  },
+  {
+    "source": "citadel_weapon_ratking_set"
+  },
+  {
+    "source": "ability_melee_ratking"
+  },
+  {
+    "source": "ability_ratking_ratnibble"
+  },
+  {
+    "source": "ability_ratking_scrap_grenade"
+  },
+  {
+    "source": "ability_ratking_ratarmor"
+  },
+  {
+    "source": "ability_ratking_entertunnel"
+  },
+  {
+    "source": "ability_ratking_standard_bearer_trigger"
+  },
+  {
+    "source": "ability_ratking_standard_bearer"
+  },
+  {
+    "source": "citadel_ability_jump_ratking"
+  }
+]

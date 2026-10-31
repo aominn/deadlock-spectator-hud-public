@@ -1,0 +1,515 @@
+{
+  "schema": 1,
+  "scope": "reviewed applied effects only; forecast excluded; native icons without names; live/replay share exact paths",
+  "modifiers": {
+    "ability_artist_bamboogrove/groundaura/silence": {
+      "effect": "サイレンス",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "ability_artist_rollingprojectile/slow": {
+      "effect": "スロウ",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "ability_artist_tether/stunned": {
+      "effect": "スタン",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "ability_baba_bench_run/modifier_baba_bench_run/modifier_baba_bench_heavy_kick_slow": {
+      "effect": "スロウ",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "ability_baba_hexing_brew/modifier_baba_brew_barrier": {
+      "effect": "シールド",
+      "polarity": "buff",
+      "enemy_only": false,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "ability_baba_hexing_brew/modifier_baba_brew_fire": {
+      "effect": "燃焼",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "ability_baba_hexing_brew/modifier_baba_brew_silence": {
+      "effect": "サイレンス",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "ability_baba_ultimate_2/modifier_baba_ult2_mark/modifier_baba_ult2_impact/modifier_baba_ult2_pigeon": {
+      "effect": "変身",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "exact native path and owner/caster verified in local recordings for v0.1.52"
+    },
+    "ability_bookworm_aoemagic/areamodifier/root": {
+      "effect": "移動不能",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "ability_bookworm_aoemagic/areamodifier/slowmodifier": {
+      "effect": "スロウ",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "ability_bookworm_dragonfire/groundaura/groundaura_burn": {
+      "effect": "燃焼",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "ability_bookworm_knightbarrier/knightbarrier": {
+      "effect": "シールド",
+      "polarity": "buff",
+      "enemy_only": false,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "ability_burrow/modifier_spin/modifier_slow": {
+      "effect": "スロウ",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "ability_chessmaster_forkpiece/hex": {
+      "effect": "移動不能",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "native modifier_citadel_root with exact path;28 enemy target applications in local recording115363298"
+    },
+    "ability_chessmaster_queen/slow": {
+      "effect": "スロウ",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "ability_chessmaster_throwbishop/slow": {
+      "effect": "スロウ",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "ability_deadpack_chargeblast/coated_slow": {
+      "effect": "スロウ",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "ability_familiar_ability02/slow": {
+      "effect": "スロウ",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "ability_frank_revive/slow": {
+      "effect": "スロウ",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "ability_frank_shocktarget2/zap_slow": {
+      "effect": "スロウ",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "ability_magician_animalhexarea/hexarea_modifier/animalhex_curse_modifier": {
+      "effect": "変身",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "exact native path and owner/caster verified in local recordings for v0.1.52"
+    },
+    "ability_necro_hauntingskull/slow": {
+      "effect": "スロウ",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "ability_nurse_fear/modifier_nurse_fear_slow": {
+      "effect": "スロウ",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "ability_ratking_scrap_grenade/ratking_scrap_grenade_big_slow": {
+      "effect": "スロウ",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "ability_ratking_scrap_grenade/ratking_scrap_grenade_slow": {
+      "effect": "スロウ",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "ability_sleep_dagger/modifier_citadel_sleep_dagger_asleep": {
+      "effect": "睡眠",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "ability_sleep_dagger/modifier_citadel_sleep_dagger_asleep/modifier_postsleep": {
+      "effect": "スロウ",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "ability_smoke_bomb/smokebomb_modifier_invis": {
+      "effect": "透明化",
+      "polarity": "buff",
+      "enemy_only": false,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "ability_stacking_damage/modifier_passive_haze_stacking_damage/slow": {
+      "effect": "スロウ",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "ability_ult_combo/modifier_ult_combo_target": {
+      "effect": "拘束",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "ability_unicorn_dazzlingorb/daz_orb/dazzling_orb_slow_modifier": {
+      "effect": "スロウ",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "ability_vampirebat_batswarm/debuff": {
+      "effect": "サイレンス",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "ability_vampirebat_lovebites/lovebites_proc/slowsf": {
+      "effect": "スロウ",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "ability_viper_petrifybola/petrifybola_petrify": {
+      "effect": "石化",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "exact petrify native class;6raw replay applications"
+    },
+    "ability_viper_venom/viper_venom_modifier_subclass": {
+      "effect": "毒",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "exact native venom subclass and Japanese poison description;17raw replay applications"
+    },
+    "citadel_ability_bebop_laser_beam/bebop_laser_slow": {
+      "effect": "スロウ",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "citadel_ability_bull_charge/wall_slam_slow": {
+      "effect": "スロウ",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "citadel_ability_bull_leap/modifier_unstoppable": {
+      "effect": "妨害無効",
+      "polarity": "buff",
+      "enemy_only": false,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "citadel_ability_chrono_kinetic_carbine/modifier_chrono_kinetic_carbine_slow": {
+      "effect": "スロウ",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "citadel_ability_chrono_pulse_grenade/modifier_chrono_pulse_grenade_pulse_area/slow": {
+      "effect": "スロウ",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "citadel_ability_chrono_time_wall/modifier_citadel_chrono_time_wall_aura/modifier_citadel_silenced": {
+      "effect": "サイレンス",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "citadel_ability_flying_strike/slow": {
+      "effect": "スロウ",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "citadel_ability_hook/modifier_citadel_hooktarget/modifier_slow_bases": {
+      "effect": "移動技禁止",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "citadel_ability_infinity_slash/buff": {
+      "effect": "妨害無効",
+      "polarity": "buff",
+      "enemy_only": false,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "citadel_ability_infinity_slash/channel": {
+      "effect": "無敵",
+      "polarity": "buff",
+      "enemy_only": false,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "citadel_ability_lash_down_strike/modifier_slow_base": {
+      "effect": "スロウ",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "citadel_ability_lash_ultimate/modifier_lash_grapple_enemy_debuff": {
+      "effect": "拘束",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "citadel_ability_lightning_ball/gigagwatt_lightningball_slow": {
+      "effect": "スロウ",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "citadel_ability_melee_parry/modifier_citadel_parried_stun": {
+      "effect": "パリースタン",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "citadel_ability_power_slash/slow": {
+      "effect": "スロウ",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "citadel_ability_self_vacuum/modifier_vacuumaura/modifier_vacuumaura_target": {
+      "effect": "吸引",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "exact native path and owner/caster verified in local recordings for v0.1.52"
+    },
+    "citadel_ability_shiv_dagger/modifier_shiv_thrown_shiv_damage_debuff": {
+      "effect": "出血",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "citadel_ability_shiv_dagger/modifier_shiv_thrown_shiv_slow_debuff": {
+      "effect": "スロウ",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "citadel_ability_stomp/debuff_modifier": {
+      "effect": "スロウ",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "citadel_ability_tier3boss_aoe_wave/modifier_t3boss_wave_aura/modifier_t2boss_aoe_wave_target/modifier_glitch_debuff": {
+      "effect": "カース",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "citadel_ability_tier3boss_drop_bombs/modifier_glitch_debuff": {
+      "effect": "カース",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "citadel_ability_void_sphere/modifier_void_sphere": {
+      "effect": "無敵",
+      "polarity": "buff",
+      "enemy_only": false,
+      "friendly_only": true,
+      "basis": "exact native path and owner/caster verified in local recordings for v0.1.52"
+    },
+    "drifter_blood_blast/debuff": {
+      "effect": "サイレンス",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "modifier_citadel_knockdown": {
+      "effect": "スタン",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "modifier_citadel_stunned": {
+      "effect": "スタン",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "modifier_citadel_stunned_no_cc_diminish": {
+      "effect": "スタン",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "upgrade_arctic_blast/modifier_item_arctic_blast_aoe/modifier_arctic_blast_freeze": {
+      "effect": "凍結",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "upgrade_arctic_blast/modifier_item_arctic_blast_aoe/modifier_slow_base": {
+      "effect": "スロウ",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "upgrade_boxing_glove/modifier_boxing_glove/modifier_slow_base": {
+      "effect": "スロウ",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "upgrade_capacitor/modifier_weapon_capacitor_slow": {
+      "effect": "移動技禁止",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "upgrade_close_quarter_combat/modifier_close_range_proc/modifier_slow_base": {
+      "effect": "スロウ",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "upgrade_cold_front/modifier_item_cold_front_aoe/modifier_slow_base": {
+      "effect": "スロウ",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "upgrade_containment/modifier_slow_base": {
+      "effect": "移動技禁止",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "upgrade_divine_barrier/modifier_divine_barrier": {
+      "effect": "シールド",
+      "polarity": "buff",
+      "enemy_only": false,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "upgrade_focus_lens/modifier_citadel_silenced": {
+      "effect": "サイレンス",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "upgrade_glitch/modifier_glitch_debuff": {
+      "effect": "カース",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "upgrade_magic_slow/modifier_tech_resist_debuff_proc/mystic_slow_debuff": {
+      "effect": "スロウ",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "upgrade_mystic_reverb/modifier_mystic_reverb_proc/modifier_mystic_reverb_explosion/mystic_reverb_slow": {
+      "effect": "スロウ",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "upgrade_mystic_reverb/modifier_mystic_reverb_proc/mystic_reverb_slow": {
+      "effect": "スロウ",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "upgrade_phantom_strike/modifier_slow_base": {
+      "effect": "武装解除",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "upgrade_proc_silence/modifier_citadel_silence_proc_watcher/modifier_citadel_silence_proc_debuff/modifier_citadel_silenced": {
+      "effect": "サイレンス",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "upgrade_self_bubble/modifier_citadel_bubble": {
+      "effect": "シフト",
+      "polarity": "buff",
+      "enemy_only": false,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "upgrade_slowing_bullets/modifier_slowing_bullets_proc/slowing_bullets_debuff": {
+      "effect": "スロウ",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "upgrade_spirit_bubble/modifier_weapon_shielding_barrier": {
+      "effect": "シールド",
+      "polarity": "buff",
+      "enemy_only": false,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "upgrade_spirit_burn/modifier_proc_watcher/modifier_spirit_burn_enemy_tracker/modifier_spirit_burn_dot": {
+      "effect": "燃焼",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "upgrade_toxic_bullets/modifier_item_bleeding_bullets_active/modifier_item_bleeding_bullets_damageovertime": {
+      "effect": "出血",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "upgrade_unstoppable/modifier_unstoppable": {
+      "effect": "妨害無効",
+      "polarity": "buff",
+      "enemy_only": false,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "upgrade_veil_walker/modifier_veil_walker_watcher/modifier_invis": {
+      "effect": "透明化",
+      "polarity": "buff",
+      "enemy_only": false,
+      "basis": "reviewed exact native subclass and observed replay application"
+    },
+    "upgrade_weighted_shots/modifier_slowing_bullets_proc/slowing_bullets_debuff": {
+      "effect": "スロウ",
+      "polarity": "debuff",
+      "enemy_only": true,
+      "basis": "reviewed exact native subclass and observed replay application"
+    }
+  },
+  "pending": [
+    "Cube: additional recording required",
+    "Other sources of shields/invisibility/immunity/CC not automatically admitted"
+  ]
+}

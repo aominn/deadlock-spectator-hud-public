@@ -1,0 +1,14 @@
+import {readFileSync,existsSync} from 'node:fs';
+import vm from 'node:vm';import assert from 'node:assert/strict';
+const full=readFileSync(new URL('../mod-src/spectator_probe.js',import.meta.url),'utf8');
+assert(!existsSync(new URL('../mod-src/unit_effect_probe.js',import.meta.url)));
+assert(!readFileSync(new URL('../tools/build_mod.py',import.meta.url),'utf8').includes('unit_effect_probe'));
+const makeContext=()=>({BHasClass:()=>false,GetParent:()=>null,IsValid:()=>true,FindChildrenWithClassTraverse(){throw new Error('normal match scanned player labels')},FindChildTraverse(){throw new Error('normal match scanned details')}});
+let scheduled=[],messages=[];
+let $={GetContextPanel:makeContext,Schedule:(delay,fn)=>scheduled.push({delay,fn}),Msg:x=>messages.push(x),CreatePanel(){throw new Error('normal match created overlay')}};
+vm.runInNewContext(full.slice(0,full.indexOf('// Live debuff image bridge')),{$});
+for(const job of scheduled.splice(0))job.fn();assert.equal(messages.length,0);assert.ok(scheduled.some(j=>j.delay===1));
+scheduled=[];messages=[];
+vm.runInNewContext(full.slice(full.indexOf('// Native money containers:'),full.indexOf('// Confirmed economy receipts:')),{$,Date,JSON,encodeURIComponent});
+assert.equal(scheduled.length,1);scheduled.shift().fn();assert.equal(messages.length,0);assert.equal(scheduled[0].delay,.5);
+console.log('PASS normal mode:no research API access,no HUD init,no money roster scan;light polling retained');
