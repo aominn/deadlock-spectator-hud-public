@@ -138,6 +138,8 @@ Report problems through [GitHub Issues](https://github.com/aominn/deadlock-spect
 
 Not developed, approved or supported by Valve. Intended for spectating and replays, not regular gameplay.
 
+This tool is developed and refined using AI tools, including Codex and Claude.
+
 Game icons, native UI originals, game fonts and a generated MOD are not included in the runnable ZIP. They are prepared from the user's installed game. Documentation photos are illustrations; game-content rights remain with their respective owners.
 
 Authored code uses [MIT](LICENSE). See [third-party notices](THIRD_PARTY_NOTICES.txt) and [photo provenance](docs/images/README.txt) for other components and documentation images.
