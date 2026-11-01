@@ -12,7 +12,7 @@ This combines a MOD that changes the in-game display with a companion manager. *
 
 ![Actual 0.6.0 replay with economy, KDA, effect notifications and lane-grouped building HP](docs/images/spectator-overview-0.6.0.jpg)
 
-*Game screenshots show HUD 0.6.0 with game build 6839 in Japanese. Full views are cropped; each close-up preserves a continuous region to show where the information appears. Game values and icons have not been altered.*
+*These are actual game and manager screenshots, shown in Japanese. Close-ups preserve portrait or location context. See [photo provenance](docs/images/README.txt).*
 
 ## HUD changes
 
@@ -36,9 +36,15 @@ Notifications appear **below the corresponding hero portrait**.
 
 ### Total souls and wallet
 
-Each hero shows a name, K/D/A and **total souls / wallet**. For example, “4.1k / 909” means about 4,100 total souls and 909 in the wallet. Confirmed individual soul changes appear over this area. Both team totals appear below the central timer. After five minutes, the leading team's percentage lead appears beside it, calculated relative to the opposing team's total.
+Each hero shows a name, K/D/A and **total souls / wallet**. For example, “4.1k / 909” means about 4,100 total souls and 909 in the wallet. Confirmed individual soul changes appear over this area. Both team totals appear below the match clock at the top center. After five minutes, the percentage lead appears beside the clock on the leading team's side, calculated relative to the opposing team's total.
 
 ![Timer-centered view with hero total/wallet values on both sides and team economy](docs/images/economy-centered-0.6.0.jpg)
+
+### Compare inventories in the detailed view
+
+Open the **scoreboard/detailed view using your configured game key** to see each hero's inventory in **three columns**. Compare builds during a quieter moment after a fight. Top hero information and timers above the minimap remain visible.
+
+<img src="docs/images/detail-inventory-context-clean.jpg" width="410" alt="McGinnis, Vindicta and Abrams with three-column inventories directly below their portraits">
 
 ### Status application notifications
 
@@ -46,11 +52,11 @@ Supported stuns, slows, silence, curse, transformations, invulnerability and oth
 
 <img src="docs/images/status-three-context-0.6.0.jpg" width="280" alt="Three real effect notifications beside Violet's portrait">
 
-A new application is shown for about three seconds. Up to four appear separately; five or more overlap. These are not effect-duration timers. Coverage has not been verified for every hero or effect.
+A new application is shown for about three seconds. Up to four appear separately; five or more overlap. These are not effect-duration timers; only effects supported by the HUD are shown.
 
 ### Urn and Bridge Buff ownership
 
-Separate from brief effect notifications, the HUD marks the Urn carrier above the hero portrait and up to two Bridge Buffs beside the ultimate icon below the economy area. A white outline around each Bridge Buff shows its remaining duration.
+Separate from brief effect notifications, the HUD marks the Urn carrier above the hero portrait and up to two Bridge Buffs beside the ultimate icon below the economy area. A white outline around each Bridge Buff shows its remaining duration. In the Silver photo, the two icons on the left are the Bridge Buffs.
 
 | Urn carrier | Two Bridge Buffs |
 | :---: | :---: |
@@ -58,17 +64,17 @@ Separate from brief effect notifications, the HUD marks the Urn carrier above th
 
 ### Rejuvenator eligibility
 
-A yellow icon below the hero's economy area marks remaining Rejuvenator eligibility. The team's remaining count appears below the central timer, for example “×2”.
+A **yellow icon below a hero's economy area** marks that hero's remaining Rejuvenator eligibility. The team's remaining count appears **below the match clock at the top center**, with an icon and a value such as “×3”. Individual eligibility and team remaining uses are different information: the count is not the number of heroes holding the buff. In this photo, “×3” belongs to the team on the right.
 
-<img src="docs/images/rejuvenator-centered-0.6.0.jpg" width="190" alt="Yellow Rejuvenator eligibility icon below Vindicta's economy area">
+![Match clock at 26:25 centered between the teams, with x3 below it and yellow eligibility icons below the right-side heroes](docs/images/rejuvenator-three-clock-centered.jpg)
 
 ### Lane-grouped building HP
 
-Damaged Guardian, Walker and Base Guardian HP is grouped **by lane**, retained for about five seconds after the last hit. Simultaneous entries pack horizontally. The two Base Guardians have separate HP entries. This is not a permanent list of every building.
+Damaged Guardian, Walker and Base Guardian HP appears **on the left and right of the screen below the hero row**, retained for about five seconds after the last hit. Simultaneous entries **in the same lane** pack horizontally. The two Base Guardians have separate HP entries. This is not a permanent list of every building.
 
 ![A Walker and two Base Guardians in the same lane, displayed in one horizontal group](docs/images/lane-building-hp-0.6.0.jpg)
 
-Shrines use two horizontal columns; Patron displays follow its phase. Mid Boss has a dedicated HP display.
+The two Shrines are shown side by side; Patron displays follow its phase. Mid Boss has a dedicated HP display.
 
 ### Timers above the minimap
 
@@ -76,32 +82,30 @@ Bridge Buff counts down to its **next scheduled appearance**. Mid Boss shows a r
 
 <img src="docs/images/map-timers-0.6.0.jpg" width="410" alt="Minimap with Bridge Buff and Mid Boss time information directly above it">
 
-### Detailed view
-
-Inventory is arranged in three columns, while top hero information and map timers remain visible. Follow the action in the normal view, then compare builds during a quieter moment.
-
 ## First setup
 
 **Use with other MODs has not been tested. Display or functional problems caused by MOD conflicts are outside the scope of support.**
 
-Requires Windows with Steam and Deadlock installed. The runnable ZIP includes its runtime; no separate Python, Node.js or .NET installation is needed.
+Requires Windows 10/11 x64, with Steam and Deadlock installed. The runnable ZIP includes its runtime; no separate Python, Node.js or .NET installation is needed.
 
-1. Download the runnable ZIP from [Release](https://github.com/aominn/deadlock-spectator-hud-public/releases/tag/v0.6.0) and **extract all files**. Do not run from inside the ZIP.
+1. Download **DeadlockSpectatorHUD-0.6.0-win-x64.zip** from [Release](https://github.com/aominn/deadlock-spectator-hud-public/releases/tag/v0.6.0) and **extract all files**. Do not run from inside the ZIP.
 2. Exit Deadlock and open **HudManager.exe** from the extracted folder.
 3. Select **Deadlock/game/citadel**, then **Set up**. Images are prepared from the game installed on that PC.
 4. Choose **Enable HUD → Launch game**, then open spectating or a compatible replay.
 
 ![Actual 0.6.0 manager showing folder selection, preparation, enable, restore and launch controls in Japanese](docs/images/manager-0.6.0.jpg)
 
-Older replays may be incompatible with the current game. Leave live spectating before opening a replay.
+Older replays may be incompatible with the current game. Some long seeks can exit the game. Leave live spectating before opening a replay.
 
 Keep the manager open while spectating. Minimizing keeps it running; **closing with × stops its helper processes**. Closing alone does not restore normal mode. Allow preparation time when joining late or analyzing a replay for the first time.
 
 ## Draw on the screen
 
-Enable **Drawing (spectator / replay only)** in the manager and press **F8** in the game, or the key you selected.
+Circle a location or draw an arrow to explain a movement: **draw directly on the spectator screen with the mouse**, including over the minimap.
 
-![Actual pen strokes drawn over both the replay screen and minimap](docs/images/drawing-0.6.0.jpg)
+Enable **Drawing (spectator / replay only)** in the manager and press **F8** in the game. You can change this key in the manager.
+
+![A red circle, cyan and yellow strokes, thick white lines, a red arrow and the drawing toolbar over the game](docs/images/drawing-colored-example.jpg)
 
 - Choose four colors, thin/thick strokes and pen/arrow tools. Undo and Clear are available on the toolbar.
 - **Watch or Esc** returns to game controls while keeping the lines; **Draw** resumes drawing. F8 toggles toolbar visibility.
@@ -113,9 +117,11 @@ Enable **Drawing (spectator / replay only)** in the manager and press **F8** in 
 
 ## Restore normal mode and update
 
-**Before returning to regular play**: Exit Deadlock, then select **Restore normal mode** in the manager.
+**Before returning to regular play**: Exit Deadlock, then select **Restore normal mode** in the manager. To spectate with the HUD again, exit the game and choose **Enable HUD → Launch game**.
 
-**Update**: Close the game and manager, extract the latest ZIP into a new folder, and open its HudManager.exe. No manual individual-file replacement is needed.
+If a game update breaks the display, restore normal mode and wait for a compatible HUD release.
+
+**Update**: Get the latest runnable ZIP through **Download latest** in the manager or [GitHub Releases](https://github.com/aominn/deadlock-spectator-hud-public/releases). Close the game and manager, extract everything into a new folder, and open its HudManager.exe. Follow the manager's prompts, enable the HUD and launch the game. No manual individual-file replacement is needed.
 
 **Help**: After exiting the game, **Help** provides file checks, image refresh and rollback to a retained previous version. [Installation and recovery](docs/INSTALL.en.txt)
 

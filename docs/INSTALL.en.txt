@@ -3,7 +3,7 @@ Deadlock Spectator HUD 0.6.0 — Quick guide
 SETUP
 Close Deadlock. Extract the complete release ZIP, open HudManager.exe, select the
 Deadlock/game/citadel folder containing gameinfo.gi, then Set up → Enable HUD → Launch game.
-Steam and Deadlock are required. Other runtimes are bundled.
+Windows 10/11 x64, Steam and Deadlock are required. Other runtimes are bundled.
 Images are prepared from the installed game; missing images do not stop the other features.
 
 WINDOW
@@ -14,12 +14,14 @@ Closing the manager by itself stops the companion; use Restore normal mode to re
 UPDATE
 Close both the game and manager. Download the latest runnable ZIP from the
 GitHub Releases page, extract to a new folder, and open that folder's HudManager.exe.
+Follow the manager's prompts, enable the HUD and launch the game.
 Newer versions retain settings and the previous version. Do not mix individual files.
 
 HELP
 Verify files checks the package. Refresh images prepares images again from your game.
 Restore previous version uses the retained installation. Close the game before these operations.
-If a game update changes the original UI, wait for a compatible HUD release.
+If a game update breaks the display, restore normal mode and wait for a compatible HUD release.
+Older replays may be incompatible with the current game. Some long seeks can exit the game. Leave live spectating before opening a replay.
 
 LANGUAGE
 Manager and drawing toolbar: Windows display language (Japanese, otherwise English).
@@ -27,9 +29,11 @@ HUD additions: Deadlock client language (Japanese, otherwise English).
 The original game UI language is not changed. Unknown or ambiguous identities are not guessed.
 
 DRAWING
-Enable Drawing in the manager. F8 toggles the toolbar; Draw / Watch switches input.
+Enable Drawing each time you open the manager. F8 is the default toolbar key and can be changed in the manager. Draw / Watch switches input.
 Esc returns to game controls and keeps drawings. Changing apps keeps drawings too.
 Normal mode, tool shutdown, a different match or a detected seek clears drawings.
+
+Other MOD combinations are untested; problems caused by conflicts are outside the scope of support.
 
 Unofficial spectator/replay tool. Not approved or supported by Valve.
 See README.en.md and docs/STATUS.txt for coverage and remaining limitations.
