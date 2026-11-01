@@ -1,7 +1,7 @@
 Source development / 0.6.1 / Windows x64
 
-Runnable baseline: the complete win-x64 ZIP from the v0.6.0 public Release. Source ZIPs do not contain runtimes.
-https://github.com/aominn/deadlock-spectator-hud-public/releases/tag/v0.6.0
+Runnable baseline: the complete win-x64 ZIP from the v0.6.1 public Release. Source ZIPs do not contain runtimes.
+https://github.com/aominn/deadlock-spectator-hud-public/releases/tag/v0.6.1
 Pinned inputs: tools/runtime-lock.json, parser/package-lock.json, manager/HudManager.csproj and tools/asset-reader/AssetReader.csproj.
 1. Prepare verified runtimes using tools/prepare_runtime.py. The current build_local_release.py requires an already verified base bundle.
 2. Run npm ci --prefix parser --ignore-scripts --no-audit --no-fund.

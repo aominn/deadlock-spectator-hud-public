@@ -93,7 +93,7 @@ Requires Windows 10/11 x64, with Steam and Deadlock installed. The runnable ZIP 
 3. Select **Deadlock/game/citadel**, then **Set up**. Images are prepared from the game installed on that PC.
 4. Choose **Enable HUD → Launch game**, then open spectating or a compatible replay.
 
-![Actual 0.6.0 manager showing folder selection, preparation, enable, restore and launch controls in Japanese](docs/images/manager-0.6.0.jpg)
+![Actual 0.6.1 manager showing folder selection, preparation, enable, restore and launch controls in Japanese](docs/images/manager-0.6.1.jpg)
 
 Older replays may be incompatible with the current game. Some long seeks can exit the game. Leave live spectating before opening a replay.
 
@@ -108,7 +108,8 @@ Enable **Drawing (spectator / replay only)** in the manager and press **F8** in 
 ![A red circle, cyan and yellow strokes, thick white lines, a red arrow and the drawing toolbar over the game](docs/images/drawing-colored-example.jpg)
 
 - Choose four colors, thin/thick strokes and pen/arrow tools. Undo and Clear are available on the toolbar.
-- **Watch or Esc** returns to game controls while keeping the lines; **Draw** resumes drawing. F8 starts drawing when hidden, resumes drawing from Watch without hiding the toolbar, and hides the toolbar when already drawing. Lines remain.
+- **Watch or Esc** returns to game controls while keeping the lines and toolbar. **F8 or Draw** resumes drawing.
+- **F8 while drawing** hides the toolbar and returns to game controls. When hidden, F8 opens the toolbar and starts drawing. Lines remain in both cases.
 - Draw anywhere, including over the minimap. Lines are fixed to screen coordinates and do not follow the camera.
 - Lines survive switching to another window. Seeking, changing matches, restoring normal mode or exiting the tool clears them.
 - Enable the drawing checkbox each time you open the manager. Drawing can reduce FPS.
@@ -128,6 +129,8 @@ If a game update breaks the display, restore normal mode and wait for a compatib
 ## Display languages
 
 The manager and drawing toolbar follow the **Windows display language**. Additional in-game text follows the **Deadlock language**. Each uses Japanese for Japanese and English otherwise. The photos here are Japanese.
+
+## Problems and contact
 
 Report problems through [GitHub Issues](https://github.com/aominn/deadlock-spectator-hud-public/issues) with HUD version, game language, spectating/replay and reproduction steps. Do not post authentication data in logs. A [contact form](https://aominn.jp/form/) is also available.
 

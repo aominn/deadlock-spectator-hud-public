@@ -1,6 +1,6 @@
 Documentation photographs
 
-The current READMEs use 14 real application/game screenshots. Most game captures were taken on 2026-11-01 with public HUD 0.6.0, game build 6839, Japanese UI, 1920x1080, using replays 128579313 and 128582896. The colored drawing example was supplied by the user; its exact HUD version has not been independently established. The displayed drawing tools match 0.6.0.
+The current READMEs use 14 real application/game screenshots. The manager screenshot uses 0.6.1. Most game captures were taken on 2026-11-01 with public HUD 0.6.0, game build 6839, Japanese UI, 1920x1080, using replays 128579313 and 128582896. The colored drawing example was supplied by the user; its exact HUD version has not been independently established. The displayed drawing tools match 0.6.0.
 
 Editing is limited to continuous crops, proportional resizing, JPEG encoding and letterboxing for the overview. Game values, names, icons and drawn strokes are not synthesized, inpainted or repositioned. Drawing shapes in the demonstration are actual pen/arrow output from the tool, not added editorial annotations. Cursor pixels are outside selected crops.
 
@@ -18,8 +18,8 @@ Current selected images and sources
 - lane-building-hp-0.6.0.jpg: replay-128582896-02.png, crop(8,316)-(705,383). Same-lane Walker and two individual Base Guardian HP entries.
 - map-timers-0.6.0.jpg: same source, crop(1508,585)-(1918,1018). Timers with the actual minimap below.
 - drawing-colored-example.jpg: user-supplied 1920x1080 screenshot of replay 124306727 at 1:02, crop(0,8)-(1920,1020). Actual red circle/arrow, cyan/yellow strokes, white thick strokes and toolbar retained; only the FPS edge and lower replay seek bar removed. No generated demonstration marks.
-- manager-0.6.0.jpg: actual 0.6.0 manager window crop.
+- manager-0.6.1.jpg: actual installed 0.6.1 manager window on 2026-11-01 in normal mode; Japanese UI and updated F8 guidance, full window JPEG conversion without reshaping.
 
-Earlier drawing-0.6.0.jpg, rejuvenator-centered-0.6.0.jpg and *-0.5.12.png files remain historical/alternative examples and are not referenced by the current READMEs. Original development logs, raw replays and extracted runtime assets are not included here.
+Earlier manager-0.6.0.jpg, drawing-0.6.0.jpg, rejuvenator-centered-0.6.0.jpg and *-0.5.12.png files remain historical/alternative examples and are not referenced by the current READMEs. Original development logs, raw replays and extracted runtime assets are not included here.
 
-Documentation images are excluded from executable ZIPs. Game content in photographs remains the property of its respective rights holders and is not relicensed by the project's authored-code MIT license. This documentation revision does not replace the runnable ZIP or move the v0.6.0 tag.
+Documentation images are excluded from executable ZIPs. Game content in photographs remains the property of its respective rights holders and is not relicensed by the project's authored-code MIT license. Documentation updates on main do not replace published executable ZIPs or move their source tags.
