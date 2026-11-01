@@ -25,3 +25,5 @@ Earlier *-0.5.12.png files are historical live/replay/normal-manager examples, g
 Documentation images are excluded from executable ZIPs. Game-content rights remain with their owners and are not relicensed under project MIT. Raw replays, logs and extracted runtime assets are not included. No runnable binary, Release ZIP or version tag was changed in this documentation revision.
 
 Rejuvenator illustration revised: source crop center x1278 matches the hero/economy center. Narrower continuous crop excludes adjacent hero effect fragments. Display width190px preserves the previous subject scale; no icon was repositioned.
+
+Ownership photographs added from replay128582896 at10:45, captured with public HUD0.6.0/game6839. urn-carrier-0.6.0.jpg: source crop(12,18)-(156,205), Warden carrying the Urn. bridge-buffs-two-0.6.0.jpg: source crop(290,18)-(434,205), Silver holding survival and movement Bridge Buffs simultaneously. Each is a continuous real screenshot crop enlarged to360x468, with no icons or values generated or moved. Their source rectangles have equal dimensions.

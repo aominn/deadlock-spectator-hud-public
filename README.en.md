@@ -52,6 +52,10 @@ A new application is shown for about three seconds. Up to four appear separately
 
 Separate from brief effect notifications, the HUD marks the Urn carrier above the hero portrait and up to two Bridge Buffs beside the ultimate icon below the economy area. A white outline around each Bridge Buff shows its remaining duration.
 
+| Urn carrier | Two Bridge Buffs |
+| :---: | :---: |
+| <img src="docs/images/urn-carrier-0.6.0.jpg" width="220" alt="Warden carrying the Urn"> | <img src="docs/images/bridge-buffs-two-0.6.0.jpg" width="220" alt="Silver holding two Bridge Buffs"> |
+
 ### Rejuvenator eligibility
 
 A yellow icon below the hero's economy area marks remaining Rejuvenator eligibility. The team's remaining count appears below the central timer, for example “×2”.
@@ -77,6 +81,8 @@ Bridge Buff counts down to its **next scheduled appearance**. Mid Boss shows a r
 Inventory is arranged in three columns, while top hero information and map timers remain visible. Follow the action in the normal view, then compare builds during a quieter moment.
 
 ## First setup
+
+**Use with other MODs has not been tested. Display or functional problems caused by MOD conflicts are outside the scope of support.**
 
 Requires Windows with Steam and Deadlock installed. The runnable ZIP includes its runtime; no separate Python, Node.js or .NET installation is needed.
 
@@ -113,13 +119,9 @@ Enable **Drawing (spectator / replay only)** in the manager and press **F8** in 
 
 **Help**: After exiting the game, **Help** provides file checks, image refresh and rollback to a retained previous version. [Installation and recovery](docs/INSTALL.en.txt)
 
-## Languages and verification scope
+## Display languages
 
 The manager and drawing toolbar follow the **Windows display language**. Additional in-game text follows the **Deadlock language**. Each uses Japanese for Japanese and English otherwise. The photos here are Japanese.
-
-On November 1, 2026, three recent replays were downloaded and confirmed to start with 0.6.0. Photos come from two of them. Seeking into the middle of one replay terminated the game, so long seeks may terminate the game.
-
-A user reported basic installation, asset preparation, spectating/replays, normal restoration, Japanese/English and × shutdown on another PC with 0.5.12. This is not a second-PC test of 0.6.0. Exhaustive testing of all heroes/effects, all live features, OBS capture methods and exclusive fullscreen is incomplete. Before broadcasting, check that your capture method includes the game and drawn lines. [Current limitations](docs/STATUS.txt)
 
 Report problems through [GitHub Issues](https://github.com/aominn/deadlock-spectator-hud-public/issues) with HUD version, game language, spectating/replay and reproduction steps. Do not post authentication data in logs. A [contact form](https://aominn.jp/form/) is also available.
 

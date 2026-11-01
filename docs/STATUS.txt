@@ -9,6 +9,7 @@ Verification records
 - User-reported second-PC verification on 0.5.12: ZIP extraction, game folder selection, asset preparation, live spectating/replays, normal restoration, Japanese/English and closing the manager stopping its companion. This is a user report, not independently observed maintainer automation or a second-PC 0.6.0 test.
 
 Known limits
+- Use with other MODs has not been tested. Display or functional problems caused by MOD conflicts are outside the scope of support.
 - Long seeks in some replays may terminate the game.
 - Drawing can reduce FPS. It does not pause live matches automatically.
 - All heroes/effects, all live features, broader hardware, OBS capture methods, exclusive fullscreen and shrine physical left/right mapping have not been exhaustively verified.
