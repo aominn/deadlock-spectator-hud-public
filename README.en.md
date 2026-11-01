@@ -52,7 +52,7 @@ Separate from brief effect notifications, the HUD marks the Urn carrier above th
 
 A dedicated icon below the hero's economy area marks remaining Rejuvenator eligibility. The team's remaining count appears below the central timer.
 
-<img src="docs/images/rejuvenator-ownership-0.6.0.jpg" width="220" alt="Yellow Rejuvenator ownership icon below Vindicta's economy area">
+<img src="docs/images/rejuvenator-centered-0.6.0.jpg" width="190" alt="Yellow Rejuvenator ownership icon below Vindicta's economy area">
 
 ### Lane-grouped building HP
 

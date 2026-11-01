@@ -52,7 +52,7 @@ Deadlockの観戦・リプレイ向け非公式HUDです。**誰が何を買い�
 
 使用権が残るキャラには金額欄の下に専用アイコンを表示します。チームの残回数は中央タイマーの下で確認できます。
 
-<img src="docs/images/rejuvenator-ownership-0.6.0.jpg" width="220" alt="ヴィンディクタの金額欄の下に黄色いリジュベネーターの所持アイコン">
+<img src="docs/images/rejuvenator-centered-0.6.0.jpg" width="190" alt="ヴィンディクタの金額欄の下に黄色いリジュベネーターの所持アイコン">
 
 ### レーンごとの建物HP
 

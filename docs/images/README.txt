@@ -15,11 +15,13 @@ lane-building-hp-0.6.0.jpg
   Source: replay-128582896-02.png; crop [[8, 316, 705, 383]]. One continuous screenshot crop of the native same-lane horizontal building HP group; timer is not included.
 map-timers-0.6.0.jpg
   Source: replay-128582896-02.png; crop [[1508, 585, 1918, 1018]]. One continuous screenshot crop includes the timers and minimap below, to show their real location.
-rejuvenator-ownership-0.6.0.jpg
-  Source: replay-128582896-02.png; crop [[1200, 20, 1332, 205]]. One continuous hero crop includes portrait and rejuvenator ownership below; separate from transient status notifications.
+rejuvenator-centered-0.6.0.jpg
+  Source: replay-128582896-02.png; crop [[1221, 20, 1335, 205]]. One continuous hero crop includes portrait and rejuvenator ownership below; separate from transient status notifications.
 status-three-context-0.6.0.jpg
   Source: raw/effects-candidate-07.png; crop [[1048, 16, 1195, 205]]. One continuous screenshot crop includes Violett portrait and three actual effect notifications to its left. Proportional enlargement only. Replay 128579313, game clock 23:47. No added icons.
 
 Other current images: spectator-overview-0.6.0.jpg (cropped and letterboxed16:9 to preserve outer heroes), drawing-0.6.0.jpg (real demonstration pen strokes), manager-0.6.0.jpg (cropped manager window). These are unchanged in this presentation revision.
 Earlier *-0.5.12.png files are historical live/replay/normal-manager examples, game build6837. They are not used by current READMEs. Superseded numbered and grouped plates were removed from the current tree; Git history retains them.
 Documentation images are excluded from executable ZIPs. Game-content rights remain with their owners and are not relicensed under project MIT. Raw replays, logs and extracted runtime assets are not included. No runnable binary, Release ZIP or version tag was changed in this documentation revision.
+
+Rejuvenator illustration revised: source crop center x1278 matches the hero/economy center. Narrower continuous crop excludes adjacent hero effect fragments. Display width190px preserves the previous subject scale; no icon was repositioned.
