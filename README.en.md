@@ -4,13 +4,17 @@ An unofficial HUD for **spectating and replays** in Deadlock. Follow purchases, 
 
 [日本語](README.md) · Windows 10/11 x64
 
+This combines a MOD that changes the in-game display with a companion manager. **Use it for spectating and replays. Before regular play, exit the game and select Restore normal mode.** It is not developed or approved by Valve.
+
+[Setup](#first-setup) · [Restore and update](#restore-normal-mode-and-update) · [Coverage](docs/STATUS.txt)
+
 **[Download the runnable 0.6.0 ZIP](https://github.com/aominn/deadlock-spectator-hud-public/releases/tag/v0.6.0)** and extract everything. Code → Download ZIP is the development source, not the runnable package.
 
 ![Actual 0.6.0 replay with economy, KDA, effect notifications and lane-grouped building HP](docs/images/spectator-overview-0.6.0.jpg)
 
-*Photos show HUD 0.6.0 with game build 6839 in Japanese. Full views are cropped; each close-up preserves a continuous region to show where the information appears. Game values and icons have not been altered.*
+*Game screenshots show HUD 0.6.0 with game build 6839 in Japanese. Full views are cropped; each close-up preserves a continuous region to show where the information appears. Game values and icons have not been altered.*
 
-## What it adds to the standard view
+## HUD changes
 
 ### Purchases and ability changes
 
@@ -32,15 +36,15 @@ Notifications appear **below the corresponding hero portrait**.
 
 ### Total souls and wallet
 
-Each hero shows a name, K/D/A and **total souls / wallet**. For example, “4.1k / 909” means about 4,100 total souls and 909 in the wallet. Confirmed individual soul changes appear over this area. After five minutes, the central economy lead appears for the leading team only.
+Each hero shows a name, K/D/A and **total souls / wallet**. For example, “4.1k / 909” means about 4,100 total souls and 909 in the wallet. Confirmed individual soul changes appear over this area. Both team totals appear below the central timer. After five minutes, the leading team's percentage lead appears beside it, calculated relative to the opposing team's total.
 
 ![Timer-centered view with hero total/wallet values on both sides and team economy](docs/images/economy-centered-0.6.0.jpg)
 
 ### Status application notifications
 
-Supported stuns, slows, silence, curse, transformations, invulnerability and other supported effects appear as **icons without names beside the hero portrait**. The photo shows three notifications beside Violett.
+Supported stuns, slows, silence, curse, transformations, invulnerability and other supported effects appear as **icons without names beside the hero portrait**. The photo shows three notifications beside Violet.
 
-<img src="docs/images/status-three-context-0.6.0.jpg" width="280" alt="Three real effect notifications beside Violett's portrait">
+<img src="docs/images/status-three-context-0.6.0.jpg" width="280" alt="Three real effect notifications beside Violet's portrait">
 
 A new application is shown for about three seconds. Up to four appear separately; five or more overlap. These are not effect-duration timers. Coverage has not been verified for every hero or effect.
 
@@ -50,9 +54,9 @@ Separate from brief effect notifications, the HUD marks the Urn carrier above th
 
 ### Rejuvenator eligibility
 
-A dedicated icon below the hero's economy area marks remaining Rejuvenator eligibility. The team's remaining count appears below the central timer.
+A yellow icon below the hero's economy area marks remaining Rejuvenator eligibility. The team's remaining count appears below the central timer, for example “×2”.
 
-<img src="docs/images/rejuvenator-centered-0.6.0.jpg" width="190" alt="Yellow Rejuvenator ownership icon below Vindicta's economy area">
+<img src="docs/images/rejuvenator-centered-0.6.0.jpg" width="190" alt="Yellow Rejuvenator eligibility icon below Vindicta's economy area">
 
 ### Lane-grouped building HP
 
@@ -78,16 +82,18 @@ Requires Windows with Steam and Deadlock installed. The runnable ZIP includes it
 
 1. Download the runnable ZIP from [Release](https://github.com/aominn/deadlock-spectator-hud-public/releases/tag/v0.6.0) and **extract all files**. Do not run from inside the ZIP.
 2. Exit Deadlock and open **HudManager.exe** from the extracted folder.
-3. Select **Deadlock/game/citadel**, then **Prepare**. Images are prepared from the game installed on that PC.
+3. Select **Deadlock/game/citadel**, then **Set up**. Images are prepared from the game installed on that PC.
 4. Choose **Enable HUD → Launch game**, then open spectating or a compatible replay.
 
 ![Actual 0.6.0 manager showing folder selection, preparation, enable, restore and launch controls in Japanese](docs/images/manager-0.6.0.jpg)
 
-Keep the manager open while spectating. Minimizing keeps it running; **closing with × stops its helper processes**. Allow preparation time when joining late or analyzing a replay for the first time.
+Older replays may be incompatible with the current game. Leave live spectating before opening a replay.
+
+Keep the manager open while spectating. Minimizing keeps it running; **closing with × stops its helper processes**. Closing alone does not restore normal mode. Allow preparation time when joining late or analyzing a replay for the first time.
 
 ## Draw on the screen
 
-Enable **Draw lines (spectating/replays only)** in the manager and press **F8** in the game, or the key you selected.
+Enable **Drawing (spectator / replay only)** in the manager and press **F8** in the game, or the key you selected.
 
 ![Actual pen strokes drawn over both the replay screen and minimap](docs/images/drawing-0.6.0.jpg)
 
@@ -97,7 +103,7 @@ Enable **Draw lines (spectating/replays only)** in the manager and press **F8** 
 - Lines survive switching to another window. Seeking, changing matches, restoring normal mode or exiting the tool clears them.
 - Enable the drawing checkbox each time you open the manager. Drawing can reduce FPS.
 
-[Drawing details](docs/DRAWING.txt)
+[Drawing details (Japanese)](docs/DRAWING.txt)
 
 ## Restore normal mode and update
 
@@ -105,15 +111,15 @@ Enable **Draw lines (spectating/replays only)** in the manager and press **F8** 
 
 **Update**: Close the game and manager, extract the latest ZIP into a new folder, and open its HudManager.exe. No manual individual-file replacement is needed.
 
-**Troubleshooting**: After exiting the game, **Troubleshooting** provides file checks, image refresh and rollback to a retained previous version. [Installation and recovery](docs/INSTALL.txt)
+**Help**: After exiting the game, **Help** provides file checks, image refresh and rollback to a retained previous version. [Installation and recovery](docs/INSTALL.en.txt)
 
 ## Languages and verification scope
 
 The manager and drawing toolbar follow the **Windows display language**. Additional in-game text follows the **Deadlock language**. Each uses Japanese for Japanese and English otherwise. The photos here are Japanese.
 
-On November 1, 2026, three recent replays were downloaded and confirmed to start with 0.6.0. Photos come from two of them. Seeking into the middle of one replay terminated the game, so the long-seek limitation remains.
+On November 1, 2026, three recent replays were downloaded and confirmed to start with 0.6.0. Photos come from two of them. Seeking into the middle of one replay terminated the game, so long seeks may terminate the game.
 
-A user has confirmed basic installation, asset preparation, spectating/replays, normal restoration, Japanese/English and × shutdown on another PC. Exhaustive testing of all heroes/effects, all live features, OBS capture methods and exclusive fullscreen is incomplete. [Current limitations](docs/STATUS.txt)
+A user reported basic installation, asset preparation, spectating/replays, normal restoration, Japanese/English and × shutdown on another PC with 0.5.12. This is not a second-PC test of 0.6.0. Exhaustive testing of all heroes/effects, all live features, OBS capture methods and exclusive fullscreen is incomplete. Before broadcasting, check that your capture method includes the game and drawn lines. [Current limitations](docs/STATUS.txt)
 
 Report problems through [GitHub Issues](https://github.com/aominn/deadlock-spectator-hud-public/issues) with HUD version, game language, spectating/replay and reproduction steps. Do not post authentication data in logs. A [contact form](https://aominn.jp/form/) is also available.
 

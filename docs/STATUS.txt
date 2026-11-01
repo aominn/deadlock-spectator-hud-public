@@ -1,10 +1,21 @@
-Current distribution: 0.6.0 / Windows 10-11 x64 / Japanese and English
+Current distribution: 0.6.0 / Windows 10–11 x64 / Japanese and English
 
-Public release: source, executable ZIP and checksums share tag v0.6.0.
-HUD timing and display behavior are retained from 0.5.12. Documentation photographs remain explicitly labelled 0.5.12.
-Verified locally on game build6837: replay parsing, paused replay, drawing, live spectator updates, normal restoration and companion shutdown. CPU user testing confirmed mode-change-only HUD logs.
-Known limits: long seeks in some replays can exit the game; drawing mode can reduce FPS; broader hardware coverage, all OBS capture methods, exclusive fullscreen, all live features/heroes/effects and shrine physical left/right mapping are not exhaustively verified.
-No game images/native UI originals/game fonts/generatedVPK/authentication/personalsettings/logs/replays are included. Compatibility identifiers and display-name mappings remain.
-See INSTALL.txt / INSTALL.en.txt, PORTABLE.txt and LOCAL-ASSETS.txt. Valve does not develop, approve or support this tool.
+Current documentation photographs show HUD 0.6.0 on game build 6839. Retained 0.5.12 screenshots are historical examples and are not used by the current READMEs.
+The executable ZIP and its original source are associated with tag v0.6.0. Later main-branch documentation edits do not change that ZIP or tag.
 
-User-reported second-PC verification on0.5.12: extraction, gamefolder, assetpreparation, live/replay, normalrestoration, Japanese/English, and managerclose stoppingcompanion. Reported by user; not independently observed by maintainer automation. This does not establish every OBS/exclusivefullscreen/feature combination.
+Verification records
+- Earlier local verification on game build 6837: replay parsing, paused replay, drawing, live spectator updates, normal restoration and companion shutdown. CPU user testing confirmed mode-change-only HUD logs.
+- November 1, 2026, HUD 0.6.0 / game build 6839: three recent replays started; documentation photos use two. Seeking into the middle of one replay terminated the game. This was not an exhaustive live-feature or OBS test.
+- User-reported second-PC verification on 0.5.12: ZIP extraction, game folder selection, asset preparation, live spectating/replays, normal restoration, Japanese/English and closing the manager stopping its companion. This is a user report, not independently observed maintainer automation or a second-PC 0.6.0 test.
+
+Known limits
+- Long seeks in some replays may terminate the game.
+- Drawing can reduce FPS. It does not pause live matches automatically.
+- All heroes/effects, all live features, broader hardware, OBS capture methods, exclusive fullscreen and shrine physical left/right mapping have not been exhaustively verified.
+- Published screenshots are game captures; they do not establish that a particular OBS capture method includes every UI element or drawn line. Check the actual broadcast setup before use.
+- Old replays may be incompatible with the current game. Leave live spectating before opening a replay.
+
+This is an unofficial spectator/replay tool, not a regular-play tool. Exit the game and select Restore normal mode before regular play. Closing the manager stops its companion but does not remove the installed MOD.
+Game images, native UI originals, game fonts, generated VPKs, authentication, personal settings, logs and replays are not included in the runnable ZIP. Game assets are prepared from the user's installation. Compatibility identifiers and display-name mappings remain in the source.
+Valve does not develop, approve or support this tool.
+See INSTALL.txt / INSTALL.en.txt, PORTABLE.txt and LOCAL-ASSETS.txt.
