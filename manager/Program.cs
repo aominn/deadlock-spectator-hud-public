@@ -77,7 +77,7 @@ internal sealed class ManagerForm : Form
         var ink = Row(); drawingKey.Items.AddRange(new[] { "F8", "F9", "F10", "Ctrl+Shift+D" }); drawingKey.SelectedIndex = 0;
         void ConfigureDrawing() { drawing.Configure(drawingEnabled.Checked && Config()?["enabled"]?.GetValue<bool>() == true, drawingKey.SelectedItem?.ToString() ?? "F8"); }
         drawingEnabled.CheckedChanged += (_, _) => ConfigureDrawing(); drawingKey.SelectedIndexChanged += (_, _) => ConfigureDrawing();
-        ink.Controls.Add(drawingEnabled); ink.Controls.Add(drawingKey); ink.Controls.Add(new Label { Text = Ui.T("選んだキーで表示切替／「描く・観戦へ」で操作切替"), AutoSize = true, Padding = new Padding(0, 5, 0, 0) }); layout.Controls.Add(ink);
+        ink.Controls.Add(drawingEnabled); ink.Controls.Add(drawingKey); ink.Controls.Add(new Label { Text = Ui.T("選んだキーで描画開始・再開／描画中は非表示"), AutoSize = true, Padding = new Padding(0, 5, 0, 0) }); layout.Controls.Add(ink);
         layout.Controls.Add(output);
         FormClosing += async (_, e) =>
         {

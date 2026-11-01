@@ -1,3 +1,7 @@
+0.6.1 — resume drawing with F8
+
+After Esc / Watch, F8 resumes drawing without hiding the toolbar. While drawing, F8 hides the toolbar and returns to game controls. All transitions retain the lines. Existing spectator gates, input surface and transport timing are unchanged.
+
 0.6.0 — first public runnable release
 
 Retains the reviewed 0.5.12 HUD display, input and update timing. No additional gameplay features.

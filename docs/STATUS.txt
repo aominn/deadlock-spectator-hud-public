@@ -1,9 +1,10 @@
-Current distribution: 0.6.0 / Windows 10–11 x64 / Japanese and English
+Current distribution: 0.6.1 / Windows 10–11 x64 / Japanese and English
 
 Most current game photographs were captured with HUD 0.6.0 on game build 6839; the colored drawing example is a user-supplied actual screenshot whose exact HUD version was not independently established. See docs/images/README.txt for sources. Retained0.5.12 screenshots are historical and are not used by the current READMEs.
-The executable ZIP and its original source are associated with tag v0.6.0. Later main-branch documentation edits do not change that ZIP or tag.
+The current executable ZIP and source are associated with tag v0.6.1. The original v0.6.0 release remains unchanged. Documentation photographs retain their recorded versions.
 
 Verification records
+- 0.6.1: native Windows F8 / Esc / Watch transitions tested with the production controller and synthetic spectator context. Toolbar identity, retained strokes and underlying controls verified. This is not a new real-game replay/live F8 test. Existing parser and mode/restore regression checks passed; runtime polling and input-surface implementation are unchanged.
 - Earlier local verification on game build 6837: replay parsing, paused replay, drawing, live spectator updates, normal restoration and companion shutdown. CPU user testing confirmed mode-change-only HUD logs.
 - November 1, 2026, HUD 0.6.0 / game build 6839: three recent replays started; documentation photos use two. Seeking into the middle of one replay terminated the game. This was not an exhaustive live-feature or OBS test.
 - User reports basic OBS capture working. Specific capture methods and configurations were not recorded.

@@ -1,4 +1,4 @@
-Source development / 0.6.0 / Windows x64
+Source development / 0.6.1 / Windows x64
 
 Runnable baseline: the complete win-x64 ZIP from the v0.6.0 public Release. Source ZIPs do not contain runtimes.
 https://github.com/aominn/deadlock-spectator-hud-public/releases/tag/v0.6.0

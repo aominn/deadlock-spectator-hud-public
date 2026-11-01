@@ -8,7 +8,7 @@ This combines a MOD that changes the in-game display with a companion manager. *
 
 [Setup](#first-setup) · [Restore and update](#restore-normal-mode-and-update) · [Coverage](docs/STATUS.txt)
 
-**[Download the runnable 0.6.0 ZIP](https://github.com/aominn/deadlock-spectator-hud-public/releases/tag/v0.6.0)** and extract everything. Code → Download ZIP is the development source, not the runnable package.
+**[Download the runnable 0.6.1 ZIP](https://github.com/aominn/deadlock-spectator-hud-public/releases/tag/v0.6.1)** and extract everything. Code → Download ZIP is the development source, not the runnable package.
 
 ![Actual 0.6.0 replay with economy, KDA, effect notifications and lane-grouped building HP](docs/images/spectator-overview-0.6.0.jpg)
 
@@ -88,7 +88,7 @@ Bridge Buff counts down to its **next scheduled appearance**. Mid Boss shows a r
 
 Requires Windows 10/11 x64, with Steam and Deadlock installed. The runnable ZIP includes its runtime; no separate Python, Node.js or .NET installation is needed.
 
-1. Download **DeadlockSpectatorHUD-0.6.0-win-x64.zip** from [Release](https://github.com/aominn/deadlock-spectator-hud-public/releases/tag/v0.6.0) and **extract all files**. Do not run from inside the ZIP.
+1. Download **DeadlockSpectatorHUD-0.6.1-win-x64.zip** from [Release](https://github.com/aominn/deadlock-spectator-hud-public/releases/tag/v0.6.1) and **extract all files**. Do not run from inside the ZIP.
 2. Exit Deadlock and open **HudManager.exe** from the extracted folder.
 3. Select **Deadlock/game/citadel**, then **Set up**. Images are prepared from the game installed on that PC.
 4. Choose **Enable HUD → Launch game**, then open spectating or a compatible replay.
@@ -108,7 +108,7 @@ Enable **Drawing (spectator / replay only)** in the manager and press **F8** in 
 ![A red circle, cyan and yellow strokes, thick white lines, a red arrow and the drawing toolbar over the game](docs/images/drawing-colored-example.jpg)
 
 - Choose four colors, thin/thick strokes and pen/arrow tools. Undo and Clear are available on the toolbar.
-- **Watch or Esc** returns to game controls while keeping the lines; **Draw** resumes drawing. F8 toggles toolbar visibility.
+- **Watch or Esc** returns to game controls while keeping the lines; **Draw** resumes drawing. F8 starts drawing when hidden, resumes drawing from Watch without hiding the toolbar, and hides the toolbar when already drawing. Lines remain.
 - Draw anywhere, including over the minimap. Lines are fixed to screen coordinates and do not follow the camera.
 - Lines survive switching to another window. Seeking, changing matches, restoring normal mode or exiting the tool clears them.
 - Enable the drawing checkbox each time you open the manager. Drawing can reduce FPS.

@@ -94,7 +94,8 @@ def main():
  for n in ['README.md','README.en.md','README.txt','LICENSE','THIRD_PARTY_NOTICES.txt']:
   if n in ('README.md','README.en.md'):
    # Runtime ZIPs omit documentation photographs; retain usable versioned links.
-   content=(root/n).read_text(encoding='utf-8').replace('](docs/images/','](https://raw.githubusercontent.com/aominn/deadlock-spectator-hud-public/v'+q.version+'/docs/images/')
+   image_url='https://raw.githubusercontent.com/aominn/deadlock-spectator-hud-public/v'+q.version+'/docs/images/'
+   content=(root/n).read_text(encoding='utf-8').replace('](docs/images/',']('+image_url).replace('src="docs/images/','src="'+image_url)
    (package/n).write_text(content,encoding='utf-8',newline='\n')
   else:shutil.copy2(root/n,package/n)
  shutil.copy2(Path(q.native_manager)/'HudManager.exe',package/'HudManager.exe');copy_files(template,package/PROFILE['template']);copy_files(reader.parent,package/'asset-preparation/reader');shutil.copy2(root/'tools/local-assets-recipe.json',package/PROFILE['recipe'])

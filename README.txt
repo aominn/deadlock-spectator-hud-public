@@ -1,6 +1,6 @@
-Deadlock Spectator HUD 0.6.0 — Windows10/11 x64
+Deadlock Spectator HUD 0.6.1 — Windows10/11 x64
 非公式HUD・Windows用配布版
-https://github.com/aominn/deadlock-spectator-hud-public/releases/tag/v0.6.0
+https://github.com/aominn/deadlock-spectator-hud-public/releases/tag/v0.6.1
 
 Windows10/11 x64、Steam、Deadlockが必要です。配布ZIPには実行環境が含まれます。
 初回：ZIPをすべて展開 → HudManager.exe → Deadlock/game/citadelを選ぶ →「準備する」→「HUDを有効にする」→「ゲームを起動」。

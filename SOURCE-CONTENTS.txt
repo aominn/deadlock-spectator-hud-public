@@ -1,7 +1,7 @@
-Public 0.6.0 source. Based on the reviewed 0.5.12 HUD behavior; earlier private history is not imported.
+Public 0.6.1 source. Based on the reviewed 0.5.12 HUD behavior; earlier private history is not imported.
 Included: authored HUD/manager/parser/build code and tests; minimum compatibility identifiers and display-name mappings; third-party font and license notices.
 Excluded: prior .git history/tags; game images/native UI originals/game fonts/generated VPK; research/history notes and private-only publisher; runtimes/dependencies/build products/logs/replays/settings/authentication.
-Full extracted modifier data is reduced to source/class lookup fields consumed by buildCatalog(). Runtime display/timing code is unchanged; update-link default and new source-built package metadata target this repository.
+Full extracted modifier data is reduced to source/class lookup fields consumed by buildCatalog(). 0.6.1 changes the drawing hotkey transition; other runtime display/timing code is unchanged; update-link default and new source-built package metadata target this repository.
 Game-related names/identifiers belong to their owners. Third-party components retain their licenses. No Valve approval or affiliation is implied.
 
 Documentation photographs: docs/images contains actual game/manager captures for README/article explanations, including verified 0.6.0 captures, retained historical 0.5.12 screenshots and a user-supplied drawing capture whose exact HUD version is unconfirmed. See docs/images/README.txt for provenance. These are distinct from extracted runtime game assets and are excluded from executable ZIPs; game-content rights are not licensed under project MIT.

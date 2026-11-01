@@ -1,4 +1,4 @@
-Deadlock Spectator HUD 0.6.0 — Quick guide
+Deadlock Spectator HUD 0.6.1 — Quick guide
 
 SETUP
 Close Deadlock. Extract the complete release ZIP, open HudManager.exe, select the
@@ -29,7 +29,7 @@ HUD additions: Deadlock client language (Japanese, otherwise English).
 The original game UI language is not changed. Unknown or ambiguous identities are not guessed.
 
 DRAWING
-Enable Drawing each time you open the manager. F8 is the default toolbar key and can be changed in the manager. Draw / Watch switches input.
+Enable Drawing each time you open the manager. F8 is the default key and can be changed in the manager. It starts drawing when hidden, resumes from Watch, and hides the toolbar while drawing. Draw / Watch switches input.
 Esc returns to game controls and keeps drawings. Changing apps keeps drawings too.
 Normal mode, tool shutdown, a different match or a detected seek clears drawings.
 

@@ -95,7 +95,12 @@ internal sealed class DrawingController : IDisposable
     bool CanUseContext() => enabled && context?.Active == true && DateTime.UtcNow - contextSucceededAt <= TimeSpan.FromSeconds(3);
     void ToggleToolbar()
     {
-        if (toolbar != null) { HideToolbar(); return; }
+        if (toolbar != null)
+        {
+            if (canvas == null) ToggleDrawing();
+            else HideToolbar();
+            return;
+        }
         var foreground = Native.GetForegroundWindow();
         if (!CanUseContext() || !targetCheck(foreground) || !Native.ClientBounds(foreground, out var bounds)) return;
         target = foreground; lastBounds = bounds;
@@ -116,7 +121,7 @@ internal sealed class DrawingController : IDisposable
         Native.RegisterHotKey(hotkey.Handle, 52, 0x4000, 0x1B);
         canvas = new InkCanvas(bounds, model, () => context?.Map, PauseDrawing);
         canvas.Show(); canvas.Present(model, context.Map); toolbar.Owner = canvas; toolbar.SetDrawing(true);
-        canvas.Activate(); toolbar.BringToFront(); status(Ui.T("描画中：「観戦へ」かEscでゲーム操作へ。開始キーはツールバーの表示切替です。"));
+        canvas.Activate(); toolbar.BringToFront(); status(Ui.T("描画中：「観戦へ」かEscでゲーム操作へ。開始キーでツールバーを隠せます。"));
         _ = Upload(true);
     }
     async Task Upload(bool drawing, string? epoch = null)
@@ -155,7 +160,7 @@ internal sealed class DrawingController : IDisposable
         if (toolbar != null) toolbar.Owner = null; // Keep the toolbar alive when its drawing surface closes.
         canvas = null; old.Dispose(); toolbar?.SetDrawing(false);
         if (restoreFocus && wasOurs && Native.IsWindow(target)) Native.SetForegroundWindow(target);
-        status(Ui.T("観戦操作に戻りました。線は残ります。ツールバーの「描く」で再開できます。"));
+        status(Ui.T("観戦操作に戻りました。線は残ります。開始キーか「描く」で再開できます。"));
     }
     void HideToolbar() => HideToolbar(true);
     void HideToolbar(bool restoreFocus)

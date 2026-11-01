@@ -8,7 +8,7 @@ Deadlockの観戦・リプレイ向け非公式HUDです。**誰が何を買い�
 
 [導入手順](#最初の使い方) · [通常復帰・更新](#通常の表示に戻す更新する) · [対応範囲（英語）](docs/STATUS.txt)
 
-**[0.6.0の実行用ZIPをダウンロード](https://github.com/aominn/deadlock-spectator-hud-public/releases/tag/v0.6.0)** — ReleaseのZIPをすべて展開してください。Codeの「Download ZIP」は開発用ソースです。
+**[0.6.1の実行用ZIPをダウンロード](https://github.com/aominn/deadlock-spectator-hud-public/releases/tag/v0.6.1)** — ReleaseのZIPをすべて展開してください。Codeの「Download ZIP」は開発用ソースです。
 
 ![0.6.0の実リプレイ。上部の資産・KDA、効果通知、左右のレーン別建物HPを表示](docs/images/spectator-overview-0.6.0.jpg)
 
@@ -88,7 +88,7 @@ Deadlockの観戦・リプレイ向け非公式HUDです。**誰が何を買い�
 
 Windows 10・11の64bit版と、Steam・Deadlockが必要です。実行環境が含まれるため、Python・Node.js・.NETの別途導入は不要です。
 
-1. [Release](https://github.com/aominn/deadlock-spectator-hud-public/releases/tag/v0.6.0)から **DeadlockSpectatorHUD-0.6.0-win-x64.zip** を入手し、**すべて展開**します。ZIP内から直接起動しないでください。
+1. [Release](https://github.com/aominn/deadlock-spectator-hud-public/releases/tag/v0.6.1)から **DeadlockSpectatorHUD-0.6.1-win-x64.zip** を入手し、**すべて展開**します。ZIP内から直接起動しないでください。
 2. Deadlockを終了し、展開先の **HudManager.exe** を開きます。
 3. **Deadlock/game/citadel** フォルダーを指定し、 **「準備する」** を押します。画像はそのPCにインストールしたゲームから用意します。
 4. **「HUDを有効にする」→「ゲームを起動」** から、観戦・対応するリプレイを開きます。
@@ -108,7 +108,7 @@ Windows 10・11の64bit版と、Steam・Deadlockが必要です。実行環境�
 ![実際のツールで赤い丸、色付きの線、白い太線、赤い矢印を描いた画面。下部にツールバーも見える](docs/images/drawing-colored-example.jpg)
 
 - ツールバーで4色・細い線／太い線・ペン／矢印を選べます。「戻す」「消去」も使えます。
-- **「観戦へ」またはEsc** で線を残してゲーム操作へ戻り、**「描く」** で再開します。F8はツールバーの表示切替です。
+- **「観戦へ」またはEsc** で線を残してゲーム操作へ戻り、**「描く」** で再開します。F8は、非表示なら描画を開始し、観戦操作中ならそのまま描画を再開します。描画中に押すとツールバーを隠してゲーム操作へ戻ります。線は残ります。
 - 画面全体へ描けるのでミニマップ上にも描けます。線は画面上の位置に固定され、カメラには追従しません。
 - 別ウィンドウへの切替では線を保持し、シーク・別試合・通常モード復帰・ツール終了では消去します。
 - 描画チェックは管理画面を開くたびに設定します。描画中はFPSが下がる場合があります。
