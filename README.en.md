@@ -8,44 +8,69 @@ An unofficial HUD for **spectating and replays** in Deadlock. Follow purchases, 
 
 ![Actual 0.6.0 replay with economy, KDA, effect notifications and lane-grouped building HP](docs/images/spectator-overview-0.6.0.jpg)
 
-*Photos show HUD 0.6.0 with game build 6839 in Japanese. Full views are cropped; close-ups combine enlarged regions with external numbered labels. Game values and icons have not been altered.*
+*Photos show HUD 0.6.0 with game build 6839 in Japanese. Full views are cropped; each close-up preserves a continuous region to show where the information appears. Game values and icons have not been altered.*
 
 ## What it adds to the standard view
 
 ### Purchases and ability changes
 
-**Icon-and-name notifications** appear below each hero for purchases, sales and ability upgrades. Item accents distinguish Weapon, Vitality and Spirit. Upgrades show ◇1–3; confirmed unlocks use the game's unlock icon. Explain how a purchase changes the next fight without losing track of the player.
+**Icon-and-name notifications** appear below each hero for purchases, detected sales and ability upgrades. Not every sale is guaranteed to be reported. Item accents distinguish Weapon, Vitality and Spirit. Upgrades show ◇1–3; confirmed unlocks use the game's unlock icon. Explain how a purchase changes the next fight without losing track of the player.
 
-![Close-ups of an unlock and purchase, followed by a tier-one upgrade](docs/images/purchase-upgrade-0.6.0.jpg)
+Notifications appear **below the corresponding hero portrait**.
 
-*1: unlock. 2: purchase. 3: upgrade. These are separate regions of the same actual frame.*
+**Item purchase**
 
-### Economy and carried buffs
+![Yamato's portrait with a purchase notification directly below it](docs/images/notification-purchase-context-0.6.0.jpg)
 
-Each hero shows a name, K/D/A and **total souls / wallet**. Confirmed individual soul changes appear over the economy area. The central team lead appears only for the leading side after the first five minutes.
+**Ability upgrade**
 
-![1 hero name, KDA and total/wallet; 2 team economy lead](docs/images/economy-0.6.0.jpg)
+![Deadman Danny's portrait with an upgrade notification directly below it](docs/images/notification-upgrade-context-0.6.0.jpg)
 
-The HUD also marks the Urn carrier, up to two Bridge Buffs with a white remaining-time outline, individual Rejuvenator eligibility and the team's remaining count. Rejuvenator ownership is visible in the photos.
+**Ability unlock**
 
-### Status application icons
+![Rat King's portrait with an unlock notification directly below it](docs/images/notification-unlock-context-0.6.0.jpg)
 
-Supported stuns, slows, silence, curse, transformations, invulnerability and other supported effects appear as **icons without text labels** near the affected hero. A new application is shown for about three seconds. Up to four appear separately; five or more overlap. These brief notifications are not effect-duration timers.
+### Total souls and wallet
 
-![Enlarged hero row showing status icons and Rejuvenator ownership below the economy display](docs/images/effects-ownership-0.6.0.jpg)
+Each hero shows a name, K/D/A and **total souls / wallet**. For example, “4.1k / 909” means about 4,100 total souls and 909 in the wallet. Confirmed individual soul changes appear over this area. After five minutes, the central economy lead appears for the leading team only.
 
-*Transient application notifications and carried-buff indicators are separate systems. Coverage is not guaranteed for every hero or effect.*
+![Timer-centered view with hero total/wallet values on both sides and team economy](docs/images/economy-centered-0.6.0.jpg)
 
-### Buildings and objectives
+### Status application notifications
 
-- Damaged Guardian, Walker and Base Guardian HP is grouped **by lane**, retained for about five seconds after the last hit. Simultaneous entries pack horizontally. The two Base Guardians are separate entries.
-- Shrines use two horizontal columns; Patron displays follow its phase. Mid Boss has a dedicated HP display.
-- Bridge Buff countdowns and Mid Boss time information sit above the minimap. An unavailable state may show “—”, as in the photo.
-- The detailed view arranges inventory in three columns while retaining the top hero information and map timers.
+Supported stuns, slows, silence, curse, transformations, invulnerability and other supported effects appear as **icons without names beside the hero portrait**. The photo shows three notifications beside Violett.
 
-![1 Walker; 2 same-lane Base Guardian; 3 opposing Walker; 4 map timers](docs/images/objectives-0.6.0.jpg)
+<img src="docs/images/status-three-context-0.6.0.jpg" width="280" alt="Three real effect notifications beside Violett's portrait">
 
-*The numbered panels are different regions of one frame. This is not a permanent list of every building.*
+A new application is shown for about three seconds. Up to four appear separately; five or more overlap. These are not effect-duration timers. Coverage has not been verified for every hero or effect.
+
+### Urn and Bridge Buff ownership
+
+Separate from brief effect notifications, the HUD marks the Urn carrier above the hero portrait and up to two Bridge Buffs beside the ultimate icon below the economy area. A white outline around each Bridge Buff shows its remaining duration.
+
+### Rejuvenator eligibility
+
+A dedicated icon below the hero's economy area marks remaining Rejuvenator eligibility. The team's remaining count appears below the central timer.
+
+<img src="docs/images/rejuvenator-ownership-0.6.0.jpg" width="220" alt="Yellow Rejuvenator ownership icon below Vindicta's economy area">
+
+### Lane-grouped building HP
+
+Damaged Guardian, Walker and Base Guardian HP is grouped **by lane**, retained for about five seconds after the last hit. Simultaneous entries pack horizontally. The two Base Guardians have separate HP entries. This is not a permanent list of every building.
+
+![A Walker and two Base Guardians in the same lane, displayed in one horizontal group](docs/images/lane-building-hp-0.6.0.jpg)
+
+Shrines use two horizontal columns; Patron displays follow its phase. Mid Boss has a dedicated HP display.
+
+### Timers above the minimap
+
+Bridge Buff counts down to its **next scheduled appearance**. Mid Boss shows a respawn countdown or a spawned state when available from the game; an unavailable state shows “—”. The remaining duration of a collected Bridge Buff is shown by its white outline in the hero row.
+
+<img src="docs/images/map-timers-0.6.0.jpg" width="410" alt="Minimap with Bridge Buff and Mid Boss time information directly above it">
+
+### Detailed view
+
+Inventory is arranged in three columns, while top hero information and map timers remain visible. Follow the action in the normal view, then compare builds during a quieter moment.
 
 ## First setup
 
@@ -76,7 +101,7 @@ Enable **Draw lines (spectating/replays only)** in the manager and press **F8** 
 
 ## Restore normal mode and update
 
-**Restore**: Exit Deadlock, then select **Restore normal mode** in the manager.
+**Before returning to regular play**: Exit Deadlock, then select **Restore normal mode** in the manager.
 
 **Update**: Close the game and manager, extract the latest ZIP into a new folder, and open its HudManager.exe. No manual individual-file replacement is needed.
 
