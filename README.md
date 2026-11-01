@@ -90,7 +90,7 @@ Windows 10・11の64bit版と、Steam・Deadlockが必要です。実行環境�
 
 1. [Release](https://github.com/aominn/deadlock-spectator-hud-public/releases/tag/v0.6.0)から **DeadlockSpectatorHUD-0.6.0-win-x64.zip** を入手し、**すべて展開**します。ZIP内から直接起動しないでください。
 2. Deadlockを終了し、展開先の **HudManager.exe** を開きます。
-3. **Deadlock/game/citadel** フォルダーを指定し、**「準備する」**を押します。画像はそのPCにインストールしたゲームから用意します。
+3. **Deadlock/game/citadel** フォルダーを指定し、 **「準備する」** を押します。画像はそのPCにインストールしたゲームから用意します。
 4. **「HUDを有効にする」→「ゲームを起動」** から、観戦・対応するリプレイを開きます。
 
 ![0.6.0の管理画面。フォルダー指定・準備・HUD有効化・通常復帰・起動](docs/images/manager-0.6.0.jpg)
