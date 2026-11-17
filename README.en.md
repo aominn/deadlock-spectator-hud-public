@@ -8,7 +8,7 @@ This combines a MOD that changes the in-game display with a companion manager. *
 
 [Setup](#first-setup) · [Restore and update](#restore-normal-mode-and-update) · [Coverage](docs/STATUS.txt)
 
-**[Download the runnable 0.6.1 ZIP](https://github.com/aominn/deadlock-spectator-hud-public/releases/tag/v0.6.1)** and extract everything. Code → Download ZIP is the development source, not the runnable package.
+**Download the runnable ZIP from [GitHub Releases](https://github.com/aominn/deadlock-spectator-hud-public/releases).** This README includes screens and features from the 0.6.27 release candidate.
 
 ![Actual 0.6.0 replay with economy, KDA, effect notifications and lane-grouped building HP](docs/images/spectator-overview-0.6.0.jpg)
 
@@ -88,7 +88,7 @@ Bridge Buff counts down to its **next scheduled appearance**. Mid Boss shows a r
 
 Requires Windows 10/11 x64, with Steam and Deadlock installed. The runnable ZIP includes its runtime; no separate Python, Node.js or .NET installation is needed.
 
-1. Download **DeadlockSpectatorHUD-0.6.1-win-x64.zip** from [Release](https://github.com/aominn/deadlock-spectator-hud-public/releases/tag/v0.6.1) and **extract all files**. Do not run from inside the ZIP.
+1. Download `DeadlockSpectatorHUD-0.6.27-win-x64.zip` from [Releases](https://github.com/aominn/deadlock-spectator-hud-public/releases) and **extract all files**.
 2. Exit Deadlock and open **HudManager.exe** from the extracted folder.
 3. Select **Deadlock/game/citadel**, then **Set up**. Images are prepared from the game installed on that PC.
 4. Choose **Enable HUD → Launch game**, then open spectating or a compatible replay.
@@ -98,6 +98,22 @@ Requires Windows 10/11 x64, with Steam and Deadlock installed. The runnable ZIP 
 Older replays may be incompatible with the current game. Some long seeks can exit the game. Leave live spectating before opening a replay.
 
 Keep the manager open while spectating. Minimizing keeps it running; **closing with × stops its helper processes**. Closing alone does not restore normal mode. Allow preparation time when joining late or analyzing a replay for the first time.
+
+## Show team names, logos and bans (0.6.27)
+
+Open **Team settings** in the manager before launching the game. **Left team** and **Right team** refer to their positions on the spectator HUD. Set a name and a PNG or JPEG logo, then enable team names and icons in **Display settings**. In 0.6.27, choose Small, Standard, or Large for both team headings.
+
+Use **Choose bans** to manually select up to six heroes banned by each team. Save to show their icons above that team's roster in spectating and replays. Selections carry over to the next match. Use **Clear bans** for each side and save before setting up the next match. Teams with no selections have no BAN row.
+
+In Team settings before launch, select BO3 or BO5 and enter each side’s wins to show the series score in the center of the full-width tournament header. Off uses the previous spectator layout.
+
+The strip above the minimap shows Mid Boss on the left and Bridge Buff on the right. When the Mid Boss countdown was observed, it continues after the Rejuvenator pickup. Joining after the countdown is unavailable may show a dash.
+
+The 0.6.26 game view was checked at 1920×1080 borderless and 1280×720 windowed. WQHD and 4K have been checked in layout simulations only.
+
+![0.6.27 English replay with team names, bans, and the BO5 score](docs/images/tournament-header-0.6.27-en.jpg)
+
+Team names, logos and BAN assignments are examples.
 
 ## Draw on the screen
 
@@ -122,7 +138,7 @@ Enable **Drawing (spectator / replay only)** in the manager and press **F8** in 
 
 If a game update breaks the display, restore normal mode and wait for a compatible HUD release.
 
-**Update**: Get the latest runnable ZIP through **Download latest** in the manager or [GitHub Releases](https://github.com/aominn/deadlock-spectator-hud-public/releases). Close the game and manager, extract everything into a new folder, and open its HudManager.exe. Follow the manager's prompts, enable the HUD and launch the game. No manual individual-file replacement is needed.
+**Update**: Get the latest runnable ZIP through **Help → Download latest** in the manager or [GitHub Releases](https://github.com/aominn/deadlock-spectator-hud-public/releases). Close the game and manager, extract everything into a new folder, and open its HudManager.exe. Follow the manager's prompts, enable the HUD and launch the game. No manual individual-file replacement is needed.
 
 **Help**: After exiting the game, **Help** provides file checks, image refresh and rollback to a retained previous version. [Installation and recovery](docs/INSTALL.en.txt)
 

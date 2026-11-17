@@ -26,7 +26,7 @@ internal sealed class DrawingController : IDisposable
     InkToolbar? toolbar;
     IntPtr target;
     bool enabled, registered, polling, uploading, disposed, hotkeyFailure;
-    string key = "F8";
+    HudKey key = HudKey.DrawingDefault;
     long sequence, incarnation, uploadedRevision = -1;
     DateTime checkedAt = DateTime.MinValue, contextSucceededAt = DateTime.MinValue, uploadSucceededAt = DateTime.MinValue, uploadedAt = DateTime.MinValue;
     Rectangle lastBounds;
@@ -35,7 +35,7 @@ internal sealed class DrawingController : IDisposable
         this.status = status; this.targetCheck = targetCheck ?? IsDeadlock; this.contextReader = contextReader;
         hotkey = new HotkeyWindow(id => { if (id == 51) ToggleToolbar(); else if (id == 52) PauseDrawing(); }); timer.Tick += async (_, _) => await Tick(); timer.Start();
     }
-    public void Configure(bool enabled, string key)
+    public void Configure(bool enabled, HudKey key)
     {
         if (this.key != key) { Unregister(); this.key = key; hotkeyFailure = false; }
         if (!this.enabled && enabled) hotkeyFailure = false;
@@ -70,9 +70,7 @@ internal sealed class DrawingController : IDisposable
         if (!ours && !targetCheck(foreground)) { HideToolbar(false); Unregister(); if (model.Revision != uploadedRevision && inkEpoch != null) await Upload(true); return; }
         if (!registered && !hotkeyFailure)
         {
-            uint modifier = key == "Ctrl+Shift+D" ? 0x4006u : 0x4000u;
-            uint code = key switch { "F9" => 0x78u, "F10" => 0x79u, "Ctrl+Shift+D" => 0x44u, _ => 0x77u };
-            registered = Native.RegisterHotKey(hotkey.Handle, 51, modifier, code);
+            registered = Native.RegisterHotKey(hotkey.Handle, 51, 0x4000u | (uint)key.Modifiers, (uint)key.Code);
             if (!registered) { hotkeyFailure = true; status(Ui.T("描画キーを登録できません（Windows ") + Marshal.GetLastWin32Error() + Ui.T("）。別のキーを選ぶか、描画をいったん切り替えてください。")); }
         }
         if (toolbar != null && (Native.IsIconic(target) || !Native.ClientBounds(target, out var bounds) || bounds != lastBounds)) { HideToolbar(); return; }

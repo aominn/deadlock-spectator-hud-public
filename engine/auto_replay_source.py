@@ -84,6 +84,8 @@ class AutoReplaySource:
   with self.lock:return self.active.economy_advance(clock,heroes,stamp) if self.bound else []
  def money_at(self,clock,heroes):
   with self.lock:return self.active.money_at(clock,heroes) if self.bound else []
+ def stats_at(self,clock,heroes):
+  with self.lock:return self.active.stats_at(clock,heroes) if self.bound else ((),())
  @property
  def base_guardians(self):
   with self.lock:return self.active.base_guardians if self.bound else None

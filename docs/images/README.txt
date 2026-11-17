@@ -1,6 +1,6 @@
 Documentation photographs
 
-The current READMEs use 14 real application/game screenshots. The manager screenshot uses 0.6.1. Most game captures were taken on 2026-11-01 with public HUD 0.6.0, game build 6839, Japanese UI, 1920x1080, using replays 128579313 and 128582896. The colored drawing example was supplied by the user; its exact HUD version has not been independently established. The displayed drawing tools match 0.6.0.
+The current READMEs use real application/game screenshots. The manager screenshot uses 0.6.1. Most game captures were taken on 2026-11-01 with public HUD 0.6.0, game build 6839, Japanese UI, 1920x1080, using replays 128579313 and 128582896. The colored drawing example was supplied by the user; its exact HUD version has not been independently established. The displayed drawing tools match 0.6.0.
 
 Editing is limited to continuous crops, proportional resizing, JPEG encoding and letterboxing for the overview. Game values, names, icons and drawn strokes are not synthesized, inpainted or repositioned. Drawing shapes in the demonstration are actual pen/arrow output from the tool, not added editorial annotations. Cursor pixels are outside selected crops.
 
@@ -23,3 +23,5 @@ Current selected images and sources
 Earlier manager-0.6.0.jpg, drawing-0.6.0.jpg, rejuvenator-centered-0.6.0.jpg and *-0.5.12.png files remain historical/alternative examples and are not referenced by the current READMEs. Original development logs, raw replays and extracted runtime assets are not included here.
 
 Documentation images are excluded from executable ZIPs. Game content in photographs remains the property of its respective rights holders and is not relicensed by the project's authored-code MIT license. Documentation updates on main do not replace published executable ZIPs or move their source tags.
+
+tournament-header-0.6.27-{ja,en}.jpg: top HUD crops from replay 138426226 (0.6.27).

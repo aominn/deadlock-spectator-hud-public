@@ -35,7 +35,7 @@ for(const kind of ['購入','強化','解放'])for(const hasImage of [true,false
 }
 const two={queue:[{kind:'強化',name:'ヒル治療',tier:3,image:'',until:103},{kind:'購入',name:'エクストラスピリット',image:'',until:103}]};c.renderCards(owner,two,100);assert.equal(c.card(owner,1).style.position,'0px 192px 0px');assert.equal(card.style.height,'32px');assert.equal(card.style.width,'140px');assert.equal(get('SpecEventTierNumber').text,'3');
 vm.runInContext(funcs('urnBadge','teamResources'),c);c.playerSide=p=>p.side;
-for(const [side,x] of [['left',18],['right',94]]){const badge={style:{}};c.urnBadge({side,actuallayoutwidth:140,FindChildTraverse:()=>badge});assert.equal(badge.style.position,x+'px -12px 0px');}
+for(const [side,x] of [['left',18],['right',94]]){const badge={style:{}};c.urnBadge({side,actuallayoutwidth:140,FindChildTraverse:()=>badge});assert.equal(badge.style.position,x+'px -12px 0px');c.urnBadge({side,actuallayoutwidth:140,_specPlayerNameShown:true,FindChildTraverse:()=>badge});assert.equal(badge.style.position,x+'px 4px 0px');}
 console.log(JSON.stringify({passed:true,upgrade_render_cases:cases,layout_cases:layoutCases,production_card_tree:true,reading_order:'icon + diamond tier + name',side_inset:8,internal_gap:4,unknown_tier_hidden:true,seek_and_repeat_guards:true,scope:'production functions/native fixtures;not native visual proof'}));
 
 assert.equal(get('SpecEventTierIcon').image,'s2r://panorama/images/hud/hero_ability_pip_psd.vtex');

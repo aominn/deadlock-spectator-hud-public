@@ -14,6 +14,7 @@
 
 /* Portrait callouts are hidden only while spectating. */
 .spec_mode .ChatContainer {visibility: collapse;}
+.spec_mode CitadelHudTopBarPlayer .SpectatorImage {visibility: collapse;}
 
 /* Compact native team totals: match the small per-player soul tags. */
 .spec_mode .TeamNetworth {width: 160px;}
@@ -30,6 +31,7 @@
 /* Move each full six-player group, preserving internal spacing. */
 .spec_mode #TeamFriendly {transform: translateX(-42px);}
 .spec_mode #TeamEnemy {transform: translateX(42px);}
+.spec_mode .SpecRosterTeamHeaders #TeamsContainer, .spec_mode.SpecRosterTeamHeaders #TeamsContainer {padding-top: 74px;}
 
 /* Shifted outer purchase cards stay inside the screen, outside the old root clip. */
 .spec_mode CitadelHudTopBar {overflow: noclip;}
@@ -84,3 +86,17 @@
 /* Objective HP must disappear immediately when the detail inventory opens. */
 .spec_mode .SpecBuildDetailsOpen #SpecBaseGuardianHP,
 .spec_mode.SpecBuildDetailsOpen #SpecBaseGuardianHP { opacity: 0; }
+
+/* Only shift the center group when the optional series row occupies the top. */
+.spec_mode.SpecTournamentHeaderActive .GameClock,
+.spec_mode .SpecTournamentHeaderActive .GameClock,
+.spec_mode.SpecTournamentHeaderActive .TeamNetworth,
+.spec_mode .SpecTournamentHeaderActive .TeamNetworth,
+.spec_mode.SpecTournamentHeaderActive #RejuvenatorCharges,
+.spec_mode .SpecTournamentHeaderActive #RejuvenatorCharges,
+.spec_mode.SpecTournamentHeaderActive .KillsAndAbilityPointsContainer,
+.spec_mode .SpecTournamentHeaderActive .KillsAndAbilityPointsContainer { transform: translateY(32px); }
+
+/* The screen-space K/D/A row needs extra clearance in small windows. */
+.spec_mode.SpecCompactTeamHeader #TeamsContainer,
+.spec_mode .SpecCompactTeamHeader #TeamsContainer { padding-top: 124px; }

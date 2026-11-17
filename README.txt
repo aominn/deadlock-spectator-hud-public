@@ -1,6 +1,6 @@
-Deadlock Spectator HUD 0.6.1 — Windows10/11 x64
+Deadlock Spectator HUD — Windows10/11 x64
 非公式HUD・Windows用配布版
-https://github.com/aominn/deadlock-spectator-hud-public/releases/tag/v0.6.1
+https://github.com/aominn/deadlock-spectator-hud-public/releases
 
 Windows10/11 x64、Steam、Deadlockが必要です。配布ZIPには実行環境が含まれます。
 初回：ZIPをすべて展開 → HudManager.exe → Deadlock/game/citadelを選ぶ →「準備する」→「HUDを有効にする」→「ゲームを起動」。
@@ -16,7 +16,7 @@ ZIP内から直接起動せず、ファイルを個別に差し替えないで�
 更新前の画面が動いていると、二重起動を避けるため既存画面が前面に出る場合があります。閉じて新しいEXEを開き直してください。
 CodeのDownload ZIPは開発ソースです。Releasesのwin-x64実行用ZIPを使います。SHA256SUMSは配布物の照合用です。
 
-困ったとき：ゲーム終了後、メイン画面の「困ったとき」からファイル確認、画像の読み直し、前の版への復帰。
+困ったとき：ゲーム終了後、メイン画面の「ヘルプ」→「困ったとき」からファイル確認、画像の読み直し、前の版への復帰。
 「準備する」は、準備済みの同じゲームなら画像を読み直します。
 新版の素材生成や切替が失敗した場合は、旧設定・旧版・有効状態を維持／復旧します。原本と競合した場合は強制上書きせず停止します。
 管理画面を閉じる処理が失敗した場合は画面が残るので、表示内容を確認して再試行してください。

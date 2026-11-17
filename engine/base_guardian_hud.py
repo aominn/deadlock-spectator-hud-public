@@ -88,11 +88,11 @@ def draw_guardian_rows(image,rows,font_at,icon=None,origin_y=292,columns=None,la
   left=row['team']==2;scale=min(1,image.width/1920);key=(row['team'],slot);column=(columns or {}).get(key,0)+offsets.get(key,0)
   if column>=5:continue
   offsets[key]=offsets.get(key,0)+1
-  w=round(220*scale);h=round(34*scale);x=16+round(228*scale*column) if left else image.width-16-w-round(228*scale*column);y=origin_y+round(40*scale*slot);content=x+round(40*scale)
+  w=round(210*scale);h=round(32*scale);x=16+round(218*scale*column) if left else image.width-16-w-round(218*scale*column);y=origin_y+round(40*scale*slot);content=x+round(40*scale)
   ink.rounded_rectangle((x,y,x+w-1,y+h-1),radius=max(1,round(2*scale)),fill=(16,19,13,238),outline=(75,73,63,255))
   fill_width=max(0,round((w-round(44*scale))*row['fraction']))
   if fill_width:image.alpha_composite(Image.new('RGBA',(fill_width,max(1,h-2)),(212,134,11,204) if left else (77,117,195,204)),(content,y+1))
-  if icon is not None:image.alpha_composite(icon.convert('RGBA').resize((max(1,round(26*scale)),max(1,round(26*scale))),Image.Resampling.LANCZOS),(x+round(4*scale),y+round(4*scale)))
+  if icon is not None:image.alpha_composite(icon.convert('RGBA').resize((max(1,round(24*scale)),max(1,round(24*scale))),Image.Resampling.LANCZOS),(x+round(4*scale),y+round(4*scale)))
   caption_width=w-round(44*scale)
   lane=LANE_NAMES[row['lane']] if language=='ja' else {1:'York',3:'Greenwich',4:'Broadway',6:'Purple'}[row['lane']]
   title='ベースガーディアン' if language=='ja' else 'Base Guardian'

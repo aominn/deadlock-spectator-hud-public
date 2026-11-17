@@ -5,6 +5,7 @@ from urllib.parse import urlparse,parse_qs
 import io,json,re,time,threading,os,argparse,collections,functools,math,base64
 from PIL import Image,ImageDraw,ImageFont
 from native_session import mode_signal,lobby_line,resume_log
+from team_header import series_png, team_bans_png, team_header_png
 ROOT=Path(__file__).resolve().parent
 STATE=Path(os.environ.get('SPEC_HUD_STATE',str(ROOT))).resolve();STATE.mkdir(parents=True,exist_ok=True)
 CAT=json.loads((ROOT/'effect-catalog.json').read_text(encoding='utf-8'))
@@ -27,6 +28,7 @@ from live_effect_source import LiveEffectSource
 from replay_effect_source import ReplayEffectSource
 from base_guardian_hud import GuardianView,draw_guardian_rows,TowerGrid
 from drawing_hud import DrawingStore
+from spectator_stats import LiveStats, StatsPanels, WindowsStatsKeys, DEFAULT_STATS_KEYS, load_stats_keys, panel_png
 from bridge_buffs import BridgeView,RULES as BRIDGE_RULES,bridge_geometry
 WORLD_CAT=json.loads((ROOT/'world-effect-catalog.json').read_text(encoding='utf-8'))['classes']
 def MARKER_IN_LINE(line):
@@ -35,6 +37,7 @@ def MARKER_IN_LINE(line):
 class State:
  def __init__(self):
   self.language="ja";self.drawing=DrawingStore();self.tower_grid=TowerGrid();self.guardian_view=GuardianView();self.guardian_rows=[];self.kda_hold={};self.sale_ready=False;self.sale_seen=collections.deque(maxlen=2000);self.sale_active={};self.economy_view=EconomyView();self.money_rows=[];self.bridge_view=BridgeView();self.bridge_rows=None;self.notice_order=0;self.feeds={};self.camera_owner=None;self.camera_since=0;self.camera_at=0;self.entities={};self.snapshots={};self.observed={};self.notifications={};self.last_notice={};self.history=collections.deque(maxlen=3000);self.history_saved=None;self.record_saved=None;self.metrics=collections.Counter();self.suppressed=collections.deque(maxlen=1000);self.status_saved=0
+  self.stats_keys=DEFAULT_STATS_KEYS;self.stats_panels=StatsPanels();self.live_stats=LiveStats();self.live_stats_rows=()
   self.session_signal=None;self.native_confirmed=False;self.native_sequence=None
   self.current=None;self.rows=[];self.last_http=0;self.last_clock=None;self.postgame=False;self.stable_after=0;self.frames=0;self.samples=0;self.roster=[];self.lock=threading.RLock();self.last_cfg=None;self.last_heartbeat=None;self.native_at=0;self.stop=False
  def reset(self):
@@ -86,7 +89,8 @@ class State:
    self.session_signal=signal
    pending=STATE/'session-mode.pending';pending.write_text(json.dumps(signal,ensure_ascii=False),encoding='utf-8');os.replace(pending,STATE/'session-mode.json')
    return
-  if MARKER_IN_LINE(line):self.native_confirmed=False;self.drawing.clear()
+  if MARKER_IN_LINE(line):self.native_confirmed=False;self.drawing.clear();self.live_stats_rows=()
+  if lobby_line(line):self.live_stats=LiveStats()
   if lobby_line(line):self.session_signal={'kind':'lobby','source':'native-map','at':time.time()}
   if LIVE is not None:
    old=LIVE.route;LIVE.observe_log(line)
@@ -436,7 +440,7 @@ def render_identity_notices(im,clock):
   if isinstance(kda,list) and len(kda)==3:S.kda_hold[hero]=kda
   else:kda=S.kda_hold.get(hero)
   if ready and isinstance(kda,list) and len(kda)==3:
-   label='K '+str(kda[0])+'  D '+str(kda[1])+'  A '+str(kda[2]);im.alpha_composite(kda_texture(tuple(kda)),(round(center-60),round(base-30)));records.append({'hero':hero,'kind':'kda','text':label,'rect':[round(center-60),round(base-30),120,16]})
+   label='K '+str(kda[0])+'  D '+str(kda[1])+'  A '+str(kda[2]);x=round(center-60);y=round(base-(42 if p.get('two_name_rows') is True else 30));im.alpha_composite(kda_texture(tuple(kda)),(x,y));records.append({'hero':hero,'kind':'kda','text':label,'rect':[x,y,120,16]})
   for e in v.get('sales',[]):
    key=str(e['id'])
    if key in S.sale_seen:continue
@@ -522,7 +526,9 @@ def apply_live(now):
    if LIVE_PATH is None or LIVE_PATH.stat().st_size>1024*1024:raise ValueError('live snapshot size')
    snapshot=json.loads(LIVE_PATH.read_text(encoding='utf-8'))
  except (OSError,ValueError):snapshot=None
- fresh=LIVE.advance(snapshot,now,[int(p['hero']) for p in S.roster],stamp,time.time(),postgame=S.postgame)
+ heroes=[int(p['hero']) for p in S.roster]
+ fresh=LIVE.advance(snapshot,now,heroes,stamp,time.time(),postgame=S.postgame)
+ S.live_stats_rows=S.live_stats.update(snapshot if LIVE.bound else None,LIVE.route,now,heroes)
  if was_bound!=LIVE.bound or old_generation!=(LIVE.session,LIVE.generation):
   S.economy_view.clear()
   LIVE_WINDOWS.clear();S.notifications.clear();S.observed.clear();S.snapshots.clear();S.feeds.clear();S.entities.clear();S.camera_owner=None
@@ -700,9 +706,42 @@ def money_image(query):
   row=candidates[0];bold,regular=game_fonts()
   return glyph_png(row['total'],row['wallet'],bold,regular,query.get('tone',['light'])[0],native_total=None if confirmed_final() else row['native_total'])
 
+def stats_scope():
+ signal=S.session_signal or {}
+ if signal.get('kind') in ('replay','spectator') and -5<=time.time()-signal.get('at',0)<=4 and time.monotonic()-S.native_at<3:
+  return signal.get('kind'),signal.get('id'),getattr(REPLAY,'target',None),getattr(LIVE,'route',None)
+ return None
+
+def stats_image(query):
+ with S.lock:
+  clock=query.get('clock',[''])[0]
+  panel=S.stats_panels.open
+  now=S.last_clock
+  if not panel or stats_scope()!=S.stats_panels.scope or now is None or clock!=f'{now//60}:{now%60:02}' or time.monotonic()-S.last_http>2:
+   return panel_png(None,(),(),(),0,True)
+  names=tuple((str(p['hero']),re.sub(r'<[^>]*>','',str(p.get('name','')))[:80]) for p in sorted(S.roster,key=lambda p:p['pos']['x']))
+  heroes=[int(hero) for hero,_ in names]
+  if getattr(REPLAY,'bound',False) and hasattr(REPLAY,'stats_at'):
+   rows,history=REPLAY.stats_at(now,heroes)
+  elif getattr(LIVE,'bound',False):
+   rows,history=S.live_stats_rows,S.live_stats.through(now) if panel=='graph' else ()
+  else:
+   rows,history=(),()
+  if panel!='damage':rows=();names=()
+  if panel!='graph':history=()
+  ja=S.language=='ja'
+ return panel_png(panel,rows,names,history,now,ja)
+
 class ThreadingHTTPServer(_ThreadingHTTPServer):
  # Native image requests arrive in bursts across twelve player panels.
  request_queue_size=64
+
+def roster_option_png():
+ buffer=io.BytesIO()
+ Image.new('RGBA',(1,1)).save(buffer,format='PNG')
+ return buffer.getvalue()
+
+ROSTER_OPTION_PNG=roster_option_png()
 
 class H(BaseHTTPRequestHandler):
  protocol_version='HTTP/1.1'
@@ -713,7 +752,40 @@ class H(BaseHTTPRequestHandler):
   try:
    if len(self.path)>16000:raise ValueError('length')
    p=urlparse(self.path);q=parse_qs(p.query)
-   if q.get('token')!=[TOKEN] or p.path not in ('/frame.png','/money.png','/status.png','/guardian.png','/ink.png','/drawing-state'):self.send_error(404);return
+   if q.get('token')!=[TOKEN] or p.path not in ('/frame.png','/money.png','/status.png','/guardian.png','/ink.png','/stats.png','/drawing-state','/roster-option.png','/team-heading.png'):self.send_error(404);return
+   if p.path=='/team-heading.png':
+    side=q.get('side',[''])[0];mode=q.get('mode',[''])[0];language=q.get('lang',[''])[0]
+    if side not in ('0','1') or mode not in ('1','2','3','4','5') or language not in ('ja','en'):raise ValueError('team heading')
+    if mode=='5':
+     b=series_png(STATE.parent,ROOT)
+    elif mode=='4':
+     b=team_bans_png(STATE.parent,ROOT,int(side),language)
+    else:
+     b=team_header_png(STATE.parent,ROOT,int(side),int(mode),language)
+    self.send_response(200 if b else 204);self.send_header('Cache-Control','no-store')
+    if b:
+     self.send_header('Content-Type','image/png');self.send_header('Content-Length',str(len(b)))
+    self.end_headers()
+    if b:self.wfile.write(b)
+    return
+   if p.path=='/roster-option.png':
+    # These four requests check for differences from the default; PNG loading is native to Panorama.
+    key=q.get('option',[''])[0]
+    bit={'player':1,'hero':2,'teamName':4,'teamIcon':8}.get(key)
+    if bit is None:raise ValueError('roster option')
+    try:
+     mask=int((STATE.parent/'roster-display').read_text(encoding='ascii'))
+     if not 0<=mask<=15:mask=2
+    except (OSError,ValueError):mask=2
+    b=ROSTER_OPTION_PNG if (mask ^ 2) & bit else b''
+    self.send_response(200 if b else 204)
+    self.send_header('Cache-Control','no-store')
+    if b:
+     self.send_header('Content-Type','image/png')
+     self.send_header('Content-Length',str(len(b)))
+    self.end_headers()
+    if b:self.wfile.write(b)
+    return
    if p.path=='/drawing-state':
     with S.lock:body=json.dumps(S.drawing.status(S.session_signal)).encode('utf-8')
     self.send_response(200);self.send_header('Content-Type','application/json');self.send_header('Cache-Control','no-store');self.send_header('Content-Length',str(len(body)));self.end_headers();self.wfile.write(body);return
@@ -721,6 +793,7 @@ class H(BaseHTTPRequestHandler):
    if p.path=='/ink.png':
     context=json.loads(q.get('context',['{}'])[0])
     with S.lock:S.drawing.update_context(context,S.session_signal);b=S.drawing.png()
+   elif p.path=='/stats.png':b=stats_image(q)
    elif p.path=='/status.png':b=status_image()
    elif p.path=='/guardian.png':b=guardian_image(q.get('width',['1920'])[0])
    elif p.path=='/money.png':b=money_image(q)
@@ -749,39 +822,47 @@ class H(BaseHTTPRequestHandler):
   except (ValueError,KeyError,TypeError):self.send_error(400)
   except (ConnectionError,OSError):pass
  def log_message(self,*a):pass
-def watch(log):
+def watch(log, hotkeys_path=None):
  started=time.time();partial=b'';lastbeat=0;resume_key=None
  try:seed,pos,partial,meta=resume_log(log,not_before=started)
  except (OSError,ValueError) as e:
   S.stop=True;(STATE/'bridge-error.txt').write_text(str(e),encoding='utf-8');return
  with S.lock:
   for line in seed:S.line(line)
- while not S.stop:
-  try:
-   size=log.stat().st_size
-   if size<pos:pos=0;partial=b'';S.reset();resume_key=None;started=time.time()
-   if size>pos:
-    with log.open('rb') as f:f.seek(pos);b=f.read(min(size-pos,2*1024*1024));pos+=len(b)
-    lines=(partial+b).split(b'\n');partial=lines.pop()
+ S.stats_keys=load_stats_keys(hotkeys_path)
+ keys=WindowsStatsKeys(S.stats_keys) if os.name=='nt' else None
+ try:
+  while not S.stop:
+   try:
+    size=log.stat().st_size
+    if size<pos:pos=0;partial=b'';S.reset();resume_key=None;started=time.time()
+    if size>pos:
+     with log.open('rb') as f:f.seek(pos);b=f.read(min(size-pos,2*1024*1024));pos+=len(b)
+     lines=(partial+b).split(b'\n');partial=lines.pop()
+     with S.lock:
+      for line in lines:S.line(line.decode('utf-8',errors='replace').rstrip('\r'))
     with S.lock:
-     for line in lines:S.line(line.decode('utf-8',errors='replace').rstrip('\r'))
-   with S.lock:
-    signal=S.session_signal or {};key=(signal.get('id'),signal.get('kind'))
-    can_resume=signal.get('kind') in ('replay','spectator') and signal.get('at',0)>=started and not getattr(LIVE,'route',None) and not getattr(REPLAY,'target',None)
-    if signal.get('kind') not in ('replay','spectator'):resume_key=None
-   if can_resume and key!=resume_key:
-    seed,newpos,newpartial,meta=resume_log(log,not_before=started);resume_key=key
-    with S.lock:
-     for line in seed:S.line(line)
-     if meta.get('reason')=='restored':S.metrics['session_restores']+=1
-    pos=newpos;partial=newpartial
-   if time.monotonic()-lastbeat>10:
-    lastbeat=time.monotonic();(STATE/'bridge-status.json').write_text(json.dumps({'at':time.time(),'frames':S.frames,'samples':S.samples,'entities':len(S.entities),'active':time.monotonic()-S.last_http<2,'log_size':size,'mode':'automatic replay and native spectator broadcast','session_mode':S.session_signal,'session_resume':meta,'live_source':{'bound':LIVE.bound,'metrics':dict(LIVE.metrics)} if LIVE is not None else None}),encoding='utf-8')
-   if size>256*1024*1024:raise RuntimeError('Diagnostic log limit reached; collector must be restarted with a new session log.')
-  except FileNotFoundError:pass
-  except Exception as e:
-   S.reset();S.stop=True;(STATE/'bridge-error.txt').write_text(str(e),encoding='utf-8');return
-  time.sleep(.05)
+     signal=S.session_signal or {};key=(signal.get('id'),signal.get('kind'))
+     can_resume=signal.get('kind') in ('replay','spectator') and signal.get('at',0)>=started and not getattr(LIVE,'route',None) and not getattr(REPLAY,'target',None)
+     if signal.get('kind') not in ('replay','spectator'):resume_key=None
+     scope=stats_scope()
+     events=keys.events(scope is not None) if keys else ()
+     S.stats_panels.poll(scope,events)
+    if can_resume and key!=resume_key:
+     seed,newpos,newpartial,meta=resume_log(log,not_before=started);resume_key=key
+     with S.lock:
+      for line in seed:S.line(line)
+      if meta.get('reason')=='restored':S.metrics['session_restores']+=1
+     pos=newpos;partial=newpartial
+    if time.monotonic()-lastbeat>10:
+     lastbeat=time.monotonic();(STATE/'bridge-status.json').write_text(json.dumps({'at':time.time(),'frames':S.frames,'samples':S.samples,'entities':len(S.entities),'active':time.monotonic()-S.last_http<2,'log_size':size,'mode':'automatic replay and native spectator broadcast','session_mode':S.session_signal,'session_resume':meta,'hotkeys_unavailable':keys.failed if keys else [],'live_source':{'bound':LIVE.bound,'metrics':dict(LIVE.metrics)} if LIVE is not None else None}),encoding='utf-8')
+    if size>256*1024*1024:raise RuntimeError('Diagnostic log limit reached; collector must be restarted with a new session log.')
+   except FileNotFoundError:pass
+   except Exception as e:
+    S.reset();S.stop=True;(STATE/'bridge-error.txt').write_text(str(e),encoding='utf-8');return
+   time.sleep(.05)
+ finally:
+  if keys:keys.close()
 if __name__=='__main__':
  ap=argparse.ArgumentParser();ap.add_argument('--log',required=True);ap.add_argument('--cfg',help=argparse.SUPPRESS);ap.add_argument('--replay-index');ap.add_argument('--replay-file');ap.add_argument('--live-effects');args=ap.parse_args()
  if bool(args.replay_index)!=bool(args.replay_file):ap.error('--replay-index and --replay-file must be supplied together')

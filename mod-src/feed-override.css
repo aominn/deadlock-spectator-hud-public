@@ -1,7 +1,9 @@
 /* Keep native kill / urn semantics and expiry. Compact spectator log only. */
 .spec_mode #EventFeed {width: 720px; margin-top: 416px; margin-left: 12px;}
-.spec_mode #EventFeed CitadelHudInfoFeed {ui-scale: 85%;}
-.spec_mode #EventFeed CitadelHudBossKilled {ui-scale: 85%;}
+/* Reserve space for the third building HP row when team headings lower the grid. */
+.spec_mode #EventFeed.SpecRosterTeamHeaders {margin-top: 442px;}
+.spec_mode #EventFeed CitadelHudInfoFeed {ui-scale: 82%;}
+.spec_mode #EventFeed CitadelHudBossKilled {ui-scale: 82%;}
 
 /* Preserve native feed flow and lifetime; no additional height clipping. */
 

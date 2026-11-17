@@ -7,6 +7,7 @@ from pathlib import Path
 import bisect,collections,hashlib,json,math,re
 from bridge_buffs import BridgeTimeline
 from money_hud import MoneyTimeline
+from spectator_stats import StatsTimeline
 from economy_hud import EconomyTimeline,EconomyCursor
 
 class ReplayEffectSource:
@@ -34,6 +35,7 @@ class ReplayEffectSource:
   self.bridge=BridgeTimeline(index.get('bridge'),self.owners)
   try:self.money=MoneyTimeline(index.get('money'),{p['hero']:p.get('team') for p in roster})
   except (ValueError,KeyError,TypeError):self.money=MoneyTimeline(None,self.heroes)
+  self.stats=StatsTimeline(index.get('spectator_stats'),{p['hero']:p.get('team') for p in roster})
   self.times=[math.floor(e['seconds']) for e in self.events]
   self.bound=False;self.previous=None;self.cursor=0;self.stable_after=0;self.last_stamp=None;self.metrics=collections.Counter()
 
@@ -43,6 +45,9 @@ class ReplayEffectSource:
 
  def money_at(self,clock,heroes):
   return self.money.at(clock,heroes) if self.bound else []
+
+ def stats_at(self,clock,heroes):
+  return self.stats.at(clock) if self.bound and len(heroes)==12 and set(heroes)==self.heroes else ((),())
 
  def bridge_at(self,clock,heroes):
   if not self.bound or set(heroes)!=self.heroes or len(heroes)!=12:return []

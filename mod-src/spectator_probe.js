@@ -1,5 +1,9 @@
 // Enable only in development builds; transport/session receipts below remain active.
 var SPEC_RESEARCH_LOGS=false;
+// Keep native building bars and the replay/live base-guardian image on the same rows.
+function specBuildingHudTop(topBar){
+ return topBar.BHasClass('SpecRosterTeamHeaders')?320:292;
+}
 (function(){
 'use strict';
 var normalRestored=false;
@@ -31,25 +35,182 @@ function seconds(s){var m=String(s).match(/^(\d+):(\d\d)$/);return m&&Number(m[2
 function clean(s){return String(s).replace(/\s/g,'').toLowerCase();}
 function label(parent,id,x,y,width){var p=$.CreatePanel('Label',parent,id);p.hittest=false;p.style.ignoreParentFlow=true;p.style.horizontalAlign='center';p.style.position=x+'px '+y+'px 0px';p.style.width=width+'px';p.style.fontSize='14px';p.style.fontWeight='bold';p.style.color='#eee6cd';p.style.textAlign='center';p.style.backgroundColor='#171915dd';p.style.borderRadius='3px';p.style.padding='2px 4px';p.visible=false;overlays.push(p);return p;}
 var leftBadge,rightBadge,leftKills,rightKills,mid,bridge,objectiveBox;
-function init(){var parent=ctx.GetParent();leftBadge=label(parent,'SpecLeadLeft',-76,20,72);rightBadge=label(parent,'SpecLeadRight',76,20,72);var money=[leftBadge,rightBadge];for(var i=0;i<money.length;i++){money[i].style.backgroundImage='url("s2r://panorama/images/hud/icons/icon_soul.vsvg")';money[i].style.backgroundSize='14px 14px';money[i].style.backgroundRepeat='no-repeat';money[i].style.backgroundPosition='4px center';money[i].style.paddingLeft='20px';money[i].style.fontSize='14px';money[i].style.whiteSpace='nowrap';money[i].style.textOverflow='shrink';}leftKills=label(parent,'SpecKillsLeft',-90,16,52);rightKills=label(parent,'SpecKillsRight',90,16,52);objectiveBox=$.CreatePanel('Panel',parent,'SpecObjectivePanel');objectiveBox.hittest=false;objectiveBox.style.ignoreParentFlow=true;objectiveBox.style.horizontalAlign='right';objectiveBox.style.verticalAlign='bottom';objectiveBox.style.marginRight='16px';objectiveBox.style.marginBottom='440px';objectiveBox.style.width='360px';objectiveBox.style.height='40px';objectiveBox.style.backgroundColor='#17191599';overlays.push(objectiveBox);mid=objectiveRow(objectiveBox,'SpecMidNext',1,'s2r://panorama/images/minimap/super_neutral_marker_psd.vtex','ミッドボス');bridge=objectiveRow(objectiveBox,'SpecBridgeNext',0,'s2r://panorama/images/hud/modifiers/icon_powerup.vsvg','ブリッジバフ');}
-function objectiveRow(parent,id,index,icon,title){var row=$.CreatePanel('Panel',parent,id);row.hittest=false;row.style.ignoreParentFlow=true;row.style.horizontalAlign='left';row.style.position=(index*180)+'px 0px 0px';row.style.width='180px';row.style.height='40px';row.style.backgroundImage='url("'+icon+'")';row.style.backgroundSize=id==='SpecMidNext'?'40px 40px':'20px 20px';row.style.backgroundRepeat='no-repeat';row.style.backgroundPosition=id==='SpecMidNext'?'2px center':'12px center';row.visible=false;for(var i=0;i<2;i++){var n=$.CreatePanel('Label',row,i?'SpecObjectiveValue':'SpecObjectiveName');n.hittest=false;n.html=false;n.style.ignoreParentFlow=true;n.style.position='44px '+(i?14:0)+'px 0px';n.style.width='128px';n.style.height=i?'26px':'14px';n.style.fontFamily='sans';n.style.fontSize=i?'18px':'11px';n.style.fontWeight=i?'semi-bold':'normal';n.style.color='#d6d3c9';n.style.whiteSpace='nowrap';n.style.textAlign='left';if(!i)n.text=typeof SpecLocale==='undefined'?title:SpecLocale.text(title);}return row;}
-function objectiveGeometry(map,parent){if(!map||!parent||typeof map.GetPositionWithinWindow!=='function')return null;var pos=map.GetPositionWithinWindow(),origin=parent.GetPositionWithinWindow(),scale=Number(parent.actualuiscale_x)||1,ms=Number(map.actualuiscale_x)||scale,w=Number(map.actuallayoutwidth)*ms/scale,h=Number(map.actuallayoutheight)*ms/scale,x=(pos.x-origin.x)/scale,y=(pos.y-origin.y)/scale-60,pw=Number(parent.actuallayoutwidth),ph=Number(parent.actuallayoutheight);if(!isFinite(x)||!isFinite(y)||!isFinite(w)||!isFinite(h)||w<240||w>600||h<200||h>600||x<pw/2||x+w>pw+2||y<ph*.35||y+60+h>ph+2)return null;return {x:x+24,y:y,width:w-48};}
-function layoutObjectives(){var parent=ctx.GetParent(),maps=all(root(),'HudMinimap'),g=null;for(var i=0;i<maps.length;i++){g=objectiveGeometry(maps[i],parent);if(g)break;}if(!g){objectiveBox.visible=false;return false;}objectiveBox.style.horizontalAlign='left';objectiveBox.style.verticalAlign='top';objectiveBox.style.marginRight='0px';objectiveBox.style.marginBottom='0px';objectiveBox.style.position=g.x+'px '+g.y+'px 0px';objectiveBox.style.width=g.width+'px';var half=g.width/2,rows=[bridge,mid];for(i=0;i<2;i++){rows[i].style.position=(i*half)+'px 0px 0px';rows[i].style.width=half+'px';rows[i].FindChildTraverse('SpecObjectiveName').style.width=(half-52)+'px';rows[i].FindChildTraverse('SpecObjectiveValue').style.width=(half-52)+'px';}return true;}
+function init(){var parent=ctx.GetParent();leftBadge=label(parent,'SpecLeadLeft',-76,20,72);rightBadge=label(parent,'SpecLeadRight',76,20,72);var money=[leftBadge,rightBadge];for(var i=0;i<money.length;i++){money[i].style.backgroundImage='url("s2r://panorama/images/hud/icons/icon_soul.vsvg")';money[i].style.backgroundSize='14px 14px';money[i].style.backgroundRepeat='no-repeat';money[i].style.backgroundPosition='4px center';money[i].style.paddingLeft='20px';money[i].style.fontSize='14px';money[i].style.whiteSpace='nowrap';money[i].style.textOverflow='shrink';}leftKills=label(parent,'SpecKillsLeft',-90,16,52);rightKills=label(parent,'SpecKillsRight',90,16,52);objectiveBox=$.CreatePanel('Panel',parent,'SpecObjectivePanel');objectiveBox.hittest=false;objectiveBox.style.ignoreParentFlow=true;objectiveBox.style.horizontalAlign='right';objectiveBox.style.verticalAlign='bottom';objectiveBox.style.marginRight='16px';objectiveBox.style.marginBottom='440px';objectiveBox.style.width='360px';objectiveBox.style.height='44px';objectiveBox.style.backgroundColor='#171915bb';overlays.push(objectiveBox);mid=objectiveRow(objectiveBox,'SpecMidNext',0,'s2r://panorama/images/minimap/super_neutral_marker_psd.vtex','ミッドボス');bridge=objectiveRow(objectiveBox,'SpecBridgeNext',1,'s2r://panorama/images/hud/modifiers/icon_powerup.vsvg','ブリッジバフ');}
+function objectiveRow(parent,id,index,icon,title){var row=$.CreatePanel('Panel',parent,id);row.hittest=false;row.style.ignoreParentFlow=true;row.style.horizontalAlign='left';row.style.position=(index*180)+'px 0px 0px';row.style.width='180px';row.style.height='44px';row.style.backgroundImage='url("'+icon+'")';row.style.backgroundSize=id==='SpecMidNext'?'40px 40px':'20px 20px';row.style.backgroundRepeat='no-repeat';row.style.backgroundPosition=id==='SpecMidNext'?'0px center':'12px center';if(index)row.style.borderLeft='1px solid #d6d3c947';row.visible=false;for(var i=0;i<2;i++){var n=$.CreatePanel('Label',row,i?'SpecObjectiveValue':'SpecObjectiveName');n.hittest=false;n.html=false;n.style.ignoreParentFlow=true;n.style.position='48px '+(i?19:4)+'px 0px';n.style.width='124px';n.style.height=i?'24px':'16px';n.style.fontFamily='sans';n.style.fontSize=i?'18px':'12px';n.style.textOverflow='shrink';n.style.fontWeight=i?'semi-bold':'normal';n.style.color='#d6d3c9';n.style.whiteSpace='nowrap';n.style.textAlign='left';if(!i)n.text=typeof SpecLocale==='undefined'?title:SpecLocale.text(title);}return row;}
+// At sub-1x window sizes the root reports pixel dimensions, while authored positions are scaled.
+function smallWindowViewport(parent,scale){
+ var divisor=Math.min(1,scale);
+ return {width:Number(parent.actuallayoutwidth)/divisor,height:Number(parent.actuallayoutheight)/divisor};
+}
+function objectiveGeometry(map,parent){if(!map||!parent||typeof map.GetPositionWithinWindow!=='function')return null;var pos=map.GetPositionWithinWindow(),origin=parent.GetPositionWithinWindow(),scale=Number(parent.actualuiscale_x)||1,ms=Number(map.actualuiscale_x)||scale,w=Number(map.actuallayoutwidth)*ms/scale,h=Number(map.actuallayoutheight)*ms/scale,x=(pos.x-origin.x)/scale,y=(pos.y-origin.y)/scale-72,viewport=smallWindowViewport(parent,scale),pw=viewport.width,ph=viewport.height;if(!isFinite(x)||!isFinite(y)||!isFinite(w)||!isFinite(h)||w<240||w>600||h<200||h>600||x<pw/2||x+w>pw+48||y<ph*.35||y+72+h>ph+48)return null;var width=Math.min(360,w-24);return {x:Math.min(pw,x+w)-width-12,y:y,width:width};}
+function layoutObjectives(){var parent=ctx.GetParent(),maps=all(root(),'HudMinimap'),g=null;for(var i=0;i<maps.length;i++){g=objectiveGeometry(maps[i],parent);if(g)break;}if(!g){objectiveBox.visible=false;return false;}objectiveBox.style.horizontalAlign='left';objectiveBox.style.verticalAlign='top';objectiveBox.style.marginRight='0px';objectiveBox.style.marginBottom='0px';objectiveBox.style.position=g.x+'px '+g.y+'px 0px';objectiveBox.style.width=g.width+'px';var half=g.width/2,rows=[mid,bridge];for(i=0;i<2;i++){rows[i].style.position=(i*half)+'px 0px 0px';rows[i].style.width=half+'px';rows[i].FindChildTraverse('SpecObjectiveName').style.width=(half-54)+'px';rows[i].FindChildTraverse('SpecObjectiveValue').style.width=(half-54)+'px';}return true;}
 // Reuse at most12 root-level labels; refresh owners each scan, so obsolete slots cannot survive.
 var nameOwners=[],namePanels=[],rejuvenatorPanels=[];
 function positionName(p,parent,n,offset,maxWidth){var portrait=p.FindChildTraverse('HeroBadge')||p,pos=portrait.GetPositionWithinWindow(),origin=parent.GetPositionWithinWindow(),scale=Number(parent.actualuiscale_x)||1,ps=Number(portrait.actualuiscale_x)||scale,ns=Number(n.actualuiscale_x)||scale,base=p.GetPositionWithinWindow(),center=(pos.x-origin.x+Number(portrait.actuallayoutwidth)*ps/2)/scale,w=Number(n.actuallayoutwidth)*ns/scale;if(!isFinite(w)||w<=0)w=maxWidth;var x=center-w/2,y=(base.y-origin.y)/scale+offset;return isFinite(x)&&isFinite(y)&&w>0&&w<=maxWidth+2&&y>=0?{x:x,y:y,center:center,width:w}:null;}
 function nameOwnerReady(p){try{if(!p||(p.IsValid&&!p.IsValid())||p.visible===false||!(Number(p.actuallayoutwidth)>=80)||!(Number(p.actuallayoutheight)>0))return false;if(typeof p.IsVisible==='function'&&!p.IsVisible())return false;var b=p.FindChildTraverse('HeroBadge');if(!b||(b.IsValid&&!b.IsValid())||b.visible===false||!(Number(b.actuallayoutwidth)>0)||!(Number(b.actuallayoutheight)>0)||!/^\d+$/.test(String(b.heroid))||String(b.heroid)==='0')return false;if(typeof b.IsVisible==='function'&&!b.IsVisible())return false;return true;}catch(e){return false;}}
 function hideNames(){for(var i=0;i<namePanels.length;i++)if(namePanels[i])namePanels[i].visible=false;}
 function refreshNameOwners(){hideNames();hidePlayerBadges();nameOwners=[];var parent=ctx.GetParent(),seen={};for(var i=0;i<players.length;i++){var p=players[i];if(!nameOwnerReady(p))continue;var g=positionName(p,parent,{actuallayoutwidth:120,actualuiscale_x:parent.actualuiscale_x},-14,120),hero=state(p).hero,pw=Number(parent.actuallayoutwidth);if(!g||g.x<0||g.x+g.width>pw+2||seen[hero])continue;seen[hero]=true;nameOwners.push(p);}if(nameOwners.length>12)nameOwners=[];}
-function nameLabel(p,hero){if(!hero)return null;var slot=nameOwners.indexOf(p);if(slot<0||!nameOwnerReady(p))return null;var parent=ctx.GetParent(),n=namePanels[slot];if(!n){n=$.CreatePanel('Panel',parent,'SpecHeroName'+slot);namePanels[slot]=n;n.hittest=false;n.html=false;n.style.ignoreParentFlow=true;n.style.horizontalAlign='left';n.style.verticalAlign='top';n.style.width='120px';n.style.backgroundColor='#11131355';n.style.borderRadius='0px';n.style.padding='0px';n.style.margin='0px';n.style.maxWidth='120px';n.style.height='14px';var caption=$.CreatePanel('Label',n,'Caption');caption.hittest=false;caption.html=false;caption.style.width='fit-children';caption.style.maxWidth='120px';caption.style.height='fit-children';caption.style.verticalAlign='center';caption.style.horizontalAlign='center';n.style.overflow='noclip';caption.style.padding='0px';caption.style.margin='0px';caption.style.textAlign='center';caption.style.fontSize='12px';caption.style.fontFamily='sans';caption.style.fontWeight='bold';caption.style.color='#f4f1e8';caption.style.textShadow='0px 1px 3px #000000ee';caption.style.whiteSpace='nowrap';caption.style.textOverflow='shrink';caption.style.zIndex='112';}var name=text(all(p,'HeroName')[0]).replace(/[\r\n]+/g,' ');if(name.indexOf('{')>=0)name='';if(name&&typeof SpecLocale!=='undefined')name=SpecLocale.heroName(state(p).hero,name);var caption=n.FindChildTraverse('Caption');if(caption.text!==name)caption.text=name;var g=positionName(p,parent,n,-14,120);n.visible=!!name&&!!g;if(g){n.style.position=g.x+'px '+g.y+'px 0px';if(n._specAudit!==name){n._specAudit=name;$.Msg('[SpecHeroNameLayout] '+JSON.stringify({hero:state(p).hero,name:name,anchor:'roster-pool',slot:slot,label_x:g.x,label_width:g.width,y:g.y,owners:nameOwners.length}));}}return n;}
-function playerName(p){var n=p._specNameLabel;if(n)n.visible=false;return null;}
-function heroName(p,detail){return nameLabel(p,true);}
+var rosterOptions={player:false,hero:true,teamName:false,teamIcon:false},rosterOptionProbes=[],teamHeaders=[];
+function requestRosterOptions(){
+ if(rosterOptionProbes.length)return;
+ Object.keys(rosterOptions).forEach(function(key){
+  var probe=$.CreatePanel('Image',ctx,'SpecRosterOption'+key);
+  rosterOptionProbes.push(probe);probe.visible=false;probe.hittest=false;
+  $.RegisterEventHandler('ImageLoaded',probe,function(){rosterOptions[key]=key!=='hero';});
+  probe.SetImage('http://127.0.0.1:49647/roster-option.png?token=spec-debuff-local-8a71&option='+key+'&nonce='+Date.now());
+ });
+}
+function rosterCaption(parent,id){
+ var caption=$.CreatePanel('Label',parent,id);
+ caption.hittest=false;caption.html=false;
+ caption.style.width='fit-children';caption.style.horizontalAlign='center';caption.style.height='fit-children';caption.style.textAlign='center';
+ caption.style.fontFamily='sans';caption.style.fontWeight='bold';caption.style.color='#f4f1e8';
+ caption.style.textShadow='0px 1px 3px #000000ee';caption.style.whiteSpace='nowrap';caption.style.textOverflow='shrink';
+ return caption;
+}
+function rosterName(p){
+ var panel=all(p,'PlayerName')[0],name=panel&&panel.text?String(panel.text):'';
+ return name.replace(/[\r\n\t]+/g,' ').trim();
+}
+function heroName(p){
+ var slot=nameOwners.indexOf(p);if(slot<0||!nameOwnerReady(p))return null;
+ var hero=rosterOptions.hero?text(all(p,'HeroName')[0]).replace(/[\r\n]+/g,' '):'',player=rosterOptions.player?rosterName(p):'';
+ if(hero.indexOf('{')>=0)hero='';
+ if(hero&&typeof SpecLocale!=='undefined')hero=SpecLocale.heroName(state(p).hero,hero);
+ var twoRows=!!(player&&hero),parent=ctx.GetParent(),n=namePanels[slot];
+ if(!n){
+  n=$.CreatePanel('Panel',parent,'SpecHeroName'+slot);namePanels[slot]=n;n.hittest=false;
+  n.style.ignoreParentFlow=true;n.style.horizontalAlign='left';n.style.verticalAlign='top';
+  n.style.width='120px';n.style.maxWidth='120px';n.style.backgroundColor='#11131355';n.style.borderRadius='0px';n.style.padding='0px';n.style.margin='0px';n.style.overflow='noclip';
+  n._primary=rosterCaption(n,'Caption');n._primary.style.maxWidth='116px';n._primary.style.verticalAlign='top';
+  n._secondary=rosterCaption(n,'SecondaryCaption');n._secondary.style.maxWidth='116px';n._secondary.style.verticalAlign='bottom';n._secondary.style.fontSize='10px';
+ }
+ var caption=player||hero,g=positionName(p,parent,n,twoRows?-26:-14,120);
+ n.visible=!!caption&&!!g;p._specTwoNameRows=n.visible&&twoRows;p._specPlayerNameShown=n.visible&&!!player;
+ n.style.height=twoRows?'26px':'14px';
+ n._primary.style.fontSize=player?'13px':'12px';
+ n._primary.style.verticalAlign=twoRows?'top':'center';
+ if(n._primary.text!==caption)n._primary.text=caption;
+ n._secondary.visible=twoRows;if(twoRows&&n._secondary.text!==hero)n._secondary.text=hero;
+ if(g)n.style.position=g.x+'px '+g.y+'px 0px';
+ return n;
+}
+function teamHeader(side,parent){
+ if(teamHeaders[side])return teamHeaders[side];
+ var n=$.CreatePanel('Panel',parent,'SpecRosterTeam'+side);teamHeaders[side]=n;n.hittest=false;
+ n.style.ignoreParentFlow=true;n.style.horizontalAlign='left';n.style.verticalAlign='top';n.style.width='250px';n.style.height='30px';n.style.zIndex='2';
+ var row=$.CreatePanel('Panel',n,'TeamHeading');row.hittest=false;row.style.flowChildren='right';row.style.horizontalAlign='center';row.style.height='100%';row.style.padding='0px 8px';
+ var icon=$.CreatePanel('Image',row,'TeamEmblem');icon.hittest=false;icon.style.width='21px';icon.style.height='21px';icon.style.verticalAlign='center';
+ icon.SetImage('s2r://panorama/images/hud/core/team'+(side+1)+'_icon.vsvg');
+ var name=rosterCaption(row,'TeamName');name.style.width='fit-children';name.style.maxWidth='210px';name.style.verticalAlign='center';name.style.fontSize='19px';
+ name.text=typeof SpecLocale!=='undefined'&&SpecLocale.language==='ja'?$.Localize('#Citadel_Team'+(side+1)+'_Name',ctx):(side===0?'The Hidden King':'The Archmother');
+ var tone=side===0?'#f6c769':'#b6caff';name.style.color=tone;icon.style.washColor=tone;
+ n._icon=icon;n._name=name;n._stock=row;n._headings={};return n;
+}
+function showTeamHeading(header,side){
+ var mode=(rosterOptions.teamName?1:0)+(rosterOptions.teamIcon?2:0),images=header._headings,image=images[mode];
+ if(!image){
+  image=$.CreatePanel('Image',header,'CustomTeamHeading'+mode);images[mode]=image;
+  image.hittest=false;image.visible=false;image.style.ignoreParentFlow=true;
+  image.style.width='250px';image.style.height='30px';
+  $.RegisterEventHandler('ImageLoaded',image,function(){image._loaded=true;});
+  var lang=typeof SpecLocale!=='undefined'&&SpecLocale.language==='ja'?'ja':'en';
+  image.SetImage('http://127.0.0.1:49647/team-heading.png?token=spec-debuff-local-8a71&side='+side+'&mode='+mode+'&lang='+lang+'&nonce='+Date.now());
+ }
+ for(var key in images)images[key].visible=images[key]===image&&image._loaded===true;
+ header._stock.visible=image._loaded!==true;
+}
+var teamBans=[],teamBands=[],seriesHeader=null;
+function updateSeriesHeader(parent,active){
+ if(active&&!seriesHeader){
+  seriesHeader=$.CreatePanel('Panel',parent,'SpecTournamentHeader');
+  seriesHeader.hittest=false;seriesHeader.style.ignoreParentFlow=true;
+  seriesHeader.style.horizontalAlign='left';seriesHeader.style.verticalAlign='top';
+  seriesHeader.style.width='100%';seriesHeader.style.height='37px';seriesHeader.style.zIndex='1';
+  seriesHeader.style.backgroundColor='gradient(linear, 0% 0%, 100% 0%, from(#251b12fa), color-stop(0.43, #251b12fa), color-stop(0.5, #1a1c20fa), color-stop(0.57, #172131fa), to(#172131fa))';
+  seriesHeader.style.borderBottom='1px solid #927d64';
+  var score=$.CreatePanel('Image',seriesHeader,'SpecSeriesScore');
+  score.hittest=false;score.style.horizontalAlign='center';score.style.verticalAlign='top';
+  score.style.marginTop='7px';score.style.width='224px';score.style.height='30px';
+  $.RegisterEventHandler('ImageLoaded',score,function(){seriesHeader._loaded=true;});
+  score.SetImage('http://127.0.0.1:49647/team-heading.png?token=spec-debuff-local-8a71&side=0&mode=5&lang=en&nonce='+Date.now());
+ }
+ var enabled=!!(active&&seriesHeader&&seriesHeader._loaded===true);
+ if(seriesHeader)seriesHeader.visible=enabled;
+ ctx.SetHasClass('SpecTournamentHeaderActive',enabled);
+ if(leftBadge){
+  leftBadge.style.position='-76px '+(enabled?52:20)+'px 0px';
+  rightBadge.style.position='76px '+(enabled?52:20)+'px 0px';
+ }
+ return enabled;
+}
+function showTeamBand(parent,side,screenWidth){
+ var band=teamBands[side];
+ if(!band){
+  band=$.CreatePanel('Panel',parent,'SpecTeamBand'+side);teamBands[side]=band;
+  band.hittest=false;band.style.ignoreParentFlow=true;
+  band.style.horizontalAlign='left';band.style.verticalAlign='top';band.style.zIndex='1';
+  band.style.height='30px';
+  band.style.backgroundColor=side===0?'#251b12ef':'#172131ef';
+  band.style.borderBottom=side===0?'1px solid #ad824e':'1px solid #607fc0';
+ }
+ // Reserve the central score area, then reuse its clearance at the outside edges.
+ var scoreHalfWidth=112, gap=16;
+ var width=Math.floor(screenWidth/2-scoreHalfWidth-gap*2);
+ band.style.position=(side===0?gap:screenWidth-gap-width)+'px 7px 0px';
+ band.style.width=width+'px';
+ band.visible=true;
+}
+function teamBanPanel(parent,side){
+ var image=teamBans[side];if(image)return image;
+ image=$.CreatePanel('Image',parent,'SpecTeamBans'+side);teamBans[side]=image;
+ image.hittest=false;image.visible=false;image.style.ignoreParentFlow=true;
+ image.style.horizontalAlign='left';image.style.verticalAlign='top';image.style.width='200px';image.style.height='30px';image.style.zIndex='2';
+ $.RegisterEventHandler('ImageLoaded',image,function(){image._loaded=true;});
+ var lang=typeof SpecLocale!=='undefined'&&SpecLocale.language==='ja'?'ja':'en';
+ image.SetImage('http://127.0.0.1:49647/team-heading.png?token=spec-debuff-local-8a71&side='+side+'&mode=4&lang='+lang+'&nonce='+Date.now());
+ return image;
+}
+function updateRosterTeams(active){
+ var titles=active&&(rosterOptions.teamName||rosterOptions.teamIcon),enabled=titles;
+ var parent=ctx.GetParent(),origin=parent.GetPositionWithinWindow(),scale=Number(parent.actualuiscale_x)||1;
+ var tournament=updateSeriesHeader(parent,active),screenWidth=smallWindowViewport(parent,scale).width,compact=Number(parent.actuallayoutwidth)*Math.max(1,scale)<=1440;
+ for(var side=0;side<2;side++){
+  var header=teamHeaders[side],ban=teamBans[side],band=teamBands[side];
+  if(band)band.visible=false;
+  if(header)header.visible=false;
+  if(ban)ban.visible=false;
+  if(!active)continue;
+  var team=ctx.FindChildTraverse(side===0?'TeamFriendly':'TeamEnemy');
+  if(!team||Number(team.actuallayoutwidth)<=0)continue;
+  var pos=team.GetPositionWithinWindow();
+  var width=Number(team.actuallayoutwidth)*(Number(team.actualuiscale_x)||scale)/scale;
+  var center=(pos.x-origin.x)/scale+width/2;
+  if(!isFinite(center))continue;
+  ban=teamBanPanel(parent,side);
+  if(compact)center=screenWidth*(side===0?.25:.75);
+  if(!tournament&&(titles||ban._loaded===true)&&isFinite(screenWidth)&&screenWidth>=640)showTeamBand(parent,side,screenWidth);
+  if(ban._loaded===true){
+   var outward=titles?(compact?Math.min(240,screenWidth/4-112):Math.min(240,Math.max(0,width/2-110))):0;
+   ban.style.position=(center+(side===0?-outward:outward)-100)+'px 7px 0px';
+   ban.visible=true;
+   enabled=true;
+  }
+  if(!titles)continue;
+  header=teamHeader(side,parent);
+  header._icon.visible=rosterOptions.teamIcon;header._icon.style.marginRight=rosterOptions.teamName?'6px':'0px';
+  header._name.visible=rosterOptions.teamName;showTeamHeading(header,side);header.style.position=(center-125)+'px 7px 0px';header.visible=true;
+ }
+ ctx.SetHasClass('SpecRosterTeamHeaders',enabled||tournament);
+ ctx.SetHasClass('SpecCompactTeamHeader',!!((enabled||tournament)&&compact));
+ var feed=find('EventFeed');if(feed)feed.SetHasClass('SpecRosterTeamHeaders',enabled||tournament);
+}
 function scanPlayers(){players=[];walk(ctx,function(p){if(p.paneltype==='CitadelHudTopBarPlayer')players.push(p);},0);refreshNameOwners();}
 function card(p,index){var id='SpecEventCard'+index,n=p.FindChildTraverse(id);if(!n){n=$.CreatePanel('Panel',p,id);n.hittest=false;n.style.ignoreParentFlow=true;n.style.position='0px '+(CARD_TOP+index*36)+'px 0px';n.style.width='140px';n.style.height='32px';n.style.horizontalAlign='center';n.style.backgroundColor='#191c1bff';n.style.zIndex='100';n.style.border='1px solid #756e56';n.style.borderRadius='0px';var accent=$.CreatePanel('Panel',n,'SpecCategoryAccent');accent.hittest=false;accent.style.ignoreParentFlow=true;accent.style.position='0px 0px 0px';accent.style.width='3px';accent.style.height='100%';var content=$.CreatePanel('Panel',n,'SpecEventContent');content.hittest=false;content.style.ignoreParentFlow=true;content.style.horizontalAlign='center';content.style.verticalAlign='center';content.style.width='fit-children';content.style.maxWidth='124px';content.style.height='18px';content.style.flowChildren='right';var image=$.CreatePanel('Image',content,'SpecEventIcon');image.hittest=false;image.style.width='16px';image.style.height='16px';image.style.marginRight='4px';image.style.verticalAlign='center';var kind=$.CreatePanel('Panel',content,'SpecEventKind');kind.hittest=false;kind.style.width='18px';kind.style.height='18px';kind.style.marginRight='4px';kind.style.verticalAlign='center';kind.style.flowChildren='right';var mark=$.CreatePanel('Image',kind,'SpecEventTierIcon');mark.hittest=false;mark.SetImage('s2r://panorama/images/hud/hero_ability_pip_psd.vtex');mark.style.width='9px';mark.style.height='9px';mark.style.verticalAlign='center';mark.style.washColor='#69e799';var number=$.CreatePanel('Label',kind,'SpecEventTierNumber');number.hittest=false;number.html=false;number.style.width='9px';number.style.height='fit-children';number.style.verticalAlign='center';number.style.fontSize='11px';number.style.transform='translateY(1px)';number.style.fontFamily='sans';number.style.fontWeight='semi-bold';number.style.padding='0px';number.style.margin='0px';number.style.color='#69e799';number.style.textAlign='center';var unlockIcon=$.CreatePanel('Image',kind,'SpecEventUnlockIcon');unlockIcon.hittest=false;unlockIcon.SetImage('s2r://panorama/images/hud/unlock_icon.vsvg');unlockIcon.style.width='14px';unlockIcon.style.height='14px';unlockIcon.style.verticalAlign='center';unlockIcon.style.washColor='#69e799';var area=$.CreatePanel('Panel',content,'SpecEventNameArea');area.hittest=false;area.style.width='fit-children';area.style.maxWidth='104px';area.style.height='18px';var name=$.CreatePanel('Label',area,'SpecEventName');name.hittest=false;name.html=false;name.style.fontSize='11px';name.style.fontFamily='sans';name.style.fontWeight='semi-bold';name.style.whiteSpace='nowrap';name.style.textAlign='center';name.style.color='#f0eee6';name.style.padding='0px';name.style.margin='0px';name.style.width='fit-children';name.style.maxWidth='104px';name.style.height='fit-children';name.style.verticalAlign='center';name.style.textOverflow='shrink';}return n;}
 function validEventImage(e){return typeof e.image==='string'&&(e.kind==='購入'?e.image.indexOf('s2r://panorama/images/items/')===0:e.image.indexOf('s2r://panorama/images/hud/abilities/')===0);}
 
 function playerSide(p){for(var i=0;p&&i<8;i++,p=p.GetParent()){if(p.id==='TeamFriendly')return 'left';if(p.id==='TeamEnemy')return 'right';}return ''; }
-function urnBadge(p){var n=p.FindChildTraverse('SpecHeroUrn');if(!n){n=$.CreatePanel('Panel',p,'SpecHeroUrn');n.hittest=false;n.style.ignoreParentFlow=true;n.style.position='0px -12px 0px';n.style.width='28px';n.style.height='32px';n.style.backgroundColor='#161a17ee';n.style.border='1px solid #dbd399';n.style.borderRadius='3px';n.style.backgroundImage='url("s2r://panorama/images/minimap/soul_jar_marker_psd.vtex")';n.style.backgroundSize='100% 100%';n.style.zIndex='111';}var side=playerSide(p),width=Number(p.actuallayoutwidth)||140;n.style.position=(side==='right'?width/2+24:width/2-52)+'px -12px 0px';return n;}
+function urnBadge(p){var n=p.FindChildTraverse('SpecHeroUrn');if(!n){n=$.CreatePanel('Panel',p,'SpecHeroUrn');n.hittest=false;n.style.ignoreParentFlow=true;n.style.position='0px -12px 0px';n.style.width='28px';n.style.height='32px';n.style.backgroundColor='#161a17ee';n.style.border='1px solid #dbd399';n.style.borderRadius='3px';n.style.backgroundImage='url("s2r://panorama/images/minimap/soul_jar_marker_psd.vtex")';n.style.backgroundSize='100% 100%';n.style.zIndex='111';}var side=playerSide(p),width=Number(p.actuallayoutwidth)||140;n.style.position=(side==='right'?width/2+24:width/2-52)+'px '+(p._specPlayerNameShown?'4px':'-12px')+' 0px';return n;}
 // Prefer six visible per-player resource labels: finer than the rounded team total.
 function teamResources(id){var ps=all(find(id),'SoulsValue').filter(function(n){return n.id==='SoulsValue';});if(ps.length!==6)return NaN;var total=0;for(var i=0;i<ps.length;i++){var v=number(text(ps[i]));if(isNaN(v)||v<0)return NaN;total+=v;}return total;}
 function advantage(now){leftBadge.visible=false;rightBadge.visible=false;if(now<300)return;var left=teamResources('TeamFriendly'),right=teamResources('TeamEnemy');if(isNaN(left))left=number(text(all(find('TeamScoreFriendly'),'ScoreLabel')[0]));if(isNaN(right))right=number(text(all(find('TeamScoreEnemy'),'ScoreLabel')[0]));if(isNaN(left)||isNaN(right)||left<0||right<0||left===right)return;var base=Math.min(left,right);if(base===0)return;var pct=(Math.abs(left-right)/base*100).toFixed(1);if(Number(pct)===0)return;var badge=left>right?leftBadge:rightBadge;badge.visible=true;badge.text='+'+pct+'%';}
@@ -62,7 +223,17 @@ function mapSupported(){var p=ctx,n=0;while(p&&n++<30){if(p.BHasClass('dl_midtow
 function clock(s){s=Math.max(0,Math.floor(s));return Math.floor(s/60)+':'+('0'+s%60).slice(-2);}
 // Verified local default + two Midtown map spawners. This is a schedule, not pickup detection.
 function bridgeSchedule(now){var first=300,interval=300;var next=now<first?first:first+(Math.floor((now-first)/interval)+1)*interval;return {next:next,remaining:next-now,boundary:now>=first&&(now-first)%interval===0};}
-function summary(now){var l=KILL_SOURCE_VERIFIED?teamKills('TeamFriendly'):-1,r=KILL_SOURCE_VERIFIED?teamKills('TeamEnemy'):-1;leftKills.visible=KILL_SOURCE_VERIFIED&&l>=0;rightKills.visible=KILL_SOURCE_VERIFIED&&r>=0;leftKills.text=l>=0?'キル '+l:'';rightKills.text=r>=0?'キル '+r:'';var timer=find('RejuvenatorTimer'),maps=all(root(),'mid_boss'),remain=-1,spawned=false;if(timer)spawned=timer.BHasClass('midboss_available');else for(var i=0;i<maps.length;i++){if(maps[i].actuallayoutwidth>0&&maps[i].BHasClass('midboss_spawned'))spawned=true;}if(timer&&timer.BHasClass('midboss_cooldown'))remain=seconds(text(find('MidbossTimerLabel')));mid.visible=spawned||remain>0||maps.length>0;mid.FindChildTraverse('SpecObjectiveValue').text=remain>0?clock(remain):spawned?(typeof SpecLocale==='undefined'?'出現中':SpecLocale.text('出現中')):'—';var nativeLabel=find('MidbossTimerLabel');bridge.visible=mapSupported();if(bridge.visible){var b=bridgeSchedule(now);bridge.FindChildTraverse('SpecObjectiveValue').text=clock(b.boundary?0:b.remaining);}objectiveBox.visible=layoutObjectives()&&(mid.visible||bridge.visible);if(nativeLabel)nativeLabel.style.opacity=objectiveBox.visible&&mid.visible?'0':'1';}
+var midbossClock=-1,midbossDeadline=-1;
+function midbossRemaining(now,spawned,timer){
+ if(now<midbossClock||now-midbossClock>2||spawned)midbossDeadline=-1;
+ midbossClock=now;
+ if(spawned)return -1;
+ var native=timer&&timer.BHasClass('midboss_cooldown')?seconds(text(find('MidbossTimerLabel'))):-1;
+ if(native>=0){midbossDeadline=now+native;return native;}
+ // The native timer switches to the Rejuvenator state on pickup.
+ return midbossDeadline>=now?midbossDeadline-now:-1;
+}
+function summary(now){var l=KILL_SOURCE_VERIFIED?teamKills('TeamFriendly'):-1,r=KILL_SOURCE_VERIFIED?teamKills('TeamEnemy'):-1;leftKills.visible=KILL_SOURCE_VERIFIED&&l>=0;rightKills.visible=KILL_SOURCE_VERIFIED&&r>=0;leftKills.text=l>=0?'キル '+l:'';rightKills.text=r>=0?'キル '+r:'';var timer=find('RejuvenatorTimer'),maps=all(root(),'mid_boss'),remain=-1,spawned=false;if(timer)spawned=timer.BHasClass('midboss_available');else for(var i=0;i<maps.length;i++){if(maps[i].actuallayoutwidth>0&&maps[i].BHasClass('midboss_spawned'))spawned=true;}remain=midbossRemaining(now,spawned,timer);mid.visible=spawned||remain>0||maps.length>0;mid.FindChildTraverse('SpecObjectiveValue').text=remain>0?clock(remain):spawned?(typeof SpecLocale==='undefined'?'出現中':SpecLocale.text('出現中')):'—';var nativeLabel=find('MidbossTimerLabel');bridge.visible=mapSupported();if(bridge.visible){var b=bridgeSchedule(now);bridge.FindChildTraverse('SpecObjectiveValue').text=clock(b.boundary?0:b.remaining);}objectiveBox.visible=layoutObjectives()&&(mid.visible||bridge.visible);if(nativeLabel)nativeLabel.style.opacity=objectiveBox.visible&&mid.visible?'0':'1';}
 
 function state(p){var key=p.id,s=states[key];var badge=p.FindChildTraverse('HeroBadge'),hero=badge?String(badge.heroid):'';if(!s||s.hero!==hero)s=states[key]={hero:hero,queue:[],level:-1,abilities:[],ready:false};return s;}
 function push(s,kind,name,image,now,tier){s.queue.push({kind:kind,name:name,image:image||'',tier:tier||0,until:now+4});if(s.queue.length>2)s.queue.shift();}
@@ -82,15 +253,35 @@ function nativeRejuvenatorCount(p){if(!p)return null;var classes=typeof p.GetCla
 function teamRejuvenatorCounts(active,now){var ids=['RejuvenatorFriendly','RejuvenatorEnemy'];for(var i=0;i<ids.length;i++){var p=find(ids[i]);if(!p)continue;var row=p._specTeamCount;if(!row&&active){var original=all(p,'rejuvIcon')[0];if(!original)continue;row=$.CreatePanel('Panel',p,'SpecTeamRejuvenatorCount');p._specTeamCount=row;row._specOriginal=original;row._specVisibility=original.style.visibility;row.hittest=false;row.style.ignoreParentFlow=true;row.style.horizontalAlign='center';row.style.verticalAlign='bottom';row.style.marginBottom='6px';row.style.width='48px';row.style.height='28px';var icon=$.CreatePanel('Image',row,'SpecTeamRejuvenatorIcon');icon.hittest=false;icon.SetImage('s2r://panorama/images/hud/icons/rejuvenator.vsvg');icon.style.horizontalAlign='left';icon.style.verticalAlign='center';icon.style.width='20px';icon.style.height='20px';icon.style.washColor='#FFCC00';icon.style.imgShadow='0px 0px 3px 2.0 #000000';var label=$.CreatePanel('Label',row,'SpecTeamRejuvenatorNumber');label.hittest=false;label.html=false;label.style.position='22px 0px 0px';label.style.verticalAlign='center';label.style.width='26px';label.style.height='22px';label.style.fontFamily='sans';label.style.fontSize='18px';label.style.fontWeight='semi-bold';label.style.color='#eee6cd';label.style.textShadow='0px 1px 3px #000000ee';label.style.textAlign='left';label.style.whiteSpace='nowrap';label.style.textOverflow='shrink';}if(!row)continue;var count=active?nativeRejuvenatorCount(p):null,known=count!==null;row.visible=active&&known&&count>0;row._specOriginal.style.visibility=active&&known?'collapse':(row._specVisibility===undefined?'':row._specVisibility);var value=row.FindChildTraverse('SpecTeamRejuvenatorNumber');value.text=known?'×'+count:'';var signature=String(active)+'/'+String(count);if(row._specSignature!==signature){row._specSignature=signature;if(typeof SPEC_RESEARCH_LOGS!=='undefined'&&SPEC_RESEARCH_LOGS)$.Msg('[SpecTeamRejuvenatorCount] '+JSON.stringify({clock:clock(now),team:ids[i],count:count,shown:row.visible,native_fallback:!known}));}}}
 function playerRejuvenator(p,now){var slot=nameOwners.indexOf(p);if(slot<0)return null;var parent=ctx.GetParent(),n=rejuvenatorPanels[slot];if(!n){n=$.CreatePanel('Image',parent,'SpecPersonalRejuvenator'+slot);rejuvenatorPanels[slot]=n;overlays.push(n);n.hittest=false;n.SetImage('s2r://panorama/images/hud/icons/rejuvenator.vsvg');n.style.ignoreParentFlow=true;n.style.horizontalAlign='left';n.style.verticalAlign='top';n.style.washColor='#FFCC00';n.style.imgShadow='0px 0px 3px 2.0 #000000';n.style.zIndex='111';}var held=p.BHasClass('HasRejuvenator')||p.BHasClass('HasRebirthAndRejuv'),dead=p.BHasClass('Dead'),pos=p.GetPositionWithinWindow(),origin=parent.GetPositionWithinWindow(),scale=Number(parent.actualuiscale_x)||1,ratio=(Number(p.actualuiscale_x)||scale)/scale,center=(pos.x-origin.x)/scale+Number(p.actuallayoutwidth)*ratio/2,left=center<Number(parent.actuallayoutwidth)/2,x=center+(left?12:-32)*ratio,y=(pos.y-origin.y)/scale+125*ratio,size=20*ratio;var u=p.FindChildTraverse('UltimateStatus');if(u&&Number(u.actuallayoutwidth)>0&&Number(u.actuallayoutheight)>0){var up=u.GetPositionWithinWindow();if(isFinite(up.x)&&isFinite(up.y)){x=(up.x-origin.x)/scale+(left?22:-22)*ratio;y=(up.y-origin.y)/scale;}}var valid=isFinite(x)&&isFinite(y)&&isFinite(size)&&size>0&&size<=88&&x>=0&&x+size<=Number(parent.actuallayoutwidth)&&y>=0&&y+size<420;n.visible=held&&!dead&&valid;if(valid){n.style.position=x+'px '+y+'px 0px';n.style.width=size+'px';n.style.height=size+'px';}var signature=String(held)+'/'+String(dead);if(p._specRejuvenatorState!==signature){p._specRejuvenatorState=signature;var b=p.FindChildTraverse('HeroBadge');$.Msg('[SpecRejuvenatorState] '+JSON.stringify({clock:clock(now),hero:b?String(b.heroid):'',native_has_rejuvenator:p.BHasClass('HasRejuvenator'),native_combined:p.BHasClass('HasRebirthAndRejuv'),dead:dead,shown:n.visible,rect:valid?[x,y,size,size]:null}));}return n;}
 function hidePlayerBadges(){for(var i=0;i<rejuvenatorPanels.length;i++)if(rejuvenatorPanels[i])rejuvenatorPanels[i].visible=false;}
+var auraPlacement=null;
+function positionAuraDebuffs(active){
+ var aura=active?find('hud_aura_modifiers'):null;
+ var debuffs=aura?aura.FindChildTraverse('DebuffModifiers'):null;
+ if(auraPlacement&&(auraPlacement.panel!==aura||auraPlacement.debuffs!==debuffs)){
+  var old=auraPlacement;
+  if(!old.panel.IsValid||old.panel.IsValid()){
+   old.panel.style.marginLeft=old.left||'';
+   old.panel.style.marginBottom=old.bottom||'';
+  }
+  if(old.debuffs&&(!old.debuffs.IsValid||old.debuffs.IsValid()))old.debuffs.style.uiScale=old.scale||'';
+  auraPlacement=null;
+ }
+ if(!aura||auraPlacement)return;
+ auraPlacement={panel:aura,left:aura.style.marginLeft,bottom:aura.style.marginBottom,debuffs:debuffs,scale:debuffs?debuffs.style.uiScale:null};
+ // The native notice stays in its hierarchy so its progress and expiry still update.
+ aura.style.marginLeft='230px';
+ aura.style.marginBottom='216px';
+ if(debuffs)debuffs.style.uiScale='86%';
+}
 function controlHints(active){var ids=['spectator_count','spectate_target','next_player','prev_player','camera_section','CitadelHudDamageReport'];for(var i=0;i<ids.length;i++){var p=root().FindChildTraverse(ids[i]);if(p&&hints.indexOf(p)<0){p._specOldVisibility=p.style.visibility;hints.push(p);}}for(i=0;i<hints.length;i++)hints[i].style.visibility=active?'collapse':(hints[i]._specOldVisibility===undefined?'':hints[i]._specOldVisibility);}
 
-function hide(){restoreObjectiveLayout();hideNames();hidePlayerBadges();detailMode(false);restoreLowerBuildings();nativeBuildingHealth(false);teamRejuvenatorCounts(false,0);buildingSamples=[];for(var i=0;i<overlays.length;i++)overlays[i].visible=false;for(i=0;i<players.length;i++){var name=players[i].FindChildTraverse('SpecPlayerName');if(name)name.visible=false;var probe=players[i].FindChildTraverse('SpecDebuffProbe');if(probe)probe.visible=false;for(var j=0;j<2;j++){var n=players[i].FindChildTraverse('SpecEventCard'+j);if(n)n.visible=false;}var b=players[i].FindChildTraverse('SpecHeroUrn');if(b)b.visible=false;}controlHints(false);var nativeLabel=find('MidbossTimerLabel');if(nativeLabel)nativeLabel.style.opacity='1';holderName='';pendingName='';holderNode=null;holderHero='';pendingHero='';previous=-1;seenEvents=[];states={};purchaseSeen={};purchaseOrder=[];}
+function hide(){midbossClock=midbossDeadline=-1;restoreObjectiveLayout();updateRosterTeams(false);hideNames();hidePlayerBadges();detailMode(false);restoreLowerBuildings();nativeBuildingHealth(false);teamRejuvenatorCounts(false,0);buildingSamples=[];for(var i=0;i<overlays.length;i++)overlays[i].visible=false;for(i=0;i<players.length;i++){var name=players[i].FindChildTraverse('SpecPlayerName');if(name)name.visible=false;var probe=players[i].FindChildTraverse('SpecDebuffProbe');if(probe)probe.visible=false;for(var j=0;j<2;j++){var n=players[i].FindChildTraverse('SpecEventCard'+j);if(n)n.visible=false;}var b=players[i].FindChildTraverse('SpecHeroUrn');if(b)b.visible=false;}controlHints(false);positionAuraDebuffs(false);var nativeLabel=find('MidbossTimerLabel');if(nativeLabel)nativeLabel.style.opacity='1';holderName='';pendingName='';holderNode=null;holderHero='';pendingHero='';previous=-1;seenEvents=[];states={};purchaseSeen={};purchaseOrder=[];}
 // Only detail-mode transitions poll quickly; status/economy scans retain their original cadence.
 // Bounded geometry audit uses native positions, never guessed text widths.
 var hudGeometrySignature='',hudGeometryCount=0;
 function auditHudGeometry(){if(typeof SPEC_RESEARCH_LOGS==='undefined'||!SPEC_RESEARCH_LOGS)return;try{if(hudGeometryCount>=8||Date.now()-detailSince<1000||nameOwners.length!==12)return;function rect(n){if(!n||!n.GetPositionWithinWindow)return null;var p=n.GetPositionWithinWindow(),sx=Number(n.actualuiscale_x)||1,sy=Number(n.actualuiscale_y)||sx;return [p.x,p.y,n.actuallayoutwidth*sx,n.actuallayoutheight*sy].map(function(v){return Math.round(v*10)/10;});}var rows=[],key=String(detailPrevious);for(var i=0;i<nameOwners.length;i++){var p=nameOwners[i],n=namePanels[i],b=p.FindChildTraverse('HeroBadge'),pr=rect(p),nr=rect(n);if(!n||!n.visible||!nr||nr[2]<=0)return;var row={role:'identity',hero:state(p).hero,slot:i,portrait:rect(b),owner:pr,label:nr};rows.push(row);key+='|'+row.hero+':'+pr.join(',')+':'+nr.join(',');}if(key===hudGeometrySignature)return;hudGeometrySignature=key;hudGeometryCount++;for(i=0;i<rows.length;i++)$.Msg('[SpecHudGeometry] '+JSON.stringify(rows[i]));var ids=['GameTime','TeamScoreFriendly','TeamScoreEnemy','RejuvenatorCharges','SpecLeadLeft','SpecLeadRight'];for(i=0;i<ids.length;i++)$.Msg('[SpecHudGeometry] '+JSON.stringify({role:'central',id:ids[i],box:rect(find(ids[i]))}));if(objectiveBox)$.Msg('[SpecHudGeometry] '+JSON.stringify({role:'objectives',box:rect(objectiveBox),bridge:rect(bridge),mid:rect(mid)}));}catch(e){} }
 function detailWatch(){var active=false;try{if(leftBadge&&spec()){active=true;var detail=buildDetailOpen(),changed=detail!==detailPrevious;if(changed){scanPlayers();detailMode(detail);}if(changed||(detail&&Date.now()-detailSince<96)){for(var i=0;i<players.length;i++){inventoryColumns(players[i],detail);heroName(players[i],detail);renderCards(players[i],state(players[i]),previous,detail,true);}}}}catch(e){if(errors++<3)$.Msg('[ObserverHUD] '+String(e));}$.Schedule(active?0.032:0.25,detailWatch);}
-function tick(){try{if(!spec()){if(leftBadge&&!normalRestored){hide();normalRestored=true;}$.Schedule(1,tick);return;}normalRestored=false;if(!leftBadge)init();scanPlayers();controlHints(true);var detail=buildDetailOpen();detailMode(detail);var now=seconds(text(find('GameTime')));if(now<0){hide();$.Schedule(0.25,tick);return;}var reset=previous<0||now<previous||now-previous>2||players.length!==lastCount;if(reset){settle=16;settleUntil=now+8;holderName='';pendingName='';holderNode=null;holderHero='';pendingHero='';seenEvents=all(root(),'IdolPickedUp');purchaseSeen={};purchaseOrder=[];states={};}previous=now;lastCount=players.length;var baseline=reset||settle>0||now<settleUntil;if(settle>0)settle--;advantage(now);summary(now);teamRejuvenatorCounts(true,now);purchases(now,baseline);nativeBuildingHealth(true);buildingHealth(now,baseline);for(var i=0;i<players.length;i++){inventoryColumns(players[i],detail);playerName(players[i]);heroName(players[i],detail);playerRejuvenator(players[i],now);var s=state(players[i]);if(baseline)s.queue=[];abilities(players[i],s,now,baseline);renderCards(players[i],s,now,detail,true);}nativeObjectiveLayout(now);updateUrn(now);if(detail){for(var d=0;d<buildingLabels.length;d++)if(buildingLabels[d])buildingLabels[d].visible=false;}detailAudit(detail);auditHudGeometry();
+function tick(){try{if(!spec()){if(leftBadge&&!normalRestored){hide();normalRestored=true;}$.Schedule(1,tick);return;}normalRestored=false;if(!leftBadge)init();requestRosterOptions();scanPlayers();controlHints(true);positionAuraDebuffs(true);var detail=buildDetailOpen();detailMode(detail);var now=seconds(text(find('GameTime')));if(now<0){hide();$.Schedule(0.25,tick);return;}updateRosterTeams(true);var reset=previous<0||now<previous||now-previous>2||players.length!==lastCount;if(reset){settle=16;settleUntil=now+8;holderName='';pendingName='';holderNode=null;holderHero='';pendingHero='';seenEvents=all(root(),'IdolPickedUp');purchaseSeen={};purchaseOrder=[];states={};}previous=now;lastCount=players.length;var baseline=reset||settle>0||now<settleUntil;if(settle>0)settle--;advantage(now);summary(now);teamRejuvenatorCounts(true,now);purchases(now,baseline);nativeBuildingHealth(true);buildingHealth(now,baseline);for(var i=0;i<players.length;i++){inventoryColumns(players[i],detail);heroName(players[i],detail);playerRejuvenator(players[i],now);var s=state(players[i]);if(baseline)s.queue=[];abilities(players[i],s,now,baseline);renderCards(players[i],s,now,detail,true);}nativeObjectiveLayout(now);updateUrn(now);if(detail){for(var d=0;d<buildingLabels.length;d++)if(buildingLabels[d])buildingLabels[d].visible=false;}detailAudit(detail);auditHudGeometry();
  }catch(e){if(errors++<3)$.Msg('[ObserverHUD] '+String(e));}$.Schedule(0.25,tick);}
 
 
@@ -99,7 +290,7 @@ var objectiveStyleRows=[],objectiveLayoutAudit='',riftLayoutAudit='',midbossPane
 function rememberObjectiveStyles(p,keys){for(var i=0;i<objectiveStyleRows.length;i++)if(objectiveStyleRows[i].panel===p)return;var values={};for(var j=0;j<keys.length;j++)values[keys[j]]=p.style[keys[j]];objectiveStyleRows.push({panel:p,values:values});}
 function restoreObjectiveLayout(){if(midbossPanel)midbossPanel.visible=false;for(var i=0;i<objectiveStyleRows.length;i++){var row=objectiveStyleRows[i],p=row.panel;try{if(p.IsValid&&!p.IsValid())continue;for(var key in row.values)p.style[key]=row.values[key]===undefined?'':row.values[key];}catch(e){}}objectiveStyleRows=[];objectiveLayoutAudit='';riftLayoutAudit='';}
 function objectiveRect(p){if(!p||typeof p.GetPositionWithinWindow!=='function')return null;var pos=p.GetPositionWithinWindow(),sx=Number(p.actualuiscale_x)||1,sy=Number(p.actualuiscale_y)||sx,w=Number(p.actuallayoutwidth)*sx,h=Number(p.actuallayoutheight)*sy;return isFinite(pos.x)&&isFinite(pos.y)&&w>0&&h>0?[pos.x,pos.y,w,h]:null;}
-function midbossGeometry(width){var scale=Math.min(1,width/1920),w=220*scale;return {x:(width-w)/2,y:150,width:w,height:24};}
+function midbossGeometry(width){var scale=Math.min(1,width/1920),w=220*scale;return {x:(width-w)/2,y:ctx.BHasClass('SpecTournamentHeaderActive')?182:150,width:w,height:24};}
 function midbossGauge(parent){if(midbossPanel&&(!midbossPanel.IsValid||midbossPanel.IsValid()))return midbossPanel;var n=$.CreatePanel('Panel',parent,'SpecMidbossHP');n.hittest=false;n.style.ignoreParentFlow=true;n.style.horizontalAlign='left';n.style.verticalAlign='top';n.style.height='24px';n.style.backgroundColor='#171b18ee';n.style.border='1px solid #758a79';n.style.borderRadius='3px';n.style.overflow='clip';var fill=$.CreatePanel('Panel',n,'Fill');fill.hittest=false;fill.style.height='100%';fill.style.backgroundColor='#587967';var value=$.CreatePanel('Label',n,'Value');value.hittest=false;value.style.ignoreParentFlow=true;value.style.horizontalAlign='center';value.style.verticalAlign='center';value.style.width='100%';value.style.textAlign='center';value.style.fontFamily='sans';value.style.fontWeight='bold';value.style.fontSize='13px';value.style.color='#f1f0e8';value.style.whiteSpace='nowrap';value.style.textShadow='0px 1px 2px #000000';n.visible=false;overlays.push(n);midbossPanel=n;return n;}
 function nativeObjectiveLayout(now){var host=ctx.GetParent(),width=Number(host.actuallayoutwidth),neutral=find('team_neutral_container'),cards=[];
  for(var i=0;i<players.length;i++)for(var j=0;j<2;j++){var n=players[i].FindChildTraverse('SpecEventCard'+j),box=n&&n.visible===true?objectiveRect(n):null;if(box){cards.push(box);}}
@@ -126,12 +317,12 @@ function buildingTitle(name,kind){if(typeof SpecLocale!=='undefined'&&!SpecLocal
 function buildingAudit(rows,stamp,now){if(typeof SPEC_RESEARCH_LOGS==='undefined'||!SPEC_RESEARCH_LOGS)return;if(stamp-buildingAuditAt<2)return;buildingAuditAt=stamp;var signature=JSON.stringify(rows);if(signature===buildingAuditSignature)return;buildingAuditSignature=signature;for(var i=0;i<rows.length;i++)$.Msg('[SpecBuildingState] '+JSON.stringify({clock:clock(now),index:i,count:rows.length,row:rows[i],limits_per_team:{tower:3,core:3}}));}
 var lowerBuildingRows=[],gridAuditKey='',gridAuditAt=0,towerAuditKey='';
 function restoreLowerBuildings(){lowerBuildingRows=[];}
-function layoutLowerBuildings(){var parent=ctx.GetParent(),pw=Number(parent.actuallayoutwidth);if(!isFinite(pw)||pw<960||pw>7680)return;var counts={team_friendly_container:{tower:0,core:0,shrine:0},team_enemy_container:{tower:0,core:0,shrine:0}},rects=[],scale=Math.min(1,pw/1920);
- for(var i=0;i<lowerBuildingRows.length;i++){var row=lowerBuildingRows[i],p=row.panel,left=row.side==='team_friendly_container',core=row.core===true,group=core?'core':'tower',slot=core?counts[row.side][group]++:row.slot,w=(core?300:220)*scale,h=34*scale,x=left?16:pw-16-w,y=292+slot*40*scale;
+function layoutLowerBuildings(){var parent=ctx.GetParent(),pw=Number(parent.actuallayoutwidth);if(!isFinite(pw)||pw<960||pw>7680)return;var counts={team_friendly_container:{tower:0,core:0,shrine:0},team_enemy_container:{tower:0,core:0,shrine:0}},rects=[],scale=Math.min(1,pw/1920),top=specBuildingHudTop(ctx);
+ for(var i=0;i<lowerBuildingRows.length;i++){var row=lowerBuildingRows[i],p=row.panel,left=row.side==='team_friendly_container',core=row.core===true,group=core?'core':'tower',slot=core?counts[row.side][group]++:row.slot,w=(core?300:210)*scale,h=(core?34:32)*scale,x=left?16:pw-16-w,y=top+slot*40*scale;
   if(!core&&slot!==0&&slot!==1&&slot!==2){p.visible=false;continue;}
-  if(!core&&row.column===1)x+=left?228*scale:-228*scale;
-  if(core){var team=find(left?'TeamFriendly':'TeamEnemy'),center=pw*(left?.225:.775);if(team&&typeof team.GetPositionWithinWindow==='function'&&typeof parent.GetPositionWithinWindow==='function'){var tp=team.GetPositionWithinWindow(),pp=parent.GetPositionWithinWindow(),ps=Number(parent.actualuiscale_x)||1,ts=Number(team.actualuiscale_x)||ps,tw=Number(team.actuallayoutwidth)*ts/ps,c=(tp.x-pp.x)/ps+tw/2;if(isFinite(c)&&tw>0&&tw<pw*.6&&c>pw*(left?.12:.62)&&c<pw*(left?.38:.88))center=c;}x=center-w/2;if(row.kind==='shrine'){var column=counts[row.side].shrine++;w=220*scale;h=30*scale;var span=448*scale,start=center-span/2;start=left?Math.max(start,16+232*scale):Math.min(start,pw-16-232*scale-span);x=start+column*228*scale;y=292;}else if(row.kind==='patron'||row.kind==='patron_weakened')y=292+40*scale;}
-  p.style.horizontalAlign='left';p.style.marginLeft='0px';p.style.marginRight='0px';p.style.position=x+'px '+y+'px 0px';p.style.width=w+'px';p.style.height=h+'px';var icon=p.FindChildTraverse('Icon'),gauge=p.FindChildTraverse('Gauge'),title=p.FindChildTraverse('Value');var fill=p.FindChildTraverse('Fill'),lane=p.FindChildTraverse('Lane'),iconSize=core?h-2:26*scale,iconX=core?1:4*scale,contentX=core?h+2:40*scale,contentWidth=w-contentX-4*scale;if(icon){icon.style.position=iconX+'px '+(core?1:(h-iconSize)/2)+'px 0px';icon.style.width=iconSize+'px';icon.style.height=iconSize+'px';}if(gauge){gauge.style.position=contentX+'px 0px 0px';gauge.style.width=(core?w-h-4:contentWidth)+'px';gauge.style.height=(h-2)+'px';}if(fill){fill.style.position='0px 0px 0px';fill.style.height='100%';}if(title){title.style.fontFamily='07TetsubinGothic';title.style.fontWeight='normal';title.style.textShadow='0px 1px 0px #000000c8';title.style.width=(core?w-h-6:contentWidth)+'px';title.style.height=(core?h-2:20*scale)+'px';title.style.position=core?'0px 3px 0px':'0px '+13*scale+'px 0px';title.style.fontSize=Math.round(14*scale)+'px';}if(lane){lane.style.fontFamily='Noto Sans JP';lane.style.fontWeight='normal';lane.style.color='#ddd8cd';lane.style.backgroundColor='#00000000';lane.style.textShadow='0px 1px 1px #00000080';lane.visible=!core;lane.style.position='0px '+1*scale+'px 0px';lane.style.width=contentWidth+'px';lane.style.height=12*scale+'px';lane.style.fontSize=Math.round(10*scale)+'px';}if(!core){var laneBox=p.FindChildTraverse('LaneBox'),titleBox=p.FindChildTraverse('TitleBox'),captionBoxes=[laneBox,titleBox],captions=[lane,title];for(var captionIndex=0;captionIndex<2;captionIndex++){var holder=captionBoxes[captionIndex],caption=captions[captionIndex];if(!holder||!caption)continue;holder.style.overflow='noclip';var laneInset=captionIndex?0:4*scale,laneTop=typeof SpecLocale==='undefined'||SpecLocale.japanese?5:3;holder.style.position=laneInset+'px '+(captionIndex?16:laneTop)*scale+'px 0px';holder.style.width=(contentWidth-laneInset)+'px';holder.style.height=(captionIndex?18:10)*scale+'px';caption.style.position='0px 0px 0px';caption.style.width='fit-children';caption.style.maxWidth=contentWidth+'px';caption.style.height=(captionIndex?24:18)*scale+'px';caption.style.textOverflow='ellipsis';caption.style.horizontalAlign=captionIndex?'center':'left';caption.style.verticalAlign='center';caption.style.margin='0px';caption.style.padding='0px';}}if(core&&title){var coreTitleBox=p.FindChildTraverse('TitleBox');if(coreTitleBox){coreTitleBox.style.overflow='noclip';coreTitleBox.style.position='0px '+5*scale+'px 0px';coreTitleBox.style.width=(w-h-6)+'px';coreTitleBox.style.height=(h-2)+'px';title.style.position='0px 0px 0px';title.style.width='fit-children';title.style.maxWidth=(w-h-6)+'px';title.style.height=24*scale+'px';title.style.textOverflow='ellipsis';title.style.horizontalAlign='center';title.style.verticalAlign='center';title.style.margin='0px';title.style.padding='0px';}}rects.push({team:row.side,group:group,kind:row.kind||group,slot:core?-1:slot,column:core?0:row.column||0,x:x,y:y,width:w,height:h});}
+  if(!core&&row.column===1)x+=left?218*scale:-218*scale;
+  if(core){var team=find(left?'TeamFriendly':'TeamEnemy'),center=pw*(left?.225:.775);if(team&&typeof team.GetPositionWithinWindow==='function'&&typeof parent.GetPositionWithinWindow==='function'){var tp=team.GetPositionWithinWindow(),pp=parent.GetPositionWithinWindow(),ps=Number(parent.actualuiscale_x)||1,ts=Number(team.actualuiscale_x)||ps,tw=Number(team.actuallayoutwidth)*ts/ps,c=(tp.x-pp.x)/ps+tw/2;if(isFinite(c)&&tw>0&&tw<pw*.6&&c>pw*(left?.12:.62)&&c<pw*(left?.38:.88))center=c;}x=center-w/2;if(row.kind==='shrine'){var column=counts[row.side].shrine++;w=220*scale;h=30*scale;var span=448*scale,start=center-span/2;start=left?Math.max(start,16+232*scale):Math.min(start,pw-16-232*scale-span);x=start+column*228*scale;y=top;}else if(row.kind==='patron'||row.kind==='patron_weakened')y=top+40*scale;}
+  p.style.horizontalAlign='left';p.style.marginLeft='0px';p.style.marginRight='0px';p.style.position=x+'px '+y+'px 0px';p.style.width=w+'px';p.style.height=h+'px';var icon=p.FindChildTraverse('Icon'),gauge=p.FindChildTraverse('Gauge'),title=p.FindChildTraverse('Value');var fill=p.FindChildTraverse('Fill'),lane=p.FindChildTraverse('Lane'),iconSize=core?h-2:24*scale,iconX=core?1:4*scale,contentX=core?h+2:40*scale,contentWidth=w-contentX-4*scale;if(icon){icon.style.position=iconX+'px '+(core?1:(h-iconSize)/2)+'px 0px';icon.style.width=iconSize+'px';icon.style.height=iconSize+'px';}if(gauge){gauge.style.position=contentX+'px 0px 0px';gauge.style.width=(core?w-h-4:contentWidth)+'px';gauge.style.height=(h-2)+'px';}if(fill){fill.style.position='0px 0px 0px';fill.style.height='100%';}if(title){title.style.fontFamily='07TetsubinGothic';title.style.fontWeight='normal';title.style.textShadow='0px 1px 0px #000000c8';title.style.width=(core?w-h-6:contentWidth)+'px';title.style.height=(core?h-2:20*scale)+'px';title.style.position=core?'0px 3px 0px':'0px '+13*scale+'px 0px';title.style.fontSize=Math.round(14*scale)+'px';}if(lane){lane.style.fontFamily='Noto Sans JP';lane.style.fontWeight='normal';lane.style.color='#ddd8cd';lane.style.backgroundColor='#00000000';lane.style.textShadow='0px 1px 1px #00000080';lane.visible=!core;lane.style.position='0px '+1*scale+'px 0px';lane.style.width=contentWidth+'px';lane.style.height=12*scale+'px';lane.style.fontSize=Math.round(10*scale)+'px';}if(!core){var laneBox=p.FindChildTraverse('LaneBox'),titleBox=p.FindChildTraverse('TitleBox'),captionBoxes=[laneBox,titleBox],captions=[lane,title];for(var captionIndex=0;captionIndex<2;captionIndex++){var holder=captionBoxes[captionIndex],caption=captions[captionIndex];if(!holder||!caption)continue;holder.style.overflow='noclip';var laneInset=captionIndex?0:4*scale,laneTop=typeof SpecLocale==='undefined'||SpecLocale.japanese?5:3;holder.style.position=laneInset+'px '+(captionIndex?14:laneTop)*scale+'px 0px';holder.style.width=(contentWidth-laneInset)+'px';holder.style.height=(captionIndex?18:10)*scale+'px';caption.style.position='0px 0px 0px';caption.style.width='fit-children';caption.style.maxWidth=contentWidth+'px';caption.style.height=(captionIndex?24:18)*scale+'px';caption.style.textOverflow='ellipsis';caption.style.horizontalAlign=captionIndex?'center':'left';caption.style.verticalAlign='center';caption.style.margin='0px';caption.style.padding='0px';}}if(core&&title){var coreTitleBox=p.FindChildTraverse('TitleBox');if(coreTitleBox){coreTitleBox.style.overflow='noclip';coreTitleBox.style.position='0px '+5*scale+'px 0px';coreTitleBox.style.width=(w-h-6)+'px';coreTitleBox.style.height=(h-2)+'px';title.style.position='0px 0px 0px';title.style.width='fit-children';title.style.maxWidth=(w-h-6)+'px';title.style.height=24*scale+'px';title.style.textOverflow='ellipsis';title.style.horizontalAlign='center';title.style.verticalAlign='center';title.style.margin='0px';title.style.padding='0px';}}rects.push({team:row.side,group:group,kind:row.kind||group,slot:core?-1:slot,column:core?0:row.column||0,x:x,y:y,width:w,height:h});}
  var key=JSON.stringify(rects),wall=Date.now();if(key!==gridAuditKey){gridAuditKey=key;if(typeof SPEC_RESEARCH_LOGS!=='undefined'&&SPEC_RESEARCH_LOGS)$.Msg('[SpecObjectiveGrid] '+JSON.stringify({schema:2,clock:clock(previous),columns:5,shrine_columns:2,max_rows:3,separate_core:true,bars:rects}));}var compact=rects.filter(function(row){return row.group==='tower';}).map(function(row){return {group:'tower',team:row.team,kind:row.kind,slot:row.slot};}),towerKey=JSON.stringify(compact);if(towerKey!==towerAuditKey||wall-gridAuditAt>=1000){towerAuditKey=towerKey;gridAuditAt=wall;$.Msg('[SpecTowerLayout] '+JSON.stringify({schema:2,clock:clock(previous),columns:5,bars:compact}));}
 }
 function buildingReceipt(sample,fraction,damaged,stamp,baseline){
@@ -177,7 +368,7 @@ var wall=Date.now(),p=spec()?ctx.FindChildTraverse('GameTime'):null,clock=p?Stri
 if(!active){hide();front=-1;pending=-1;lastReady=0;previous=-1;$.Schedule(0.5,tick);return;}
 var now=Number(m[1])*60+Number(m[2]);if(previous<0||now<previous||now-previous>2){guardUntil=wall+2000;hide();front=-1;lastReady=0;}previous=now;
 var ps=ctx.FindChildrenWithClassTraverse('SoulsValue'),out=[],seen={};
-for(var i=0;i<ps.length;i++){if(ps[i].id!=='SoulsValue')continue;var x=ps[i].GetParent();while(x&&x.paneltype!=='CitadelHudTopBarPlayer')x=x.GetParent();if(x&&x.actuallayoutwidth>=80){var b=x.FindChildTraverse('HeroBadge'),hero=b?String(b.heroid):'',pos=x.GetPositionWithinWindow();if(hero&&!seen[hero]&&isFinite(pos.x)&&isFinite(pos.y)){seen[hero]=true;var labels=x.FindChildrenWithClassTraverse('HeroName');out.push({hero:hero,name:labels.length?String(labels[0].text):'',pos:pos,width:x.actuallayoutwidth,scale:x.actualuiscale_x,cards:visibleCards(x),notice_top:x._specNoticeTop,detail:!!x._specDetailOpen,money:moneyMeta(x)});}}}
+for(var i=0;i<ps.length;i++){if(ps[i].id!=='SoulsValue')continue;var x=ps[i].GetParent();while(x&&x.paneltype!=='CitadelHudTopBarPlayer')x=x.GetParent();if(x&&x.actuallayoutwidth>=80){var b=x.FindChildTraverse('HeroBadge'),hero=b?String(b.heroid):'',pos=x.GetPositionWithinWindow();if(hero&&!seen[hero]&&isFinite(pos.x)&&isFinite(pos.y)){seen[hero]=true;var labels=x.FindChildrenWithClassTraverse('HeroName');out.push({hero:hero,name:labels.length?String(labels[0].text):'',pos:pos,width:x.actuallayoutwidth,scale:x.actualuiscale_x,cards:visibleCards(x),notice_top:x._specNoticeTop,two_name_rows:x._specTwoNameRows===true,detail:!!x._specDetailOpen,money:moneyMeta(x)});}}}
 if(out.length!==12||wall<guardUntil||wall-lastReady>3000)hide();
 if(out.length===12){var state={time:clock,postgame:postgame(),players:out,width:parent.actuallayoutwidth,language:typeof SpecLocale==='undefined'?'ja':SpecLocale.language};if(wall-lastHeartbeat>=500){$.Msg('[SpecDebuffHeartbeat] '+JSON.stringify({time:clock,heroes:out.map(function(p){return p.hero;})}));lastHeartbeat=wall;}if(pending<0||wall-pendingSince>=1500){var back=front===0?1:0;pending=back;pendingSince=wall;images[back].visible=false;images[back].style.height=out.some(function(p){return p.detail===true;})?'900px':'420px';images[back].SetImage('http://127.0.0.1:49647/frame.png?token=spec-debuff-local-8a71&seq='+(seq++)+'&state='+encodeURIComponent(JSON.stringify(state)));}}
 }catch(e){hide();$.Msg('[SpecDebuffError] '+String(e));}$.Schedule(active?0.016:0.5,tick);
@@ -242,12 +433,12 @@ function pauseLayout(g){
 function spec(){for(var p=ctx,i=0;p&&i<30;i++,p=p.GetParent())if(p.BHasClass('spec_mode'))return true;return false;}
 function hpClock(){var p=ctx.FindChildTraverse('GameTime'),m=p&&String(p.text||'').match(/^(\d+):([0-5]\d)$/);return m?Number(m[1])*60+Number(m[2]):-1;}
 function hpHide(clear){if(guardian)for(var i=0;i<guardian.length;i++)guardian[i].visible=false;if(clear){hpFront=-1;hpPending=-1;hpReady=0;}}
-function hpCreate(index){var p=$.CreatePanel('Image',parent,'SpecBaseGuardianHP'+index);p.hittest=false;p.visible=false;p.style.ignoreParentFlow=true;p.style.position='0px 292px 0px';p.style.height='116px';p.style.zIndex='109';
+function hpCreate(index){var p=$.CreatePanel('Image',parent,'SpecBaseGuardianHP'+index);p.hittest=false;p.visible=false;p.style.ignoreParentFlow=true;p.style.height='116px';p.style.zIndex='109';
  $.RegisterEventHandler('ImageLoaded',p,function(){if(hpPending!==index)return;hpPending=-1;var clock=hpClock();if(!active||!spec()||ctx.BHasClass('SpecBuildDetailsOpen')||clock<0||clock<p._specClock||clock-p._specClock>2){p.visible=false;return;}for(var i=0;i<guardian.length;i++)guardian[i].visible=i===index;hpFront=index;hpReady=Date.now();});
  $.RegisterEventHandler('ImageFailedLoad',p,function(){if(hpPending===index)hpPending=-1;if(hpFront!==index)p.visible=false;});return p;}
 function hpTick(w){var wall=Date.now(),clock=hpClock();if(clock<0||hpPrevious>=0&&(clock<hpPrevious||clock-hpPrevious>2))hpHide(true);hpPrevious=clock;
  if(ctx.BHasClass('SpecBuildDetailsOpen')||clock<0){hpHide(true);return;}
- if(!guardian)guardian=[hpCreate(0),hpCreate(1)];for(var i=0;i<guardian.length;i++)guardian[i].style.width=w+'px';
+ if(!guardian)guardian=[hpCreate(0),hpCreate(1)];var top=specBuildingHudTop(ctx);for(var i=0;i<guardian.length;i++){guardian[i].style.width=w+'px';guardian[i].style.position='0px '+top+'px 0px';}
  if(hpReady&&wall-hpReady>=2000)hpHide(false);if(hpPending>=0&&wall-hpStarted<1500)return;hpPending=hpFront===0?1:0;hpStarted=wall;var p=guardian[hpPending];p.visible=false;p._specClock=clock;p.SetImage('http://127.0.0.1:49647/guardian.png?token=spec-debuff-local-8a71&width='+w+'&seq='+serial);}
 function tick(){try{active=spec();if(!active){pauseLayout(null);if(image)image.visible=false;hpHide(true);hpPrevious=-1;$.Schedule(.5,tick);return;}if(!image){image=$.CreatePanel('Image',parent,'SpecBottomStatus');image.hittest=false;image.style.ignoreParentFlow=true;image.style.horizontalAlign='left';image.style.verticalAlign='top';image.style.zIndex='110';$.RegisterEventHandler('ImageLoaded',image,function(){image.visible=active&&spec();});$.RegisterEventHandler('ImageFailedLoad',image,function(){image.visible=false;});}
  var w=Number(parent.actuallayoutwidth),h=Number(parent.actuallayoutheight),origin=parent.GetPositionWithinWindow(),scale=Number(parent.actualuiscale_x)||1,maps=parent.FindChildrenWithClassTraverse('HudMinimap'),mx=NaN;for(var i=0;i<maps.length;i++)if(maps[i].actuallayoutwidth>200){mx=(maps[i].GetPositionWithinWindow().x-origin.x)/scale;break;}
@@ -346,5 +537,97 @@ function tick(){try{var t=spec()?ctx.FindChildTraverse('GameTime'):null,m=(t?Str
  if(wall-lastReady>3000)hide();
  if(context.width>=640&&context.height>=360&&(pending<0||wall-requested>=1500)){var index=front===0?1:0;pending=index;requested=wall;images[index].visible=false;images[index].SetImage('http://127.0.0.1:49647/ink.png?token=spec-debuff-local-8a71&seq='+(serial++)+'&context='+encodeURIComponent(JSON.stringify(context)));}
  }catch(e){hide();}$.Schedule(.05,tick);}
+$.Schedule(1,tick);
+})();
+
+// High-layer match statistics. The native image never captures pointer input.
+(function(){
+'use strict';
+var ctx=$.GetContextPanel(),parent=ctx.GetParent(),panels=[],front=-1,pending=-1;
+var serial=0,requested=0,ready=0,previous=-1,active=false,epoch=0,requestEpoch=0;
+function spectator(){
+ for(var p=ctx,i=0;p&&i<30;i++,p=p.GetParent()){
+  if(p.BHasClass('spec_mode')||p.BHasClass('replay_playback')||p.BHasClass('TeamSpectator'))return true;
+ }
+ return false;
+}
+function hide(){
+ for(var i=0;i<panels.length;i++)panels[i].visible=false;
+ front=-1;
+}
+function make(index){
+ var image=$.CreatePanel('Image',parent,'SpecMatchStats'+index);
+ image.hittest=false;
+ image.hittestchildren=false;
+ image.style.ignoreParentFlow=true;
+ image.style.zIndex='150';
+ image.visible=false;
+ panels[index]=image;
+ $.RegisterEventHandler('ImageLoaded',image,function(){
+  if(pending!==index||panels[index]!==image)return;
+  pending=-1;
+  if(!active||!spectator()||requestEpoch!==epoch){image.visible=false;return;}
+  if(front>=0&&front!==index)panels[front].visible=false;
+  front=index;
+  ready=Date.now();
+  image.visible=true;
+ });
+ $.RegisterEventHandler('ImageFailedLoad',image,function(){
+  if(pending===index&&panels[index]===image){pending=-1;hide();}
+ });
+}
+make(0);
+make(1);
+function layout(){
+ var timer=parent.FindChildTraverse('SpecObjectivePanel');
+ if(!timer||!timer.visible||Number(timer.actuallayoutwidth)<=0)return false;
+ var origin=parent.GetPositionWithinWindow(),pos=timer.GetPositionWithinWindow();
+ var sx=Number(parent.actualuiscale_x)||1,sy=Number(parent.actualuiscale_y)||sx;
+ var right=(pos.x-origin.x)/sx+Number(timer.actuallayoutwidth),bottom=(pos.y-origin.y)/sy-12;
+ var scale=Math.min(1,(right-16)/480,(bottom-16)/278);
+ if(!isFinite(scale)||scale<=0)return false;
+ var width=Math.floor(480*scale),height=Math.floor(278*scale);
+ for(var i=0;i<panels.length;i++){
+  var style=panels[i].style;
+  style.position=Math.floor(right-width)+'px '+Math.floor(bottom-height)+'px 0px';
+  style.width=width+'px';
+  style.height=height+'px';
+ }
+ return true;
+}
+function tick(){
+ if(!ctx.IsValid())return;
+ try{
+  var clock=spectator()?ctx.FindChildTraverse('GameTime'):null;
+  var m=clock?String(clock.text).match(/^(\d{1,3}):(\d\d)$/):null;
+  var wall=Date.now();
+  active=!!m&&Number(m[2])<60&&layout();
+  if(!active){
+   if(previous>=0){epoch++;hide();}
+   previous=-1;
+  }else{
+   var now=Number(m[1])*60+Number(m[2]);
+   if(previous>=0&&(now<previous||now-previous>2)){epoch++;hide();}
+   previous=now;
+   if(wall-ready>1100)hide();
+   if(pending>=0&&wall-requested>=1000){
+    panels[pending].DeleteAsync(0);
+    make(pending);
+    layout();
+    pending=-1;
+   }
+   if(pending<0){
+    var index=front===0?1:0;
+    pending=index;
+    requested=wall;
+    requestEpoch=epoch;
+    var image=panels[index];
+    image.visible=false;
+    image.SetImage('http://127.0.0.1:49647/stats.png?token=spec-debuff-local-8a71&seq='+(serial++)+'&clock='+encodeURIComponent(String(clock.text)));
+   }
+  }
+ }catch(e){hide();}
+ $.Schedule(active?.25:.5,tick);
+}
 $.Schedule(1,tick);
 })();

@@ -60,7 +60,7 @@ def main(home,owner_pid):
     m.require_compatible(c['game'],bundle,manifest)
     bridge.S=bridge.State();node=bundle/'runtime/node/node.exe';parser=bundle/'parser';signature=sha((bundle/'release.json').read_bytes())
     replay=AutoReplaySource(Path(c['game'])/'replays',home/'cache',node,parser/'extract-replay-effects.mjs',signature,status_path=runtime/'auto-replay-status.json');live=AutoLiveEffectSource(Path(c['log']),runtime,node,parser/'live-receipt-producer.mjs');bridge.REPLAY=replay;bridge.LIVE=live;bridge.REPLAY_SESSION=None;bridge.REPLAY_WINDOWS.clear();bridge.LIVE_WINDOWS.clear()
-    watcher=threading.Thread(target=bridge.watch,args=(Path(c['log']),),daemon=True);watcher.start();had_game=True
+    watcher=threading.Thread(target=bridge.watch,args=(Path(c['log']),home/'hotkeys.json'),daemon=True);watcher.start();had_game=True
    if not running and had_game:
     finish_session();log=Path(c['log'])
     if log.exists() and log.stat().st_size>16*1024*1024:log.rename(log.with_name('game-'+str(time.time_ns())+'.log'))

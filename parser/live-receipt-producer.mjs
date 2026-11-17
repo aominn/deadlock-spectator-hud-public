@@ -1,6 +1,7 @@
 import {attachBaseGuardians} from './base-guardian-parser.mjs';
 import {attachEconomy} from './economy-parser.mjs';
 import {attachMoney,attachSales,moneyClock} from './money-parser.mjs';
+import {attachSpectatorStats} from './spectator-stats.mjs';
 import {attachBridgeBuffs} from './bridge-buff-parser.mjs';
 // Explicit bounded live producer. Reads only the TV route emitted by the native game.
 // Local JSON contains a route digest, never the TV URL, Steam IDs or credentials.
@@ -19,6 +20,7 @@ export function nativeRoute(text){
  return raw;
 }
 export function attachLedger(parser,{session,routeSha,onSnapshot}){
+ const stats=attachSpectatorStats(parser,{basis:'broadcast'});
  const demo=parser.getDemo(),ledger=new LiveReceiptLedger(buildCatalog());const bridge=attachBridgeBuffs(parser,{pawnIdentity,basis:'broadcast',maxUpdates:128});const money=attachMoney(parser,{basis:'broadcast',maxSamples:90}),sales=attachSales(parser,{basis:'broadcast'});const economy=attachEconomy(parser,{basis:'broadcast'});const baseGuardians=attachBaseGuardians(parser,{basis:'broadcast',maxUpdates:90});let entries=[],lastPublish=0,last=null,lastState=null;
  demo.stringTableContainer.subscribe(StringTableEvent.TABLE_CHANGED,(_,table,rows)=>{
   if(table.type===StringTableType.ACTIVE_MODIFIERS)for(const e of rows||[])if(e.value)entries.push({...e.value});
@@ -36,7 +38,7 @@ export function attachLedger(parser,{session,routeSha,onSnapshot}){
   const now=Date.now();last={schema:1,route_sha256:routeSha,session,generation:ledger.generation,updated_at:now/1000,
    state:unsupportedPause?'unsupported_paused_clock':ledger.state,game_seconds:streamSeconds,
    clock_basis:'server tick minus accumulated pause ticks, divided by64, minus native game start; application timestamps already exclude pause',game_state:gameState,paused_ticks:pausedTicks,
-   roster,events:ledger.events,base_guardians:baseGuardians.snapshot(),bridge:bridge.snapshot(),money:{...money.snapshot(),sales:sales.snapshot()},economy:economy.snapshot(),metrics:ledger.metrics};
+   roster,events:ledger.events,base_guardians:baseGuardians.snapshot(),bridge:bridge.snapshot(),money:{...money.snapshot(),sales:sales.snapshot()},economy:economy.snapshot(),spectator_stats:stats.snapshot(),metrics:ledger.metrics};
   if(now-lastPublish>=100||last.state!==lastState){onSnapshot(last);lastPublish=now;lastState=last.state;}
  });
  return {ledger,finish(state){if(last)onSnapshot({...last,updated_at:Date.now()/1000,state:last.game_state===11?'ended':state,events:[]});}};

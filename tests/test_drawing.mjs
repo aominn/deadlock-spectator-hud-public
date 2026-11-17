@@ -1,5 +1,5 @@
 import fs from 'node:fs';import vm from 'node:vm';import assert from 'node:assert/strict';
-const source=fs.readFileSync(new URL('../mod-src/spectator_probe.js',import.meta.url),'utf8');const text=source.slice(source.indexOf('// Session-local telestration display.'));
+const source=fs.readFileSync(new URL('../mod-src/spectator_probe.js',import.meta.url),'utf8');const text=source.slice(source.indexOf('// Session-local telestration display.'),source.indexOf('// High-layer match statistics.'));
 let spectator=true;let now=10000;const schedules=[],images=[];
 const map={visible:true,actuallayoutwidth:320,actuallayoutheight:360,actualuiscale_x:1,GetPositionWithinWindow:()=>({x:1560,y:680})};
 const parent={actuallayoutwidth:1920,actuallayoutheight:1080,actualuiscale_x:1,GetPositionWithinWindow:()=>({x:0,y:0}),FindChildrenWithClassTraverse:()=>[map]};

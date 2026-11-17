@@ -41,7 +41,7 @@ internal static class Program
     }
 }
 
-internal sealed class ManagerForm : Form
+internal sealed partial class ManagerForm : Form
 {
     string bundle;
     readonly EventWaitHandle showSignal;
@@ -51,20 +51,20 @@ internal sealed class ManagerForm : Form
     readonly TextBox output = new() { Dock = DockStyle.Fill, ReadOnly = true, Multiline = true, ScrollBars = ScrollBars.Vertical };
     readonly System.Windows.Forms.Timer timer;
     readonly DrawingController drawing;
-    readonly CheckBox drawingEnabled = new() { Text = Ui.T("線を描く（観戦・リプレイ中のみ）"), AutoSize = true };
-    readonly ComboBox drawingKey = new() { DropDownStyle = ComboBoxStyle.DropDownList, Width = 138 };
+    HudKeys keys = HudKeys.Defaults;
+    readonly Label keySummary = new() { AutoSize = true, Padding = new Padding(0, 9, 0, 0) };
     bool busy, exiting, closeRequested, stopping;
     readonly List<Control> actions = new();
 
     public ManagerForm(string root, EventWaitHandle signal)
     {
-        bundle = root; showSignal = signal;
+        bundle = root; showSignal = signal; keys = HudKeys.Load(Program.Home);
         drawing = new DrawingController(message => { if (!IsDisposed) output.Text = message; });
         Text = Ui.T("Deadlock 観戦HUD"); ClientSize = new Size(760, 550); MinimumSize = new Size(700, 530);
         Font = new Font(Ui.Japanese ? "Yu Gothic UI" : "Segoe UI", 10); StartPosition = FormStartPosition.CenterScreen;
-        var layout = new TableLayoutPanel { Dock = DockStyle.Fill, Padding = new Padding(22), ColumnCount = 1, RowCount = 10 };
+        var layout = new TableLayoutPanel { Dock = DockStyle.Fill, Padding = new Padding(22), ColumnCount = 1, RowCount = 9 };
         layout.RowStyles.Add(new RowStyle(SizeType.AutoSize)); layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        for (int i = 2; i < 9; i++) layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        for (int i = 2; i < 8; i++) layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
         layout.RowStyles.Add(new RowStyle(SizeType.Percent, 100)); Controls.Add(layout);
         layout.Controls.Add(state); layout.Controls.Add(details);
         layout.Controls.Add(new Label { Text = Ui.T("Deadlockのフォルダー（末尾の citadel まで選択）\r\n例：...\\Steam\\steamapps\\common\\Deadlock\\game\\citadel"), AutoSize = true, Margin = new Padding(0, 18, 0, 4) });
@@ -73,11 +73,24 @@ internal sealed class ManagerForm : Form
         var primary = Row(); primary.Controls.Add(Button(Ui.T("準備する"), Prepare)); primary.Controls.Add(Button(Ui.T("HUDを有効にする"), async () => { await Run("enable"); await RefreshStatus(); })); primary.Controls.Add(Button(Ui.T("通常モードへ戻す"), async () => { await Run("normal"); await RefreshStatus(); })); primary.Controls.Add(Button(Ui.T("ゲームを起動"), async () => { await Run("launch"); })); layout.Controls.Add(primary);
         layout.Controls.Add(new Label { Text = Ui.T("観戦中はこの画面を開いておいてください。×で終了、最小化中は動作します。"), AutoSize = true });
         layout.Controls.Add(new Label { Text = Ui.T("使い方：フォルダーを選び「準備する」→「HUDを有効にする」→「ゲームを起動」。"), AutoSize = true, MaximumSize = new Size(690, 0), Margin = new Padding(0, 6, 0, 4) });
-        var updates = Row(); updates.Controls.Add(Button(Ui.T("最新版をダウンロード"), OpenReleases)); updates.Controls.Add(Button(Ui.T("困ったとき"), ShowHelp, guarded: false)); layout.Controls.Add(updates);
-        var ink = Row(); drawingKey.Items.AddRange(new[] { "F8", "F9", "F10", "Ctrl+Shift+D" }); drawingKey.SelectedIndex = 0;
-        void ConfigureDrawing() { drawing.Configure(drawingEnabled.Checked && Config()?["enabled"]?.GetValue<bool>() == true, drawingKey.SelectedItem?.ToString() ?? "F8"); }
-        drawingEnabled.CheckedChanged += (_, _) => ConfigureDrawing(); drawingKey.SelectedIndexChanged += (_, _) => ConfigureDrawing();
-        ink.Controls.Add(drawingEnabled); ink.Controls.Add(drawingKey); ink.Controls.Add(new Label { Text = Ui.T("選んだキーで描画開始・再開／描画中は非表示"), AutoSize = true, Padding = new Padding(0, 5, 0, 0) }); layout.Controls.Add(ink);
+        var settings = Row();
+        settings.Controls.Add(Button(L("キー設定", "Key bindings"), ShowKeySettings));
+        settings.Controls.Add(Button(L("表示設定", "Display settings"), ShowDisplaySettings));
+        settings.Controls.Add(Button(L("チーム設定", "Team settings"), ShowTeamSettings));
+        settings.Controls.Add(keySummary);
+        UpdateKeySummary();
+        layout.Controls.Add(settings);
+        var menu = new MenuStrip { Font = Font };
+        var help = new ToolStripMenuItem(L("ヘルプ", "Help"));
+        var troubleshooting = new ToolStripMenuItem(Ui.T("困ったとき"));
+        troubleshooting.Click += async (_, _) => { if (!busy) { try { await ShowHelp(); } catch (Exception e) { MessageBox.Show(this, e.Message, Ui.T("観戦HUD")); } } };
+        var releases = new ToolStripMenuItem(Ui.T("最新版をダウンロード"));
+        releases.Click += async (_, _) => await Guard(OpenReleases);
+        help.DropDownItems.Add(troubleshooting);
+        help.DropDownItems.Add(releases);
+        menu.Items.Add(help);
+        MainMenuStrip = menu;
+        Controls.Add(menu);
         layout.Controls.Add(output);
         FormClosing += async (_, e) =>
         {
@@ -118,7 +131,7 @@ internal sealed class ManagerForm : Form
     async Task FinishClose()
     {
         if (stopping || exiting) return;
-        drawing.Configure(false, drawingKey.SelectedItem?.ToString() ?? "F8");
+        drawing.Configure(false, keys.Drawing);
         stopping = true; timer.Stop(); Enabled = false;
         output.Text = Ui.T("補助アプリと解析を終了しています。");
         try { await Run("stop-service"); exiting = true; Close(); }
@@ -157,7 +170,7 @@ internal sealed class ManagerForm : Form
         string headline = c["enabled"]?.GetValue<bool>() == true ? Ui.T("HUD有効") : (File.Exists(Path.Combine(Program.Home, "mount.json")) ? Ui.T("復旧待ち（通常モードへ戻してください）") : Ui.T("通常モード"));
         string serviceMessage = ServiceLabel(service?["state"]?.GetValue<string>());
         string description = Ui.T("バージョン：") + (c["version"]?.GetValue<string>() ?? Ui.T("準備前")) + (c["enabled"]?.GetValue<bool>() == true ? "　" + serviceMessage : Ui.T("　ゲームは通常の表示です。"));
-        drawing.Configure(drawingEnabled.Checked && c["enabled"]?.GetValue<bool>() == true, drawingKey.SelectedItem?.ToString() ?? "F8");
+        drawing.Configure(keys.DrawingEnabled && c["enabled"]?.GetValue<bool>() == true, keys.Drawing);
         if (state.Text != headline) state.Text = headline;
         if (details.Text != description) details.Text = description;
         return Task.CompletedTask;
@@ -179,6 +192,137 @@ internal sealed class ManagerForm : Form
         else await Run("setup", new() { ["game"] = game.Text });
         await RefreshStatus();
     }
+    static string L(string ja, string en) => Ui.Japanese ? ja : en;
+
+    void UpdateKeySummary() => keySummary.Text = keys.DrawingEnabled
+        ? L($"描画 {keys.Drawing.Display}", $"Draw {keys.Drawing.Display}")
+            + $"  /  {L("ダメージ", "Damage")} {keys.Damage.Display}  /  {L("資産差", "Net worth")} {keys.Graph.Display}"
+        : L($"ダメージ {keys.Damage.Display}  /  資産差 {keys.Graph.Display}",
+            $"Damage {keys.Damage.Display}  /  Net worth {keys.Graph.Display}");
+
+    static bool GameRunning()
+    {
+        var games = Process.GetProcessesByName("deadlock");
+        foreach (var game in games) game.Dispose();
+        return games.Length != 0;
+    }
+
+    Task ShowDisplaySettings()
+    {
+        string closeGame = L("表示設定を変更する前にゲームを終了してください。", "Close the game before changing display settings.");
+        if (GameRunning()) throw new InvalidOperationException(closeGame);
+        string path = Path.Combine(Program.Home, "roster-display");
+        int mask = File.Exists(path) && int.TryParse(File.ReadAllText(path), out int saved) && saved is >= 0 and <= 15 ? saved : 2;
+        using var dialog = new Form
+        {
+            Text = L("表示設定", "Display settings"), ClientSize = new Size(470, 280),
+            StartPosition = FormStartPosition.CenterParent, Font = Font,
+            FormBorderStyle = FormBorderStyle.FixedDialog, MaximizeBox = false, MinimizeBox = false
+        };
+        var fields = new FlowLayoutPanel
+        {
+            Dock = DockStyle.Fill, FlowDirection = FlowDirection.TopDown, WrapContents = false,
+            Padding = new Padding(16)
+        };
+        dialog.Controls.Add(fields);
+        fields.Controls.Add(new Label
+        {
+            AutoSize = true, MaximumSize = new Size(420, 0), Margin = new Padding(3, 0, 3, 10),
+            Text = L("観戦・リプレイの画面上部に表示する項目です。", "Choose what appears across the top of the spectator and replay HUD.")
+        });
+        var options = new CheckBox[]
+        {
+            new() { Text = L("プレイヤー名", "Player names") },
+            new() { Text = L("キャラ名", "Hero names") },
+            new() { Text = L("チーム名", "Team names") },
+            new() { Text = L("チームアイコン", "Team icons") }
+        };
+        for (int i = 0; i < options.Length; i++)
+        {
+            options[i].AutoSize = true;
+            options[i].Checked = (mask & (1 << i)) != 0;
+            fields.Controls.Add(options[i]);
+        }
+        var buttons = Row();
+        var save = new Button { Text = L("保存", "Save"), AutoSize = true, DialogResult = DialogResult.OK };
+        var cancel = new Button { Text = L("キャンセル", "Cancel"), AutoSize = true, DialogResult = DialogResult.Cancel };
+        buttons.Controls.Add(save); buttons.Controls.Add(cancel); fields.Controls.Add(buttons);
+        dialog.AcceptButton = save; dialog.CancelButton = cancel;
+        if (dialog.ShowDialog(this) != DialogResult.OK) return Task.CompletedTask;
+        if (GameRunning()) throw new InvalidOperationException(closeGame);
+        mask = 0;
+        for (int i = 0; i < options.Length; i++)
+            if (options[i].Checked) mask |= 1 << i;
+        Directory.CreateDirectory(Program.Home);
+        string temp = path + "." + Guid.NewGuid().ToString("N");
+        try
+        {
+            File.WriteAllText(temp, mask.ToString(System.Globalization.CultureInfo.InvariantCulture));
+            File.Move(temp, path, true);
+        }
+        finally { if (File.Exists(temp)) File.Delete(temp); }
+        return Task.CompletedTask;
+    }
+
+    async Task ShowKeySettings()
+    {
+        string closeGame = L("キー設定を変更する前にゲームを終了してください。", "Close the game before changing key bindings.");
+        if (GameRunning()) throw new InvalidOperationException(closeGame);
+        using var dialog = new Form
+        {
+            Text = L("キー設定", "Key bindings"), ClientSize = new Size(550, 305),
+            StartPosition = FormStartPosition.CenterParent, Font = Font,
+            FormBorderStyle = FormBorderStyle.FixedDialog, MaximizeBox = false, MinimizeBox = false
+        };
+        var fields = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 2, Padding = new Padding(16) };
+        fields.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 54));
+        fields.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 46));
+        var note = new Label { AutoSize = true, Text = L("欄を選び、割り当てたいキーを押してください。", "Select a field and press the shortcut you want.") };
+        fields.Controls.Add(note, 0, 0); fields.SetColumnSpan(note, 2);
+        var feedback = new Label { AutoSize = true, ForeColor = Color.Firebrick };
+        void CaptureFeedback(bool valid) => feedback.Text = valid ? "" : L("このキーは割り当てられません。", "This key cannot be assigned.");
+        var draw = new KeyCapture(keys.Drawing, CaptureFeedback);
+        var damage = new KeyCapture(keys.Damage, CaptureFeedback);
+        var graph = new KeyCapture(keys.Graph, CaptureFeedback);
+        void AddField(string title, KeyCapture field, int row)
+        {
+            field.AccessibleName = title;
+            fields.Controls.Add(new Label { Text = title, AutoSize = true, Anchor = AnchorStyles.Left }, 0, row);
+            fields.Controls.Add(field, 1, row);
+        }
+        AddField(L("描画", "Drawing"), draw, 1);
+        AddField(L("対ヒーローダメージ", "Damage to heroes"), damage, 2);
+        AddField(L("チーム資産差", "Team net worth lead"), graph, 3);
+        var enable = new CheckBox { Text = Ui.T("線を描く（観戦・リプレイ中のみ）"), AutoSize = true, Checked = keys.DrawingEnabled };
+        fields.Controls.Add(enable, 0, 4); fields.SetColumnSpan(enable, 2);
+        fields.Controls.Add(feedback, 0, 5); fields.SetColumnSpan(feedback, 2);
+        var buttons = Row();
+        var reset = new Button { Text = L("キーを初期値に戻す", "Reset keys"), AutoSize = true };
+        reset.Click += (_, _) => { draw.ShowBinding(HudKey.DrawingDefault); damage.ShowBinding(HudKey.DamageDefault); graph.ShowBinding(HudKey.GraphDefault); feedback.Text = ""; };
+        var save = new Button { Text = L("保存", "Save"), AutoSize = true };
+        save.Click += (_, _) =>
+        {
+            var next = new HudKeys(draw.Binding, damage.Binding, graph.Binding, enable.Checked);
+            if (!next.IsValid) { feedback.Text = L("同じキーが複数の機能に割り当てられています。", "Each action needs a different shortcut."); return; }
+            if (GameRunning()) { feedback.Text = closeGame; return; }
+            try { next.Save(Program.Home); }
+            catch (IOException) { feedback.Text = L("キー設定を保存できませんでした。", "Could not save key bindings."); return; }
+            catch (UnauthorizedAccessException) { feedback.Text = L("キー設定を保存できませんでした。", "Could not save key bindings."); return; }
+            keys = next;
+            dialog.DialogResult = DialogResult.OK;
+        };
+        var cancel = new Button { Text = L("キャンセル", "Cancel"), AutoSize = true, DialogResult = DialogResult.Cancel };
+        dialog.CancelButton = cancel;
+        buttons.Controls.AddRange(new Control[] { reset, save, cancel });
+        fields.Controls.Add(buttons, 0, 6); fields.SetColumnSpan(buttons, 2);
+        dialog.Controls.Add(fields);
+        if (dialog.ShowDialog(this) == DialogResult.OK)
+        {
+            UpdateKeySummary();
+            await RefreshStatus();
+        }
+    }
+
     Task ShowHelp()
     {
         using var dialog = new Form { Text = Ui.T("困ったとき"), ClientSize = new Size(580, 180), StartPosition = FormStartPosition.CenterParent, Font = Font, MaximizeBox = false, MinimizeBox = false };

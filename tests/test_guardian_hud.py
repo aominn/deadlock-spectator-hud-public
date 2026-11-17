@@ -35,10 +35,10 @@ class GuardianTests(unittest.TestCase):
     rows=[dict(team=team,lane=1,entity=i,ordinal=i+1,fraction=.5) for i in range(2)]
     im=Image.new('RGBA',(2560,116));draw_guardian_rows(im,rows,font,origin_y=0,columns={(team,0):count})
     for column in (count,count+1):
-     x=16+228*column if team==2 else 2560-16-220-228*column
+     x=16+218*column if team==2 else 2560-16-210-218*column
      self.assertEqual(im.getpixel((x+3,0))[3],255)
     im=Image.new('RGBA',(2560,116));draw_guardian_rows(im,rows[1:],font,origin_y=0,columns={(team,0):count})
-    x=16+228*count if team==2 else 2560-16-220-228*count
+    x=16+218*count if team==2 else 2560-16-210-218*count
     self.assertEqual(im.getpixel((x+3,0))[3],255,'second individual closes the first column gap')
  def test_invalid_old_partial_or_changed_maximum(self):
   v=GuardianView();v.sample(self.data(1),1,1,'a')
@@ -58,15 +58,15 @@ class GuardianTests(unittest.TestCase):
   from base_guardian_hud import draw_guardian_rows
   root=Path(__file__).resolve().parents[1]/'engine';font=lambda n:ImageFont.truetype(str(root/'fonts/NotoSansJP-Bold.ttf'),n)
   im=Image.new('RGBA',(1920,1080));rows=[dict(team=t,lane=l,fraction=.5) for t in [2,3] for l in [1,4,6]];draw_guardian_rows(im,rows,font)
-  for t,x in [(2,16),(3,1684)]:
+  for t,x in [(2,16),(3,1694)]:
    for y in [292,332,372]:
-    self.assertEqual(im.getpixel((x+3,y))[3],255);self.assertEqual(im.getpixel((x+3,y+33))[3],255);self.assertEqual(im.getpixel((x,y+34))[3],0)
-  self.assertLess(font(14).getlength('ベースガーディアン 100%'),176)
+    self.assertEqual(im.getpixel((x+3,y))[3],255);self.assertEqual(im.getpixel((x+3,y+31))[3],255);self.assertEqual(im.getpixel((x,y+32))[3],0)
+  self.assertLessEqual(font(14).getlength('ベースガーディアン 100%'),166)
  def test_missing_lanes_keep_map_slots(self):
   from PIL import Image,ImageFont
   from base_guardian_hud import draw_guardian_rows
   font=lambda n:ImageFont.truetype(str(Path(__file__).resolve().parents[1]/'engine/fonts/NotoSansJP-Bold.ttf'),n)
-  for team,x in [(2,16),(3,1684)]:
+  for team,x in [(2,16),(3,1694)]:
    for lane,slot in [(1,0),(4,1),(6,2),(3,2)]:
     im=Image.new('RGBA',(1920,116));draw_guardian_rows(im,[dict(team=team,lane=lane,fraction=.5)],font,origin_y=0)
     self.assertEqual(im.getpixel((x+3,40*slot))[3],255)
@@ -84,7 +84,7 @@ class GuardianTests(unittest.TestCase):
   rows=[dict(team=2,lane=lane,fraction=.5) for lane in [1,4,6]]
   state=b.State();state.last_http=state.native_at=time.monotonic();state.last_clock=100;state.tower_grid.update(dict(schema=2,columns=5,clock='1:40',bars=[]),time.monotonic());state.roster=[dict(detail=False) for _ in range(12)]
   with patch.object(b,'S',state),patch.object(b,'REPLAY',None),patch.object(b,'LIVE',None),patch.object(state.guardian_view,'sample',return_value=rows) as sample:
-   im=Image.open(io.BytesIO(b.guardian_image(1920)));self.assertEqual(im.size,(1920,116));self.assertEqual(im.getpixel((19,113))[3],255);self.assertEqual(state.guardian_rows,rows)
+   im=Image.open(io.BytesIO(b.guardian_image(1920)));self.assertEqual(im.size,(1920,116));self.assertEqual(im.getpixel((22,111))[3],255);self.assertEqual(state.guardian_rows,rows)
    state.roster[0]['detail']=True;sample.reset_mock();im=Image.open(io.BytesIO(b.guardian_image(1920)));self.assertIsNone(im.getbbox());sample.assert_not_called();self.assertEqual(state.guardian_rows,[])
    state.roster[0]['detail']=False;state.native_at=0;im=Image.open(io.BytesIO(b.guardian_image(1920)));self.assertIsNone(im.getbbox())
    state.native_at=time.monotonic();state.last_http=0;im=Image.open(io.BytesIO(b.guardian_image(1920)));self.assertIsNone(im.getbbox())
@@ -114,7 +114,7 @@ class UnifiedTowerTests(unittest.TestCase):
    for team in [2,3]:
     for count in [0,1,2]:
      im=Image.new('RGBA',(width,116));draw_guardian_rows(im,[dict(team=team,lane=4,fraction=.5)],font,origin_y=0,columns={(team,1):count})
-     x=16+round(228*scale*count) if team==2 else width-16-round(220*scale)-round(228*scale*count)
+     x=16+round(218*scale*count) if team==2 else width-16-round(210*scale)-round(218*scale*count)
      self.assertEqual(im.getpixel((x+3,round(40*scale)))[3],255)
      if count:self.assertEqual(im.getpixel((16 if team==2 else width-17,round(40*scale)))[3],0)
  def test_state_layout_receipt_cleared_on_reset(self):
@@ -141,7 +141,7 @@ class BuildingCaptionTests(unittest.TestCase):
   from unittest.mock import patch
   font=lambda n:ImageFont.truetype(str(Path(__file__).resolve().parents[1]/'engine/fonts/NotoSansJP-Bold.ttf'),n)
   for width in [1280,1920,2560]:
-   scale=min(1,width/1920);w=round(220*scale);h=round(34*scale);content=round(40*scale);available=w-round(44*scale)
+   scale=min(1,width/1920);w=round(210*scale);h=round(32*scale);content=round(40*scale);available=w-round(44*scale)
    for team in [2,3]:
     color=(212,134,11,204) if team==2 else (77,117,195,204)
     expected=Image.alpha_composite(Image.new('RGBA',(1,1),(16,19,13,238)),Image.new('RGBA',(1,1),color)).getpixel((0,0))
