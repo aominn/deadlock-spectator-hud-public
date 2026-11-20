@@ -91,6 +91,10 @@ class IdentityExtrasTests(unittest.TestCase):
    self.assertEqual(st.kda_hold['1'],[1,2,3])
    st.roster[0]['detail']=False
    self.assertEqual(b.render_identity_notices(Image.new('RGBA',(1920,900)),10)[0]['rect'],[10,24,120,16])
+   st.roster[0]['identity_anchor']=[33.4,21.6]
+   self.assertEqual(b.render_identity_notices(Image.new('RGBA',(1920,900)),10)[0]['rect'],[33,22,120,16])
+   st.roster[0]['identity_anchor']=[None,22]
+   self.assertEqual(b.render_identity_notices(Image.new('RGBA',(1920,900)),10)[0]['rect'],[10,24,120,16])
   st.native_at=11;st.money_rows[0]['sales']=[dict(id='new',ability=2829638276,hero=1)]
   with patch.object(b,'S',st),patch.object(b.time,'monotonic',lambda:11):
    rows=b.render_identity_notices(Image.new('RGBA',(1920,900)),11);sale=[x for x in rows if x['kind']=='sale'];self.assertEqual(sale[0]['rect'],[0,210,140,32]);self.assertEqual(sale[0]['name'],'エクストラリジェネ')

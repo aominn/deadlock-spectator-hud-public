@@ -39,9 +39,9 @@
 
 /* Compact status row; preserve88px portrait art and notification typography. */
 .spec_mode CitadelHudTopBarPlayer .UltimateStatus {width: 20px; height: 20px;}
-/* Center the native three-slot group; team counters stay outside30px state icon. */
-.spec_mode #RejuvenatorCharges {width: 130px; margin-right: 0px;}
-.spec_mode #RejuvenatorCharges #RejuvenatorFriendly, .spec_mode #RejuvenatorCharges #RejuvenatorEnemy {width: 48px;}
+/* Team badges and the 72px score bars share centers 44px to either side. */
+.spec_mode #RejuvenatorCharges {width: 142px; margin-right: 0px;}
+.spec_mode #RejuvenatorCharges #RejuvenatorFriendly, .spec_mode #RejuvenatorCharges #RejuvenatorEnemy {width: 54px;}
 .spec_mode #RejuvenatorCharges #RejuvenatorTimer {width: 34px;}
 
 /* Compact clock padding, preserving native14px time metrics and vertical padding; no automatic font shrink. */
@@ -87,7 +87,7 @@
 .spec_mode .SpecBuildDetailsOpen #SpecBaseGuardianHP,
 .spec_mode.SpecBuildDetailsOpen #SpecBaseGuardianHP { opacity: 0; }
 
-/* Only shift the center group when the optional series row occupies the top. */
+/* Keep the center group at the same height under the spectator header. */
 .spec_mode.SpecTournamentHeaderActive .GameClock,
 .spec_mode .SpecTournamentHeaderActive .GameClock,
 .spec_mode.SpecTournamentHeaderActive .TeamNetworth,
@@ -96,7 +96,3 @@
 .spec_mode .SpecTournamentHeaderActive #RejuvenatorCharges,
 .spec_mode.SpecTournamentHeaderActive .KillsAndAbilityPointsContainer,
 .spec_mode .SpecTournamentHeaderActive .KillsAndAbilityPointsContainer { transform: translateY(32px); }
-
-/* The screen-space K/D/A row needs extra clearance in small windows. */
-.spec_mode.SpecCompactTeamHeader #TeamsContainer,
-.spec_mode .SpecCompactTeamHeader #TeamsContainer { padding-top: 124px; }

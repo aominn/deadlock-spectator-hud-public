@@ -8,3 +8,14 @@
 .spec_mode CitadelPaused #PausedLabel { font-family: sans; font-size: 16px; line-height: 22px; font-weight: semi-bold; max-width: 220px; text-align: center; transform: none; transition-duration: 0s; }
 .spec_mode CitadelPaused #PauserLabel, .spec_mode CitadelPaused #UnpauseButtonLabel { font-size: 12px; line-height: 16px; margin: 0px; text-align: center; }
 .spec_mode CitadelPaused #PausedCountdownLabel { font-size: 20px; margin: 0px; horizontal-align: right; animation-name: none; }
+
+/* Esc menu toggle for the replay scrubber and its playback controls. */
+.spec_mode #PlaybackControls.SpecReplayBarHidden { visibility: collapse; }
+
+/* Remove the native replay spacing from the three groups above the hidden controls. */
+.spec_mode .SpecReplayCompactLayout #AbilitiesContainer,
+.spec_mode .SpecReplayCompactLayout #StatsAndModsContainer,
+.spec_mode .SpecReplayCompactLayout #hudActivePlayerStats,
+.spec_mode.SpecReplayCompactLayout #AbilitiesContainer,
+.spec_mode.SpecReplayCompactLayout #StatsAndModsContainer,
+.spec_mode.SpecReplayCompactLayout #hudActivePlayerStats { margin-bottom: 0px; }

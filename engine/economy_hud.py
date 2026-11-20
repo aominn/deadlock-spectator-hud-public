@@ -3,7 +3,7 @@ import bisect,math,collections,io,functools,re
 CAUSES={'kill':1,'urn':1,'urn-deny':1,'building':1,'loss':-1,'soul-bag-pickup':1,'soul-bag-stolen':1}
 class EconomyTimeline:
  def __init__(self,data,teams,max_events=20000):
-  self.events=[];self.times=[]
+  self.events=[];self.times=[];self.sequences=[]
   if data is None:return
   if not isinstance(data,dict) or data.get('schema')!=1 or data.get('supported') is not True or data.get('identity_verified') is not True: return
   rows=data.get('events');seen=set();last=-1;seq=-1
@@ -16,7 +16,7 @@ class EconomyTimeline:
    if type(t) not in (int,float) or not math.isfinite(t) or t<last or t<0 or not isinstance(key,str) or not key or len(key)>80 or key in seen or e['sequence']<=seq:raise ValueError('economy event order')
    expected={'kill':(11,12,38),'urn':(33,),'urn-deny':(23,),'building':(13,),'loss':(9,)}
    if e['source'] not in expected.get(e['cause'],()) or e['generation']!=data.get('generation',0):raise ValueError('economy source')
-   self.events.append(e);self.times.append(math.ceil(t));seen.add(key);last=t;seq=e['sequence']
+   self.events.append(e);self.times.append(math.ceil(t));self.sequences.append(e['sequence']);seen.add(key);last=t;seq=e['sequence']
 class EconomyCursor:
  def __init__(self):self.reset()
  def reset(self):self.previous=None;self.stamp=None;self.scope=None;self.sequence=-1;self.stable=0
@@ -24,10 +24,15 @@ class EconomyCursor:
   if type(clock) is not int or clock<0 or not math.isfinite(stamp):self.reset();return []
   end=bisect.bisect_right(timeline.times,clock)
   reset=self.scope!=scope or self.previous is None or clock<self.previous or clock-self.previous>2 or self.stamp is None or not 0<=stamp-self.stamp<=2
-  if reset:
-   self.sequence=max((e['sequence'] for e in timeline.events[:end]),default=-1);self.stable=stamp+2
-  fresh=[e for e in timeline.events[:end] if e['sequence']>self.sequence];self.sequence=max(self.sequence,max((e['sequence'] for e in timeline.events[:end]),default=-1));self.previous=clock;self.stamp=stamp;self.scope=scope
-  return [] if reset or stamp<self.stable else [e for e in fresh if clock-math.ceil(e['seconds'])<=1]
+  sequence=timeline.sequences[end-1] if end else -1
+  prior_sequence=self.sequence
+  if reset:self.stable=stamp+2
+  self.sequence=sequence if reset else max(prior_sequence,sequence)
+  self.previous=clock;self.stamp=stamp;self.scope=scope
+  if reset or stamp<self.stable or not end:return []
+  first=bisect.bisect_right(timeline.sequences,prior_sequence,0,end)
+  first=bisect.bisect_left(timeline.times,clock-1,first,end)
+  return timeline.events[first:end]
 class EconomyView:
  # One receipt lane per hero. Do not replace normal money or accumulate old news.
  DISPLAY_SECONDS=2.2

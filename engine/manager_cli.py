@@ -35,7 +35,8 @@ def main():
    elif action=='start-service':v=m.start_service()
    elif action=='stop-service':m.stop_service();v={'message':'補助アプリの停止を要求しました。'}
    elif action=='autostart':v=m.autostart(q.get('enabled') is True)
-   elif action=='launch':v=m.launch()
+   elif action=='launch':v=m.launch(q.get('focus'))
+   elif action=='focus-status':v=m.focus_status()
    elif action=='update':v=apply_zip(m,q['package'],q['sha256'])
    elif action=='rollback':v=rollback(m)
    elif action=='verify':

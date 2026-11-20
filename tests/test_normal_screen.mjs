@@ -4,14 +4,16 @@ import assert from 'node:assert/strict';
 const source=fs.readFileSync(new URL('../mod-src/spectator_probe.js',import.meta.url),'utf8');
 const funcs=(start,end)=>source.slice(source.indexOf('function '+start+'('),source.indexOf('function '+end+'('));
 const nodes=new Map();
+let wall=5000;
 function panel(id,parent=null){const p={id,parent,style:{},children:[],visible:true,text:'',GetPositionWithinWindow(){return this.position??{x:0,y:0};},GetParent(){return this.parent;},FindChildTraverse(n){if(this.id===n)return this;for(const child of this.children){const hit=child.FindChildTraverse(n);if(hit)return hit;}return null;},FindChildrenWithClassTraverse(c){return this.children.filter(x=>x.classes?.includes(c));}};if(parent)parent.children.push(p);nodes.set(id,p);return p;}
 const root=panel('root');root.actuallayoutwidth=1920;root.actuallayoutheight=1080;const minimap=panel('nativeMap',root);minimap.classes=['HudMinimap'];minimap.actuallayoutwidth=360;minimap.actuallayoutheight=360;minimap.position={x:1544,y:656};const target=panel('spectate_target',root);target.style.visibility='visible';
 for(const id of ['spectator_count','next_player','prev_player','camera_section','CitadelHudDamageReport'])panel(id,root);
 nodes.get('spectator_count').style.visibility='visible';
 let supported=true,spawned=false,remaining='2:13',cooldown=true;
+let mapSpawned=false,mapVisible=true,mapGlyph=false,mapGlyphWidth=20;
 const nativeLabel={text:remaining,style:{}};
-const c={overlays:[],hints:[],ctx:{GetParent:()=>root},KILL_SOURCE_VERIFIED:false,root:()=>root,find:id=>id==='RejuvenatorTimer'?{BHasClass:k=>k==='midboss_cooldown'?cooldown:k==='midboss_available'?spawned:false}:id==='MidbossTimerLabel'?nativeLabel:nodes.get(id),mapSupported:()=>supported,teamKills:()=>0,all:(p,n)=>n==='mid_boss'?[{BHasClass:()=>spawned}]:p.FindChildrenWithClassTraverse(n),text:p=>p?.text??'',seconds:s=>/^\d+:\d\d$/.test(s)?Number(s.split(':')[0])*60+Number(s.split(':')[1]):-1,$:{CreatePanel:(type,parent,id)=>{const n=panel(id,parent);if(id.startsWith('SpecPlayerName'))n.actuallayoutwidth=88;return n;}}};
-vm.createContext(c);vm.runInContext(funcs('label','scanPlayers').replace(/var leftBadge,rightBadge,leftKills,rightKills,mid,bridge,objectiveBox;/,'var leftBadge,rightBadge,leftKills,rightKills,mid,bridge,objectiveBox;')+funcs('clock','state')+funcs('controlHints','hide'),c);
+const c={Date:{now:()=>wall},overlays:[],hints:[],ctx:{GetParent:()=>root},root:()=>root,find:id=>id==='RejuvenatorTimer'?{BHasClass:k=>k==='midboss_cooldown'?cooldown:k==='midboss_available'?spawned:false}:id==='MidbossTimerLabel'?nativeLabel:nodes.get(id),mapSupported:()=>supported,all:(p,n)=>n==='mid_boss'?[{actuallayoutwidth:20,visible:mapVisible,BHasClass:()=>mapSpawned,FindChildTraverse:id=>id==='Spawned'&&mapGlyph?{visible:true,actuallayoutwidth:mapGlyphWidth}:null}]:p.FindChildrenWithClassTraverse(n),text:p=>p?.text??'',seconds:s=>/^\d+:\d\d$/.test(s)?Number(s.split(':')[0])*60+Number(s.split(':')[1]):-1,$:{CreatePanel:(type,parent,id)=>{const n=panel(id,parent);if(id.startsWith('SpecPlayerName'))n.actuallayoutwidth=88;n.SetImage=url=>{n.url=url;};n.DeleteAsync=()=>{n.deleted=true;};return n;},RegisterEventHandler:(key,n,handler)=>{n[key]=handler;}}};
+vm.createContext(c);vm.runInContext(source.slice(source.indexOf('function specViewport('),source.indexOf('(function(){'))+funcs('label','scanPlayers')+funcs('clock','state')+funcs('controlHints','hide'),c);
 c.init();assert.equal(c.objectiveBox.style.width,'360px');assert.equal(c.objectiveBox.style.height,'44px');assert.equal(c.mid.FindChildTraverse('SpecObjectiveName').text,'ミッドボス');assert.equal(c.bridge.FindChildTraverse('SpecObjectiveName').text,'ブリッジバフ');assert.equal(c.mid.FindChildTraverse('SpecObjectiveValue').style.fontSize,'18px');assert.equal(c.mid.FindChildTraverse('SpecObjectiveValue').style.fontWeight,'semi-bold');assert.equal(c.mid.style.backgroundImage,'url("s2r://panorama/images/minimap/super_neutral_marker_psd.vtex")');assert.equal(c.bridge.style.backgroundImage,'url("s2r://panorama/images/hud/modifiers/icon_powerup.vsvg")');
 for(const [now,time] of [[0,'5:00'],[299,'0:01'],[300,'0:00'],[301,'4:59'],[599,'0:01'],[600,'0:00']]){c.summary(now);assert.equal(c.bridge.FindChildTraverse('SpecObjectiveValue').text,time);assert(!/予定|あと/.test(c.bridge.FindChildTraverse('SpecObjectiveValue').text));}
 c.summary(301);assert.equal(c.mid.FindChildTraverse('SpecObjectiveValue').text,'2:13');
@@ -19,16 +21,43 @@ c.summary(301);assert.equal(c.mid.FindChildTraverse('SpecObjectiveValue').text,'
 cooldown=false;c.summary(302);assert.equal(c.mid.FindChildTraverse('SpecObjectiveValue').text,'2:12');
 c.summary(304);assert.equal(c.mid.FindChildTraverse('SpecObjectiveValue').text,'2:10');
 c.summary(286);assert.equal(c.mid.FindChildTraverse('SpecObjectiveValue').text,'—');
+const oldRequest=c.midbossRequest;
+assert(oldRequest.url.includes('clock=286'));
+oldRequest.ImageLoaded();
+assert.equal(oldRequest.visible,true);
+assert.equal(c.mid.FindChildTraverse('SpecObjectiveValue').visible,false);
+wall+=2000;c.summary(271);
+assert.equal(oldRequest.deleted,true);
+assert.equal(c.mid.FindChildTraverse('SpecObjectiveValue').visible,true);
+const staleRequest=c.midbossRequest;
+wall+=2000;c.summary(297);
+staleRequest.ImageLoaded();
+assert.equal(staleRequest.visible,false,'late seek callback cannot show an old clock');
+c.updateMidbossImage(-1,false);
+assert.equal(c.midbossRequest,null);
 cooldown=true;c.summary(301);cooldown=false;c.summary(320);
 assert.equal(c.mid.FindChildTraverse('SpecObjectiveValue').text,'—');
-spawned=true;cooldown=false;c.summary(301);assert.equal(c.mid.FindChildTraverse('SpecObjectiveValue').text,'出現中');spawned=false;cooldown=false;c.summary(301);assert.equal(c.mid.FindChildTraverse('SpecObjectiveValue').text,'—');supported=false;c.summary(301);assert.equal(c.bridge.visible,false);
+spawned=true;cooldown=false;c.summary(301);assert.equal(c.mid.FindChildTraverse('SpecObjectiveValue').text,'—','native available must have a visible boss marker');spawned=false;supported=false;c.summary(301);assert.equal(c.bridge.visible,false);
+// The native timer panel may exist without state while the minimap identifies the live boss.
+supported=true;mapGlyph=true;mapSpawned=true;c.summary(302);
+assert.equal(c.mid.FindChildTraverse('SpecObjectiveValue').text,'スポーン');assert.equal(c.midbossRequest,null);
+mapVisible=false;c.summary(303);assert.equal(c.mid.FindChildTraverse('SpecObjectiveValue').text,'—');
+mapVisible=true;mapGlyphWidth=0;spawned=true;c.summary(304);
+assert.equal(c.mid.FindChildTraverse('SpecObjectiveValue').text,'—','a stale timer or marker class cannot indicate spawn if the glyph is collapsed');
+mapSpawned=spawned=false;mapGlyphWidth=20;cooldown=true;nativeLabel.text='0:10';c.summary(340);c.summary(341);
+assert.equal(c.mid.FindChildTraverse('SpecObjectiveValue').text,'0:09','unchanged native timer label');
+nativeLabel.text='0:08';c.summary(342);assert.equal(c.mid.FindChildTraverse('SpecObjectiveValue').text,'0:08');
+for(let time=343;time<350;time++)c.summary(time);
+mapSpawned=true;c.summary(350);
+assert.equal(c.mid.FindChildTraverse('SpecObjectiveValue').text,'スポーン','stale native label must not hide a newly visible boss');
+mapSpawned=false;cooldown=false;c.summary(351);
 c.controlHints(true);assert.equal(target.style.visibility,'collapse');assert.equal(nodes.get('spectator_count').style.visibility,'collapse');c.controlHints(true);assert.equal(nodes.get('spectator_count').style.visibility,'collapse');c.controlHints(false);assert.equal(nodes.get('spectator_count').style.visibility,'visible');assert.equal(target.style.visibility,'visible');assert.equal(nodes.get('camera_section').style.visibility,'');
 // Names occupy y24..40 after the8px group shift; urn starts42, portrait54.
 const rectHit=(a,b)=>a[0]<b[0]+b[2]&&b[0]<a[0]+a[2]&&a[1]<b[1]+b[3]&&b[1]<a[1]+a[3];
 const layoutCss=fs.readFileSync(new URL('../mod-src/debug-override.css',import.meta.url),'utf8');
 const cell=Number(layoutCss.match(/CitadelHudTopBarPlayer \{ width: (\d+)px/)[1]),team=Number(layoutCss.match(/CitadelHudTopBarTeam \{ width: (\d+)px/)[1]),span=Number(layoutCss.match(/#TeamsContainer \{ width: (\d+)px/)[1]);
 const shift=Number(layoutCss.match(/#TeamEnemy \{transform: translateX\((\d+)px\)/)[1]);assert.equal(shift,42);assert(layoutCss.includes('#TeamFriendly {transform: translateX(-42px);}'));
-assert.equal(cell*6,team);assert.equal(c.leftBadge.style.width,'72px');assert.equal(c.rightBadge.style.width,'72px');assert.equal(c.leftBadge.style.fontSize,'14px');assert.equal(c.rightBadge.style.position,'76px 20px 0px');
+assert.equal(cell*6,team);assert.equal(c.leftBadge.style.width,'72px');assert.equal(c.rightBadge.style.width,'72px');assert.equal(c.leftBadge.style.fontSize,'14px');assert.equal(c.rightBadge.style.position,'76px 52px 0px');
 assert.equal(c.leftBadge.style.backgroundSize,'14px 14px');assert.equal(c.rightBadge.style.whiteSpace,'nowrap');assert.equal(c.rightBadge.style.textOverflow,'shrink');
 const clockTextWidth=Number(layoutCss.match(/\.GameTime \{width: (\d+)px/)[1]);const clockPadding=Number(layoutCss.match(/\.GameClock \{padding: \d+px (\d+)px/)[1]);const clockWidth=clockTextWidth+clockPadding*2;assert.equal(clockWidth,72);assert(layoutCss.includes('font-size: 14px; white-space: nowrap;}'));assert(!layoutCss.match(/\.GameTime \{[^}]*text-overflow: shrink/));assert(layoutCss.includes('.GameClock {padding: 5px 4px;}'));assert.equal(c.clock(6000),'100:00');assert.equal(c.clock(59999),'999:59');
 for(const width of [1920,2560]){const start=(width-span)/2;const centers=[...Array.from({length:6},(_,i)=>start-shift+cell*(i+.5)),...Array.from({length:6},(_,i)=>start+span-team+shift+cell*(i+.5))];const names=centers.map(x=>[x-44,24,88,16]);const money=[c.leftBadge,c.rightBadge].map(p=>[width/2+parseFloat(p.style.position)-parseFloat(p.style.width)/2,parseFloat(p.style.position.split(' ')[1]),parseFloat(p.style.width),24]);for(let i=0;i<names.length;i++){assert(!money.some(x=>rectHit(names[i],x)),'advantage collides with player name');for(let j=i+1;j<names.length;j++)assert(!rectHit(names[i],names[j]));assert(names[i][1]+names[i][3]<42);}assert(!money.some(x=>rectHit(x,[width/2-clockWidth/2,16,clockWidth,31])),'advantage collides with game clock');}
@@ -37,10 +66,10 @@ console.log(JSON.stringify({passed:true,bridge_boundary_cases:6,mid_states:3,per
 
 // Normal minimap width, position and parent scaling govern the two columns.
 for(const width of [320,360,400,540]){minimap.actuallayoutwidth=width;minimap.actuallayoutheight=width;minimap.position={x:1920-width-16,y:1080-width-64};c.layoutObjectives();assert.equal(c.objectiveBox.style.width,Math.min(360,width-24)+'px');assert.equal(c.objectiveBox.style.position,(1892-Math.min(360,width-24))+'px '+(1080-width-136)+'px 0px');assert.equal(c.mid.style.width,(Math.min(360,width-24)/2)+'px');assert.equal(c.bridge.style.position,(Math.min(360,width-24)/2)+'px 0px 0px');assert.equal(c.mid.FindChildTraverse('SpecObjectiveValue').style.width,(Math.min(360,width-24)/2-54)+'px');}
-minimap.actuallayoutwidth=360;minimap.actuallayoutheight=360;root.actualuiscale_x=2;minimap.actualuiscale_x=2;minimap.position={x:3088,y:1312};assert.equal(c.layoutObjectives(),true);assert.equal(c.objectiveBox.style.position,'1556px 584px 0px');root.actualuiscale_x=1;minimap.actualuiscale_x=1;
+minimap.actuallayoutwidth=720;minimap.actuallayoutheight=720;root.actuallayoutwidth=3840;root.actuallayoutheight=2160;root.actualuiscale_x=2;minimap.actualuiscale_x=2;minimap.position={x:3088,y:1312};assert.equal(c.layoutObjectives(),true);assert.equal(c.objectiveBox.style.position,'1556px 584px 0px');root.actualuiscale_x=1;root.actuallayoutwidth=1920;root.actuallayoutheight=1080;minimap.actualuiscale_x=1;minimap.actuallayoutwidth=360;minimap.actuallayoutheight=360;
 minimap.position={x:NaN,y:NaN};supported=true;c.summary(301);assert.equal(c.objectiveBox.visible,false);assert.equal(nativeLabel.style.opacity,'1');minimap.position={x:0,y:0};assert.equal(c.layoutObjectives(),false);minimap.position={x:1544,y:656};minimap.actuallayoutwidth=1500;assert.equal(c.layoutObjectives(),false);minimap.actuallayoutwidth=360;c.summary(301);assert.equal(c.objectiveBox.visible,true);assert.equal(nativeLabel.style.opacity,'0');
 root.actualuiscale_x=2/3;root.actuallayoutwidth=1280;root.actuallayoutheight=720;
-minimap.actualuiscale_x=2/3;minimap.actuallayoutwidth=398;minimap.actuallayoutheight=398;
+minimap.actualuiscale_x=2/3;minimap.actuallayoutwidth=252;minimap.actuallayoutheight=252;
 minimap.position={x:1010,y:425};
 assert.equal(c.layoutObjectives(),true,'720p uses logical positions even when the root gives pixel dimensions');
 assert.equal(c.objectiveBox.style.width,'360px');

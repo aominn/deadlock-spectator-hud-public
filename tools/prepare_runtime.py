@@ -24,5 +24,12 @@ def main():
     n=safe_name(info.filename)
     if (info.external_attr>>16)&0o170000==0o120000:raise ValueError('linked vendor member')
     f=base/n;f.parent.mkdir(parents=True,exist_ok=True);f.write_bytes(z.read(info))
+ # The Windows embedded interpreter uses only its private ._pth search list.
+ version=''.join(lock['python']['version'].split('.')[:2])
+ pth=out/('python'+version+'._pth')
+ paths=pth.read_text(encoding='utf-8').splitlines()
+ if 'Lib/site-packages' not in paths:
+  paths.append('Lib/site-packages')
+  pth.write_text('\n'.join(paths)+'\n',encoding='utf-8',newline='\n')
  pins={f.relative_to(out).as_posix():hashlib.sha256(f.read_bytes()).hexdigest() for f in sorted(out.rglob('*')) if f.is_file()};(out/'vendor-manifest.json').write_text(json.dumps({'sources':{n:lock[n] for n in ['python','pillow']},'files':pins},indent=2),encoding='utf-8');print(json.dumps({'python':lock['python']['version'],'pillow':lock['pillow']['version'],'files':len(pins),'official_hashes_verified':True}))
 if __name__=='__main__':main()

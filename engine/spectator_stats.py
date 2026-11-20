@@ -101,7 +101,7 @@ class LiveStats:
         return tuple((second, self.history[second]) for second in sorted(self.history) if second <= clock)
 
 
-DEFAULT_STATS_KEYS = {'damage': (0x78, 6, 'Ctrl+Shift+F9'), 'graph': (0x79, 6, 'Ctrl+Shift+F10')}
+DEFAULT_STATS_KEYS = {'damage': (0x78, 0, 'F9'), 'graph': (0x79, 0, 'F10')}
 KEY_CODES = (set(range(0x30, 0x3A)) | set(range(0x41, 0x5B)) |
              set(range(0x60, 0x6A)) | set(range(0x70, 0x88)) |
              set(range(0x20, 0x29)) | {0x2D, 0x2E, 0xBA, 0xBB, 0xBC, 0xBD, 0xBE, 0xBF,
@@ -133,15 +133,18 @@ class StatsPanels:
     def __init__(self):
         self.open = None
         self.scope = None
+        self.snapshot = None
 
     def poll(self, scope, events):
         if scope != self.scope:
             self.open = None
             self.scope = scope
+            self.snapshot = None
         if scope is None:
             return
         for name in events:
             self.open = None if self.open == name else name
+            self.snapshot = None
 
 
 
@@ -236,10 +239,27 @@ def label(draw, xy, text, size=15, color='#ffefd7', anchor=None, *, ja=True, hea
     draw.text(xy, text, font=face, fill=color, anchor=anchor)
 
 
+PANEL_HEADER_HEIGHT = 30
+
+
+def panel_title(draw, x, y, text, ja, snapshot_clock=None):
+    size = 15
+    top, bottom = draw.textbbox((0, 0), text, font=font(size, ja))[1::2]
+    title_y = y + (PANEL_HEADER_HEIGHT - top - bottom) // 2
+    label(draw, (x+16, title_y), text, size, '#d6d3c9', ja=ja)
+    if snapshot_clock is not None:
+        clock = f'{snapshot_clock//60}:{snapshot_clock%60:02d}'
+        stamp = f'{clock}時点' if ja else f'At {clock}'
+        stamp_size = 12
+        top, bottom = draw.textbbox((0, 0), stamp, font=font(stamp_size, ja))[1::2]
+        stamp_y = y + (PANEL_HEADER_HEIGHT - top - bottom) // 2
+        label(draw, (x+462, stamp_y), stamp, stamp_size, '#bdb8ab', 'ra', ja=ja)
+
+
 def panel_background(draw, x, y):
     draw.rectangle((x, y, x+478, y+276), fill='#171915df', outline='#4b493f')
-    draw.rectangle((x+1, y+1, x+477, y+35), fill='#10130dee')
-    draw.line((x+1, y+36, x+477, y+36), fill='#4b493f')
+    draw.rectangle((x+1, y+1, x+477, y+PANEL_HEADER_HEIGHT-1), fill='#10130dee')
+    draw.line((x+1, y+PANEL_HEADER_HEIGHT, x+477, y+PANEL_HEADER_HEIGHT), fill='#4b493f')
 
 
 @lru_cache(maxsize=80)
@@ -255,10 +275,23 @@ def minimap_hero_icon(hero):
     return face, mask.resize((18, 18), Image.Resampling.LANCZOS)
 
 
-def damage_panel(image, x, y, rows, names, ja):
+def team_title(draw, xy, team, title, size, ja, *, heading=False):
+    if title:
+        ja, heading = True, False
+    else:
+        title = team_name(team, ja)
+    face = font(size, ja, heading)
+    if draw.textlength(title, font=face) > 210:
+        while title and draw.textlength(title + '…', font=face) > 210:
+            title = title[:-1]
+        title += '…'
+    label(draw, xy, title, size, COLORS[team], ja=ja, heading=heading)
+
+
+def damage_panel(image, x, y, rows, names, ja, titles, clock):
     draw = ImageDraw.Draw(image)
     panel_background(draw, x, y)
-    label(draw, (x+16,y+10), '対ヒーローダメージ' if ja else 'Damage to heroes', 20, ja=ja, heading=True)
+    panel_title(draw, x, y, '与ダメージ' if ja else 'Damage Dealt', ja, clock if rows else None)
     if not rows:
         label(draw,(x+16,y+70),'データ待ち' if ja else 'Waiting for data')
         return
@@ -268,7 +301,7 @@ def damage_panel(image, x, y, rows, names, ja):
     for col,team in enumerate(COLORS):
         left = x+16+col*232
         color = COLORS[team]
-        label(draw,(left,y+47),team_name(team, ja),15,color,ja=ja,heading=True)
+        team_title(draw, (left, y+47), team, titles[col], 15, ja, heading=True)
         for index,(name,row) in enumerate(v for v in ordered if v[1][1] == team):
             top = y+73+index*31
             name = name or str(row[0])
@@ -278,21 +311,23 @@ def damage_panel(image, x, y, rows, names, ja):
                 badge = Image.new('RGBA', (18, 18), '#25251f')
                 badge.alpha_composite(face, ((18-face.width)//2, (18-face.height)//2))
                 image.paste(badge, (left, top), mask)
-            while len(name)>1 and font(13, ja).getlength(name)>121:
+            amount = f'{row[2]:,}'
+            name_width = min(121, 210 - 24 - 8 - font(15, ja).getlength(amount))
+            while len(name)>1 and font(13, ja).getlength(name)>name_width:
                 name=name[:-2]+'…'
             label(draw,(left+24,top),name,13,ja=ja)
-            label(draw,(left+210,top+2),f'{row[2]:,}',13,anchor='ra',ja=ja)
+            label(draw,(left+210,top+1),amount,15,anchor='ra',ja=ja)
             draw.rectangle((left,top+21,left+210,top+24),fill='#39372d')
             if row[2]:
                 draw.rectangle((left,top+21,left+round(210*row[2]/maximum),top+24),fill=color)
 
 
-def graph_panel(draw, x, y, history, clock, ja):
+def graph_panel(draw, x, y, history, clock, ja, titles):
     panel_background(draw, x, y)
-    label(draw,(x+16,y+10),'チーム資産差' if ja else 'Team net worth lead',20,ja=ja,heading=True)
+    panel_title(draw, x, y, 'ソウル差' if ja else 'Soul Lead', ja, clock if history else None)
     left,right,middle,height=x+75,x+457,y+151,79
-    label(draw,(left,y+47),team_name(2, ja),13,COLORS[2],ja=ja)
-    label(draw,(left,y+226),team_name(3, ja),13,COLORS[3],ja=ja)
+    team_title(draw, (left, y+47), 2, titles[0], 13, ja)
+    team_title(draw, (left, y+226), 3, titles[1], 13, ja)
     draw.line((left,middle,right,middle),fill='#8b8473')
     label(draw,(left-8,middle),'0',12,'#d6d3c9','rm')
     end=max(1,clock)
@@ -327,16 +362,16 @@ def graph_panel(draw, x, y, history, clock, ja):
     elif history[-1][0] == clock:
         lead = history[-1][1]
         caption = (f'+{abs(lead):,}' if lead else ('同額' if ja else 'Tied'))
-        label(draw,(right,y+53),caption,14,COLORS[2 if lead>0 else 3] if lead else '#ffefd7','ra',ja=ja)
+        label(draw,(right,y+53),caption,17,COLORS[2 if lead>0 else 3] if lead else '#ffefd7','ra',ja=ja)
 
 
 @lru_cache(maxsize=6)
-def panel_png(panel, rows, names, history, clock, ja):
+def panel_png(panel, rows, names, history, clock, ja, titles=('', '')):
     im = Image.new('RGBA', (480, 278) if panel else (1, 1))
     if panel == 'damage':
-        damage_panel(im, 0, 0, rows, names, ja)
+        damage_panel(im, 0, 0, rows, names, ja, titles, clock)
     elif panel == 'graph':
-        graph_panel(ImageDraw.Draw(im), 0, 0, history, clock, ja)
+        graph_panel(ImageDraw.Draw(im), 0, 0, history, clock, ja, titles)
     output=io.BytesIO()
     im.save(output,format='PNG')
     return output.getvalue()

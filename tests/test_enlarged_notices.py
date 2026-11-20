@@ -9,6 +9,14 @@ class CompactNoticeLayout(unittest.TestCase):
    self.assertEqual(actual,side);self.assertEqual((top,width),(46,38));boxes=b.card_obstacles([player],1920);self.assertEqual(boxes[0][1],230)
    notices=[{'started':0,'until':3,'order':i,'lane':i%4} for i in range(4)];rows=b.receipt_layout(notices,rx,top,width,boxes,1)
    self.assertEqual([z[2] for z in rows],[46,82,118,154]);self.assertEqual(rows[-1][2]+b.NOTICE_HEIGHT+42,boxes[0][1])
+ def test_receipt_uses_portrait_edges_when_cell_coordinates_drift(self):
+  for left,side in [(38,'left'),(1084,'right')]:
+   player={'pos':{'x':left-54,'y':62},'width':100,'portrait':[left,82,88,88]}
+   x,y,width,actual=b.corner_geometry(player,1920)
+   self.assertEqual((y,width,actual),(82,38,side))
+   self.assertEqual(x-(left+88) if side=='left' else left-(x+width),4)
+   player['portrait']=[float('nan'),82,88,88]
+   self.assertEqual(b.corner_geometry(player,1920)[1],62)
  def test_stack_animation_never_moves_above_portrait(self):
   for count in [1,4,5,7,16,64]:
    rows=[{'started':0,'until':3,'order':i,'lane':i%4} for i in range(count)]

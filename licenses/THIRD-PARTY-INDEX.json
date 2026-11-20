@@ -4,7 +4,7 @@
   "components": [
     {
       "name": "Deadlock Spectator HUD (authored portions)",
-      "version": "0.6.0",
+      "version": "0.7.0",
       "license": "MIT",
       "notice_files": [
         "LICENSE"
@@ -31,7 +31,7 @@
     },
     {
       "name": "Pillow",
-      "version": "12.3.0",
+      "version": "13.0.0",
       "license": "MIT-CMU and bundled codec/library terms",
       "notice_files": [
         "licenses/Pillow-LICENSE.txt"
@@ -40,7 +40,7 @@
     },
     {
       "name": "Node.js",
-      "version": "24.19.0",
+      "version": "24.22.3",
       "license": "MIT and bundled third-party terms",
       "notice_files": [
         "licenses/Node-LICENSE.txt"
@@ -49,11 +49,12 @@
     },
     {
       "name": ".NET manager runtime",
-      "version": "10.0.12",
+      "version": "10.0.15",
       "license": "MIT and bundled third-party terms",
       "notice_files": [
         "licenses/DotNet-LICENSE.txt",
-        "licenses/DotNet-THIRD-PARTY-NOTICES.txt"
+        "licenses/DotNet-THIRD-PARTY-NOTICES.txt",
+        "licenses/DotNet-WindowsDesktop-LICENSE.txt"
       ],
       "source": "https://github.com/dotnet/runtime"
     },
@@ -146,7 +147,7 @@
       "scope": "asset-reader resolved build/runtime dependency; platform-specific notices retained conservatively"
     },
     {
-      "name": "Microsoft.NET.ILLink.Tasks/10.0.12",
+      "name": "Microsoft.NET.ILLink.Tasks/10.0.15",
       "license": [
         {
           "type": "expression",
@@ -155,7 +156,7 @@
       ],
       "notice_files": [
         "licenses/DotNet-LICENSE.txt",
-        "licenses/AssetReader/Microsoft.NET.ILLink.Tasks-10.0.12/THIRD-PARTY-NOTICES.TXT"
+        "licenses/AssetReader/Microsoft.NET.ILLink.Tasks-10.0.15/THIRD-PARTY-NOTICES.TXT"
       ],
       "source_notices_index": "licenses/AssetReader/INDEX.json",
       "scope": "asset-reader resolved build/runtime dependency; platform-specific notices retained conservatively"
@@ -385,11 +386,11 @@
     },
     {
       "name": ".NET asset-reader runtime",
-      "version": "10.0.12",
+      "version": "10.0.15",
       "license": "MIT and bundled third-party terms",
       "notice_files": [
-        "licenses/AssetReader/DotNet10.0.12-LICENSE.TXT",
-        "licenses/AssetReader/DotNet10.0.12-THIRD-PARTY-NOTICES.TXT"
+        "licenses/AssetReader/DotNet10.0.15-LICENSE.TXT",
+        "licenses/AssetReader/DotNet10.0.15-THIRD-PARTY-NOTICES.TXT"
       ],
       "source": "https://github.com/dotnet/runtime"
     }
@@ -397,11 +398,11 @@
   "notice_sha256": {
     "LICENSE": "3a69822ef867bcc7d526e64c5702c497f85f5662f9c9ff02a798c5194a6d5a39",
     "licenses/AssetReader/Blake3-3.0.2/UPSTREAM-LICENSE.txt": "7f7d75677fb85a9a2cb8146e5a96eec2d574654ce54e5c70a820531ece14b073",
-    "licenses/AssetReader/DotNet10.0.12-LICENSE.TXT": "d7a68596ab69b06f51ca278a6545148e4269a9381c26d597c13df5d88e08cf5b",
-    "licenses/AssetReader/DotNet10.0.12-THIRD-PARTY-NOTICES.TXT": "6d15e10a101c6bfff2ab4429ed061bf76c456fc4b23ad6b03e0d0f8377148a21",
+    "licenses/AssetReader/DotNet10.0.15-LICENSE.TXT": "d7a68596ab69b06f51ca278a6545148e4269a9381c26d597c13df5d88e08cf5b",
+    "licenses/AssetReader/DotNet10.0.15-THIRD-PARTY-NOTICES.TXT": "6d15e10a101c6bfff2ab4429ed061bf76c456fc4b23ad6b03e0d0f8377148a21",
     "licenses/AssetReader/K4os.Compression.LZ4-1.3.8/UPSTREAM-LICENSE.txt": "ef5a021fc2ae3658f4ad8d2526c87fb2cf394285f47abfb784cf73a27ffd9522",
     "licenses/AssetReader/KeyValues2-0.8.0/COPYING": "28762bd1e2393dc04904f1153660a3f1388c03f6976a94c765d99876058081cc",
-    "licenses/AssetReader/Microsoft.NET.ILLink.Tasks-10.0.12/THIRD-PARTY-NOTICES.TXT": "6d15e10a101c6bfff2ab4429ed061bf76c456fc4b23ad6b03e0d0f8377148a21",
+    "licenses/AssetReader/Microsoft.NET.ILLink.Tasks-10.0.15/THIRD-PARTY-NOTICES.TXT": "6d15e10a101c6bfff2ab4429ed061bf76c456fc4b23ad6b03e0d0f8377148a21",
     "licenses/AssetReader/SharpGLTF.Core-1.0.6/UPSTREAM-LICENSE.txt": "5e720094b3423cc2c1aef53325f2b99145d45155e36b81adb9063d18a552e469",
     "licenses/AssetReader/SharpGLTF.Runtime-1.0.6/UPSTREAM-LICENSE.txt": "5e720094b3423cc2c1aef53325f2b99145d45155e36b81adb9063d18a552e469",
     "licenses/AssetReader/SharpGLTF.Toolkit-1.0.6/UPSTREAM-LICENSE.txt": "5e720094b3423cc2c1aef53325f2b99145d45155e36b81adb9063d18a552e469",
@@ -424,6 +425,7 @@
     "licenses/AssetReader/ZstdSharp.Port-0.8.8/UPSTREAM-LICENSE.txt": "9a6a7216e532c4ee4f78881d31fb641c27148eb01b2d0e8e3235ffe9a70a662c",
     "licenses/DotNet-LICENSE.txt": "d7a68596ab69b06f51ca278a6545148e4269a9381c26d597c13df5d88e08cf5b",
     "licenses/DotNet-THIRD-PARTY-NOTICES.txt": "6d15e10a101c6bfff2ab4429ed061bf76c456fc4b23ad6b03e0d0f8377148a21",
+    "licenses/DotNet-WindowsDesktop-LICENSE.txt": "a89886665765362eb77e0f8e26602c924520041d1711b2eedc136434fe4d01ab",
     "licenses/Modlock-LICENSE.txt": "1778e3780f31e105eb15a095fd2caac11dea70daf53e5b2b5c7b5200de2264d1",
     "licenses/NPM/@deademx/engine/LICENSE": "c676d5aed3fc0638f74e37e27a167e75eccfb48e151894156358c41096c4e320",
     "licenses/NPM/deadem/LICENSE": "c676d5aed3fc0638f74e37e27a167e75eccfb48e151894156358c41096c4e320",
@@ -432,9 +434,9 @@
     "licenses/NPM/protobufjs/ext/protojson.LICENSE": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
     "licenses/NPM/protobufjs/google/LICENSE": "4ab87e6e3c0c0b78e47c77d49ec10c048f8a519fb8062e6e3217e3e6e9b0c6e9",
     "licenses/NPM/snappyjs/LICENSE": "46964f47c4b0a572739d12620f0acc456618f9d81ed9678e05994998946b31a9",
-    "licenses/Node-LICENSE.txt": "148eacf7863ef4329224a29398623077200a27194aa075569faf4a0a85566ca5",
+    "licenses/Node-LICENSE.txt": "5888dbb9a1d2b18f2c3e6c5f6af1b39de658372b402a0577b002777f14c62ace",
     "licenses/Noto-OFL.txt": "1c05c68c34f9708415aada51f17e1b0092d2cea709bf4a94cd38114f9e73d7d9",
-    "licenses/Pillow-LICENSE.txt": "4f7866a74802c6326f81faff59a56546b6aec2b10b91973e0e9308de95e79857",
+    "licenses/Pillow-LICENSE.txt": "988ffe8ab3480b0f4e9a0ab2702bffd73d9fb6b47198043fb3ba101a62fac236",
     "licenses/Python-LICENSE.txt": "935cf13e19f8c31b497d20b05d73623431a226b230c3599bc30fa3348979bc68"
   },
   "font": {

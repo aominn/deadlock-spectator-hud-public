@@ -4,6 +4,19 @@ var SPEC_RESEARCH_LOGS=false;
 function specBuildingHudTop(topBar){
  return topBar.BHasClass('SpecRosterTeamHeaders')?320:292;
 }
+// Panorama exposes the laid-out bounds in render pixels. Style positions and
+// the companion's bitmap use the host panel's authored coordinates.
+function specViewport(parent){
+ var sx=Number(parent.actualuiscale_x)||1,sy=Number(parent.actualuiscale_y)||sx;
+ var origin=typeof parent.GetPositionWithinWindow==='function'?parent.GetPositionWithinWindow():{x:0,y:0};
+ return {x:origin.x,y:origin.y,sx:sx,sy:sy,
+  width:Number(parent.actuallayoutwidth)/sx,height:Number(parent.actuallayoutheight)/sy};
+}
+function specPanelBox(panel,viewport){
+ var pos=panel.GetPositionWithinWindow();
+ return {x:(pos.x-viewport.x)/viewport.sx,y:(pos.y-viewport.y)/viewport.sy,
+  width:Number(panel.actuallayoutwidth)/viewport.sx,height:Number(panel.actuallayoutheight)/viewport.sy};
+}
 (function(){
 'use strict';
 var normalRestored=false;
@@ -12,7 +25,6 @@ var assets=typeof SpecNativeAssets==='undefined'?{items:{},abilityNames:{}}:Spec
 if(typeof SpecLocale!=='undefined')$.Msg('[SpecLanguage] '+JSON.stringify({language:SpecLocale.language,client:SpecLocale.clientLanguage}));
 var CARD_TOP=156;
 // Native kill bindings remained stale at zero in no-detail replay; do not publish them.
-var KILL_SOURCE_VERIFIED=false;
 // Read-only top-bar icons did not expose not_trained transitions in the tested replay.
 var UNLOCK_SOURCE_VERIFIED=false;
 // Native top-bar lock state is separate from Tier0..3. Verified against controller m_bUltimateTrained.
@@ -21,7 +33,7 @@ function root(){var p=ctx,last=p,n=0;while(p&&n++<30){if(p.BHasClass('spec_mode'
 function spec(){var p=ctx,n=0;while(p&&n++<30){if(p.BHasClass('spec_mode'))return true;p=p.GetParent();}return false;}
 function buildDetailOpen(){for(var p=ctx,i=0;p&&i<30;i++,p=p.GetParent())if(p.BHasClass('wants_scoreboard')||p.BHasClass('gScoreboardOpen'))return true;return false;}
 function inventoryColumns(p,active){var mods=p.FindChildTraverse('PlayerModsContainer');if(!mods)return;var grid=mods.FindChildTraverse('SpecInventoryGrid'),saved=mods._specInventoryParents||[];function restore(){for(var j=0;j<saved.length;j++){var x=saved[j];try{if((!x.node.IsValid||x.node.IsValid())&&(!x.parent.IsValid||x.parent.IsValid())){x.node.SetParent(x.parent);x.node.style.position=x.position||'0px 0px 0px';x.node.style.ignoreParentFlow=x.ignore===true;x.node.style.width=x.width||'fit-children';x.node.style.height=x.height||'fit-children';}}catch(e){}}mods._specInventoryParents=[];mods.SetHasClass('SpecThreeColumnInventory',false);if(grid)grid.visible=false;}if(!active){restore();return;}var items=[];walk(mods,function(n){if(n.paneltype==='CitadelModIcon'&&Number(n.actuallayoutwidth)>0)items.push(n);},0);if(!items.length||items.length>12){restore();return;}if(!grid){grid=$.CreatePanel('Panel',mods,'SpecInventoryGrid');grid.hittest=false;grid.style.width='105px';grid.style.height='140px';grid.style.flowChildren='right-wrap';grid.style.horizontalAlign='center';}for(var i=0;i<items.length;i++){var n=items[i],known=false;for(var j=0;j<saved.length;j++)if(saved[j].node===n){known=true;break;}if(!known)saved.push({node:n,parent:n.GetParent(),position:n.style.position,ignore:n.style.ignoreParentFlow,width:n.style.width,height:n.style.height});if(n.GetParent()!==grid){n.SetParent(grid);n.style.position='0px 0px 0px';n.style.width='52px';n.style.height='52px';n.style.ignoreParentFlow=false;}}mods._specInventoryParents=saved;mods.SetHasClass('SpecThreeColumnInventory',true);grid.visible=true;}
-function detailCardTop(p,detail){if(!detail)return CARD_TOP;try{var n=p.FindChildTraverse('PlayerNameNWContainer');if(!n||Number(n.actuallayoutheight)<160)return null;var a=n.GetPositionWithinWindow(),b=p.GetPositionWithinWindow(),scale=Number(p.actualuiscale_y)||1,ns=Number(n.actualuiscale_y)||scale,end=(a.y-b.y+Number(n.actuallayoutheight)*ns)/scale;return isFinite(end)&&end>=180&&end<820?Math.max(CARD_TOP,Math.ceil(end)+8):null;}catch(e){return null;}}
+function detailCardTop(p,detail){if(!detail)return CARD_TOP;try{var n=p.FindChildTraverse('PlayerNameNWContainer'),scale=Number(p.actualuiscale_y)||1;if(!n||Number(n.actuallayoutheight)/scale<160)return null;var a=n.GetPositionWithinWindow(),b=p.GetPositionWithinWindow(),end=(a.y-b.y+Number(n.actuallayoutheight))/scale;return isFinite(end)&&end>=180&&end<820?Math.max(CARD_TOP,Math.ceil(end)+8):null;}catch(e){return null;}}
 var detailPrevious=null,detailSince=0,detailAuditDone=false,detailRoot=null;
 function detailMode(active){ctx.SetHasClass('SpecBuildDetailsOpen',active);var next=root();if(detailRoot&&detailRoot!==next&&(!detailRoot.IsValid||detailRoot.IsValid()))detailRoot.SetHasClass('SpecBuildDetailsOpen',false);detailRoot=next;detailRoot.SetHasClass('SpecBuildDetailsOpen',active);var hints=detailRoot.FindChildTraverse('minimap_hints');if(hints){if(hints._specDetailVisibility===undefined)hints._specDetailVisibility=hints.style.visibility;hints.style.visibility=active?'collapse':hints._specDetailVisibility;}if(detailPrevious!==active){detailPrevious=active;detailSince=Date.now();detailAuditDone=false;}}
 function detailAudit(active){if(typeof SPEC_RESEARCH_LOGS==='undefined'||!SPEC_RESEARCH_LOGS)return;if(detailAuditDone||Date.now()-detailSince<750||players.length!==12)return;detailAuditDone=true;function rect(n){if(!n)return null;var p=n.GetPositionWithinWindow();return [p.x,p.y,n.actuallayoutwidth,n.actuallayoutheight,Number(n.actualuiscale_x)||1];}for(var i=0;i<players.length;i++){var p=players[i],items=[],columns=[],mods=p.FindChildTraverse('PlayerModsContainer');if(mods)walk(mods,function(n){if(n.paneltype==='CitadelModIcon'&&n.actuallayoutwidth>0)items.push(rect(n));if(n.BHasClass('ModIconColumn'))columns.push(rect(n));},0);var ab=[];for(var j=1;j<=4;j++){var n=p.FindChildTraverse('AbilityButton'+j),images=n?all(n,'ability_image'):[],buttons=n?all(n,'button_container'):[];ab.push({panel:rect(n),image:rect(images[0]),button:rect(buttons[0])});}var grid=p.FindChildTraverse('SpecInventoryGrid'),mirror=[];if(active&&grid&&grid.visible){for(var m=0;m<grid.GetChildCount();m++){var im=grid.GetChild(m);if(im.visible)mirror.push({source:'native:'+im.id,rect:rect(im)});}$.Msg('[SpecInventoryMirror] '+JSON.stringify({clock:previous,hero:state(p).hero,images:mirror}));}$.Msg('[SpecDetailLayout] '+JSON.stringify({clock:previous,open:active,hero:state(p).hero,player:rect(p),details:rect(p.FindChildTraverse('PlayerNameNWContainer')),abilities:ab,items:items,columns:columns,notification_top:detailCardTop(p,active)}));}}
@@ -34,22 +46,50 @@ function integer(s){return /^\d+$/.test(s)?Number(s):-1;}
 function seconds(s){var m=String(s).match(/^(\d+):(\d\d)$/);return m&&Number(m[2])<60?Number(m[1])*60+Number(m[2]):-1;}
 function clean(s){return String(s).replace(/\s/g,'').toLowerCase();}
 function label(parent,id,x,y,width){var p=$.CreatePanel('Label',parent,id);p.hittest=false;p.style.ignoreParentFlow=true;p.style.horizontalAlign='center';p.style.position=x+'px '+y+'px 0px';p.style.width=width+'px';p.style.fontSize='14px';p.style.fontWeight='bold';p.style.color='#eee6cd';p.style.textAlign='center';p.style.backgroundColor='#171915dd';p.style.borderRadius='3px';p.style.padding='2px 4px';p.visible=false;overlays.push(p);return p;}
-var leftBadge,rightBadge,leftKills,rightKills,mid,bridge,objectiveBox;
-function init(){var parent=ctx.GetParent();leftBadge=label(parent,'SpecLeadLeft',-76,20,72);rightBadge=label(parent,'SpecLeadRight',76,20,72);var money=[leftBadge,rightBadge];for(var i=0;i<money.length;i++){money[i].style.backgroundImage='url("s2r://panorama/images/hud/icons/icon_soul.vsvg")';money[i].style.backgroundSize='14px 14px';money[i].style.backgroundRepeat='no-repeat';money[i].style.backgroundPosition='4px center';money[i].style.paddingLeft='20px';money[i].style.fontSize='14px';money[i].style.whiteSpace='nowrap';money[i].style.textOverflow='shrink';}leftKills=label(parent,'SpecKillsLeft',-90,16,52);rightKills=label(parent,'SpecKillsRight',90,16,52);objectiveBox=$.CreatePanel('Panel',parent,'SpecObjectivePanel');objectiveBox.hittest=false;objectiveBox.style.ignoreParentFlow=true;objectiveBox.style.horizontalAlign='right';objectiveBox.style.verticalAlign='bottom';objectiveBox.style.marginRight='16px';objectiveBox.style.marginBottom='440px';objectiveBox.style.width='360px';objectiveBox.style.height='44px';objectiveBox.style.backgroundColor='#171915bb';overlays.push(objectiveBox);mid=objectiveRow(objectiveBox,'SpecMidNext',0,'s2r://panorama/images/minimap/super_neutral_marker_psd.vtex','ミッドボス');bridge=objectiveRow(objectiveBox,'SpecBridgeNext',1,'s2r://panorama/images/hud/modifiers/icon_powerup.vsvg','ブリッジバフ');}
+var leftBadge,rightBadge,mid,bridge,objectiveBox;
+function init(){var parent=ctx.GetParent();leftBadge=label(parent,'SpecLeadLeft',-76,52,72);rightBadge=label(parent,'SpecLeadRight',76,52,72);var money=[leftBadge,rightBadge];for(var i=0;i<money.length;i++){money[i].style.backgroundImage='url("s2r://panorama/images/hud/icons/icon_soul.vsvg")';money[i].style.backgroundSize='14px 14px';money[i].style.backgroundRepeat='no-repeat';money[i].style.backgroundPosition='4px center';money[i].style.paddingLeft='20px';money[i].style.fontSize='14px';money[i].style.whiteSpace='nowrap';money[i].style.textOverflow='shrink';}objectiveBox=$.CreatePanel('Panel',parent,'SpecObjectivePanel');objectiveBox.hittest=false;objectiveBox.style.ignoreParentFlow=true;objectiveBox.style.horizontalAlign='right';objectiveBox.style.verticalAlign='bottom';objectiveBox.style.marginRight='16px';objectiveBox.style.marginBottom='440px';objectiveBox.style.width='360px';objectiveBox.style.height='44px';objectiveBox.style.backgroundColor='#171915bb';overlays.push(objectiveBox);mid=objectiveRow(objectiveBox,'SpecMidNext',0,'s2r://panorama/images/minimap/super_neutral_marker_psd.vtex','ミッドボス');bridge=objectiveRow(objectiveBox,'SpecBridgeNext',1,'s2r://panorama/images/hud/modifiers/icon_powerup.vsvg','ブリッジバフ');}
 function objectiveRow(parent,id,index,icon,title){var row=$.CreatePanel('Panel',parent,id);row.hittest=false;row.style.ignoreParentFlow=true;row.style.horizontalAlign='left';row.style.position=(index*180)+'px 0px 0px';row.style.width='180px';row.style.height='44px';row.style.backgroundImage='url("'+icon+'")';row.style.backgroundSize=id==='SpecMidNext'?'40px 40px':'20px 20px';row.style.backgroundRepeat='no-repeat';row.style.backgroundPosition=id==='SpecMidNext'?'0px center':'12px center';if(index)row.style.borderLeft='1px solid #d6d3c947';row.visible=false;for(var i=0;i<2;i++){var n=$.CreatePanel('Label',row,i?'SpecObjectiveValue':'SpecObjectiveName');n.hittest=false;n.html=false;n.style.ignoreParentFlow=true;n.style.position='48px '+(i?19:4)+'px 0px';n.style.width='124px';n.style.height=i?'24px':'16px';n.style.fontFamily='sans';n.style.fontSize=i?'18px':'12px';n.style.textOverflow='shrink';n.style.fontWeight=i?'semi-bold':'normal';n.style.color='#d6d3c9';n.style.whiteSpace='nowrap';n.style.textAlign='left';if(!i)n.text=typeof SpecLocale==='undefined'?title:SpecLocale.text(title);}return row;}
-// At sub-1x window sizes the root reports pixel dimensions, while authored positions are scaled.
-function smallWindowViewport(parent,scale){
- var divisor=Math.min(1,scale);
- return {width:Number(parent.actuallayoutwidth)/divisor,height:Number(parent.actuallayoutheight)/divisor};
+function objectiveGeometry(map,parent){
+ if(!map||!parent||typeof map.GetPositionWithinWindow!=='function')return null;
+ var viewport=specViewport(parent),box=specPanelBox(map,viewport);
+ var pw=viewport.width,ph=viewport.height,x=box.x,y=box.y-72;
+ // The native minimap is pinned to this edge. Use its measured origin, not
+ // its reported size, which can be in render pixels on a scaled client.
+ var right=pw-28,available=right-x-12;
+ if(![pw,ph,x,y,box.width,box.height].every(isFinite)||box.width<=0||box.width>pw*.5||
+    box.height<=0||box.height>ph*.85||available<216||available>pw*.32||x<pw/2||y<ph*.35||box.y>ph-160)return null;
+ var width=Math.min(360,available);
+ return {x:right-width,y:y,width:width};
 }
-function objectiveGeometry(map,parent){if(!map||!parent||typeof map.GetPositionWithinWindow!=='function')return null;var pos=map.GetPositionWithinWindow(),origin=parent.GetPositionWithinWindow(),scale=Number(parent.actualuiscale_x)||1,ms=Number(map.actualuiscale_x)||scale,w=Number(map.actuallayoutwidth)*ms/scale,h=Number(map.actuallayoutheight)*ms/scale,x=(pos.x-origin.x)/scale,y=(pos.y-origin.y)/scale-72,viewport=smallWindowViewport(parent,scale),pw=viewport.width,ph=viewport.height;if(!isFinite(x)||!isFinite(y)||!isFinite(w)||!isFinite(h)||w<240||w>600||h<200||h>600||x<pw/2||x+w>pw+48||y<ph*.35||y+72+h>ph+48)return null;var width=Math.min(360,w-24);return {x:Math.min(pw,x+w)-width-12,y:y,width:width};}
-function layoutObjectives(){var parent=ctx.GetParent(),maps=all(root(),'HudMinimap'),g=null;for(var i=0;i<maps.length;i++){g=objectiveGeometry(maps[i],parent);if(g)break;}if(!g){objectiveBox.visible=false;return false;}objectiveBox.style.horizontalAlign='left';objectiveBox.style.verticalAlign='top';objectiveBox.style.marginRight='0px';objectiveBox.style.marginBottom='0px';objectiveBox.style.position=g.x+'px '+g.y+'px 0px';objectiveBox.style.width=g.width+'px';var half=g.width/2,rows=[mid,bridge];for(i=0;i<2;i++){rows[i].style.position=(i*half)+'px 0px 0px';rows[i].style.width=half+'px';rows[i].FindChildTraverse('SpecObjectiveName').style.width=(half-54)+'px';rows[i].FindChildTraverse('SpecObjectiveValue').style.width=(half-54)+'px';}return true;}
+function layoutObjectives(){var parent=ctx.GetParent(),maps=all(root(),'HudMinimap'),g=null;for(var i=0;i<maps.length;i++){g=objectiveGeometry(maps[i],parent);if(g)break;}objectiveBox._specBounds=g;if(!g){objectiveBox.visible=false;return false;}objectiveBox.style.horizontalAlign='left';objectiveBox.style.verticalAlign='top';objectiveBox.style.marginRight='0px';objectiveBox.style.marginBottom='0px';objectiveBox.style.position=g.x+'px '+g.y+'px 0px';objectiveBox.style.width=g.width+'px';var half=g.width/2,rows=[mid,bridge];for(i=0;i<2;i++){rows[i].style.position=(i*half)+'px 0px 0px';rows[i].style.width=half+'px';rows[i].FindChildTraverse('SpecObjectiveName').style.width=(half-54)+'px';rows[i].FindChildTraverse('SpecObjectiveValue').style.width=(half-54)+'px';}return true;}
 // Reuse at most12 root-level labels; refresh owners each scan, so obsolete slots cannot survive.
 var nameOwners=[],namePanels=[],rejuvenatorPanels=[];
-function positionName(p,parent,n,offset,maxWidth){var portrait=p.FindChildTraverse('HeroBadge')||p,pos=portrait.GetPositionWithinWindow(),origin=parent.GetPositionWithinWindow(),scale=Number(parent.actualuiscale_x)||1,ps=Number(portrait.actualuiscale_x)||scale,ns=Number(n.actualuiscale_x)||scale,base=p.GetPositionWithinWindow(),center=(pos.x-origin.x+Number(portrait.actuallayoutwidth)*ps/2)/scale,w=Number(n.actuallayoutwidth)*ns/scale;if(!isFinite(w)||w<=0)w=maxWidth;var x=center-w/2,y=(base.y-origin.y)/scale+offset;return isFinite(x)&&isFinite(y)&&w>0&&w<=maxWidth+2&&y>=0?{x:x,y:y,center:center,width:w}:null;}
+function positionName(p,parent,n,offset,maxWidth,baseY){
+ var viewport=specViewport(parent),portrait=specPanelBox(p.FindChildTraverse('HeroBadge')||p,viewport);
+ if(!Number.isFinite(baseY))baseY=specPanelBox(p,viewport).y;
+ var w=Number(n.actuallayoutwidth)/viewport.sx;if(!isFinite(w)||w<=0||w>maxWidth+2)w=maxWidth;
+ var center=portrait.x+portrait.width/2,x=center-w/2,y=baseY+offset;
+ return isFinite(x)&&isFinite(y)&&w>0&&w<=maxWidth+2&&y>=0?{x:x,y:y,center:center,width:w}:null;
+}
 function nameOwnerReady(p){try{if(!p||(p.IsValid&&!p.IsValid())||p.visible===false||!(Number(p.actuallayoutwidth)>=80)||!(Number(p.actuallayoutheight)>0))return false;if(typeof p.IsVisible==='function'&&!p.IsVisible())return false;var b=p.FindChildTraverse('HeroBadge');if(!b||(b.IsValid&&!b.IsValid())||b.visible===false||!(Number(b.actuallayoutwidth)>0)||!(Number(b.actuallayoutheight)>0)||!/^\d+$/.test(String(b.heroid))||String(b.heroid)==='0')return false;if(typeof b.IsVisible==='function'&&!b.IsVisible())return false;return true;}catch(e){return false;}}
 function hideNames(){for(var i=0;i<namePanels.length;i++)if(namePanels[i])namePanels[i].visible=false;}
-function refreshNameOwners(){hideNames();hidePlayerBadges();nameOwners=[];var parent=ctx.GetParent(),seen={};for(var i=0;i<players.length;i++){var p=players[i];if(!nameOwnerReady(p))continue;var g=positionName(p,parent,{actuallayoutwidth:120,actualuiscale_x:parent.actualuiscale_x},-14,120),hero=state(p).hero,pw=Number(parent.actuallayoutwidth);if(!g||g.x<0||g.x+g.width>pw+2||seen[hero])continue;seen[hero]=true;nameOwners.push(p);}if(nameOwners.length>12)nameOwners=[];}
+function refreshNameOwners(){
+ hideNames();hidePlayerBadges();nameOwners=[];
+ var parent=ctx.GetParent(),seen={},bases=[],pw=specViewport(parent).width;
+ for(var i=0;i<players.length;i++){
+  var p=players[i];if(!nameOwnerReady(p))continue;
+  var g=positionName(p,parent,{},-14,120),hero=state(p).hero;
+  if(!g||g.x<0||g.x+g.width>pw+2||seen[hero])continue;
+  seen[hero]=true;nameOwners.push(p);bases.push(g.y+14);
+ }
+ if(nameOwners.length>12){nameOwners=[];return;}
+ // The static roster row is shared. A streak can move its player's portrait,
+ // so use the established row of the other visible players as the vertical anchor.
+ var ordered=bases.slice().sort(function(a,b){return a-b;});
+ var row=ordered[Math.floor((ordered.length-1)/2)];
+ for(var j=0;j<nameOwners.length;j++)
+  nameOwners[j]._specIdentityBaseY=ordered.length===12?row:bases[j];
+}
 var rosterOptions={player:false,hero:true,teamName:false,teamIcon:false},rosterOptionProbes=[],teamHeaders=[];
 function requestRosterOptions(){
  if(rosterOptionProbes.length)return;
@@ -73,6 +113,7 @@ function rosterName(p){
  return name.replace(/[\r\n\t]+/g,' ').trim();
 }
 function heroName(p){
+ p._specIdentityAnchor=null;
  var slot=nameOwners.indexOf(p);if(slot<0||!nameOwnerReady(p))return null;
  var hero=rosterOptions.hero?text(all(p,'HeroName')[0]).replace(/[\r\n]+/g,' '):'',player=rosterOptions.player?rosterName(p):'';
  if(hero.indexOf('{')>=0)hero='';
@@ -81,18 +122,21 @@ function heroName(p){
  if(!n){
   n=$.CreatePanel('Panel',parent,'SpecHeroName'+slot);namePanels[slot]=n;n.hittest=false;
   n.style.ignoreParentFlow=true;n.style.horizontalAlign='left';n.style.verticalAlign='top';
-  n.style.width='120px';n.style.maxWidth='120px';n.style.backgroundColor='#11131355';n.style.borderRadius='0px';n.style.padding='0px';n.style.margin='0px';n.style.overflow='noclip';
+  n.style.width='120px';n.style.maxWidth='120px';n.style.backgroundColor='#11131355';n.style.zIndex='111';n.style.borderRadius='0px';n.style.padding='0px';n.style.margin='0px';n.style.overflow='noclip';
   n._primary=rosterCaption(n,'Caption');n._primary.style.maxWidth='116px';n._primary.style.verticalAlign='top';
   n._secondary=rosterCaption(n,'SecondaryCaption');n._secondary.style.maxWidth='116px';n._secondary.style.verticalAlign='bottom';n._secondary.style.fontSize='10px';
  }
- var caption=player||hero,g=positionName(p,parent,n,twoRows?-26:-14,120);
+ var caption=player||hero,g=positionName(p,parent,n,twoRows?-26:-14,120,p._specIdentityBaseY);
  n.visible=!!caption&&!!g;p._specTwoNameRows=n.visible&&twoRows;p._specPlayerNameShown=n.visible&&!!player;
  n.style.height=twoRows?'26px':'14px';
  n._primary.style.fontSize=player?'13px':'12px';
  n._primary.style.verticalAlign=twoRows?'top':'center';
  if(n._primary.text!==caption)n._primary.text=caption;
  n._secondary.visible=twoRows;if(twoRows&&n._secondary.text!==hero)n._secondary.text=hero;
- if(g)n.style.position=g.x+'px '+g.y+'px 0px';
+ if(g){
+  n.style.position=g.x+'px '+g.y+'px 0px';
+  p._specIdentityAnchor=[g.x,Math.max(0,g.y-16)];
+ }
  return n;
 }
 function teamHeader(side,parent){
@@ -112,7 +156,7 @@ function showTeamHeading(header,side){
  if(!image){
   image=$.CreatePanel('Image',header,'CustomTeamHeading'+mode);images[mode]=image;
   image.hittest=false;image.visible=false;image.style.ignoreParentFlow=true;
-  image.style.width='250px';image.style.height='30px';
+  image.style.width='100%';image.style.height='100%';
   $.RegisterEventHandler('ImageLoaded',image,function(){image._loaded=true;});
   var lang=typeof SpecLocale!=='undefined'&&SpecLocale.language==='ja'?'ja':'en';
   image.SetImage('http://127.0.0.1:49647/team-heading.png?token=spec-debuff-local-8a71&side='+side+'&mode='+mode+'&lang='+lang+'&nonce='+Date.now());
@@ -120,7 +164,7 @@ function showTeamHeading(header,side){
  for(var key in images)images[key].visible=images[key]===image&&image._loaded===true;
  header._stock.visible=image._loaded!==true;
 }
-var teamBans=[],teamBands=[],seriesHeader=null;
+var teamBans=[],seriesHeader=null;
 function updateSeriesHeader(parent,active){
  if(active&&!seriesHeader){
   seriesHeader=$.CreatePanel('Panel',parent,'SpecTournamentHeader');
@@ -130,36 +174,14 @@ function updateSeriesHeader(parent,active){
   seriesHeader.style.backgroundColor='gradient(linear, 0% 0%, 100% 0%, from(#251b12fa), color-stop(0.43, #251b12fa), color-stop(0.5, #1a1c20fa), color-stop(0.57, #172131fa), to(#172131fa))';
   seriesHeader.style.borderBottom='1px solid #927d64';
   var score=$.CreatePanel('Image',seriesHeader,'SpecSeriesScore');
+  score.visible=false;
   score.hittest=false;score.style.horizontalAlign='center';score.style.verticalAlign='top';
   score.style.marginTop='7px';score.style.width='224px';score.style.height='30px';
-  $.RegisterEventHandler('ImageLoaded',score,function(){seriesHeader._loaded=true;});
+  $.RegisterEventHandler('ImageLoaded',score,function(){score.visible=true;});
   score.SetImage('http://127.0.0.1:49647/team-heading.png?token=spec-debuff-local-8a71&side=0&mode=5&lang=en&nonce='+Date.now());
  }
- var enabled=!!(active&&seriesHeader&&seriesHeader._loaded===true);
- if(seriesHeader)seriesHeader.visible=enabled;
- ctx.SetHasClass('SpecTournamentHeaderActive',enabled);
- if(leftBadge){
-  leftBadge.style.position='-76px '+(enabled?52:20)+'px 0px';
-  rightBadge.style.position='76px '+(enabled?52:20)+'px 0px';
- }
- return enabled;
-}
-function showTeamBand(parent,side,screenWidth){
- var band=teamBands[side];
- if(!band){
-  band=$.CreatePanel('Panel',parent,'SpecTeamBand'+side);teamBands[side]=band;
-  band.hittest=false;band.style.ignoreParentFlow=true;
-  band.style.horizontalAlign='left';band.style.verticalAlign='top';band.style.zIndex='1';
-  band.style.height='30px';
-  band.style.backgroundColor=side===0?'#251b12ef':'#172131ef';
-  band.style.borderBottom=side===0?'1px solid #ad824e':'1px solid #607fc0';
- }
- // Reserve the central score area, then reuse its clearance at the outside edges.
- var scoreHalfWidth=112, gap=16;
- var width=Math.floor(screenWidth/2-scoreHalfWidth-gap*2);
- band.style.position=(side===0?gap:screenWidth-gap-width)+'px 7px 0px';
- band.style.width=width+'px';
- band.visible=true;
+ if(seriesHeader)seriesHeader.visible=active;
+ ctx.SetHasClass('SpecTournamentHeaderActive',active);
 }
 function teamBanPanel(parent,side){
  var image=teamBans[side];if(image)return image;
@@ -172,40 +194,69 @@ function teamBanPanel(parent,side){
  return image;
 }
 function updateRosterTeams(active){
- var titles=active&&(rosterOptions.teamName||rosterOptions.teamIcon),enabled=titles;
- var parent=ctx.GetParent(),origin=parent.GetPositionWithinWindow(),scale=Number(parent.actualuiscale_x)||1;
- var tournament=updateSeriesHeader(parent,active),screenWidth=smallWindowViewport(parent,scale).width,compact=Number(parent.actuallayoutwidth)*Math.max(1,scale)<=1440;
+ var titles=active&&(rosterOptions.teamName||rosterOptions.teamIcon);
+ var parent=ctx.GetParent(),viewport=specViewport(parent);
+ updateSeriesHeader(parent,active);
+ var screenWidth=viewport.width,compact=screenWidth*viewport.sx<=1440;
  for(var side=0;side<2;side++){
-  var header=teamHeaders[side],ban=teamBans[side],band=teamBands[side];
-  if(band)band.visible=false;
+  var header=teamHeaders[side],ban=teamBans[side];
   if(header)header.visible=false;
   if(ban)ban.visible=false;
   if(!active)continue;
   var team=ctx.FindChildTraverse(side===0?'TeamFriendly':'TeamEnemy');
   if(!team||Number(team.actuallayoutwidth)<=0)continue;
-  var pos=team.GetPositionWithinWindow();
-  var width=Number(team.actuallayoutwidth)*(Number(team.actualuiscale_x)||scale)/scale;
-  var center=(pos.x-origin.x)/scale+width/2;
-  if(!isFinite(center))continue;
+  var box=specPanelBox(team,viewport),width=box.width,center=box.x+width/2;
+  var min=side===0?12:screenWidth/2+116,max=side===0?screenWidth/2-116:screenWidth-12;
+  if(!isFinite(center)||!isFinite(screenWidth)||max-min<120)continue;
+  if(compact||center<=min||center>=max)center=screenWidth*(side===0?.25:.75);
+  var scale=Math.min(1,(max-min)/(titles?462:200)),banWidth=200*scale,headerWidth=250*scale,gap=12*scale;
+  var headerX=Math.max(side===0?min+banWidth+gap:min,
+   Math.min(side===0?max-headerWidth:max-headerWidth-gap-banWidth,center-headerWidth/2));
   ban=teamBanPanel(parent,side);
-  if(compact)center=screenWidth*(side===0?.25:.75);
-  if(!tournament&&(titles||ban._loaded===true)&&isFinite(screenWidth)&&screenWidth>=640)showTeamBand(parent,side,screenWidth);
   if(ban._loaded===true){
    var outward=titles?(compact?Math.min(240,screenWidth/4-112):Math.min(240,Math.max(0,width/2-110))):0;
-   ban.style.position=(center+(side===0?-outward:outward)-100)+'px 7px 0px';
+   var banMin=titles&&side===1?headerX+headerWidth+gap:min;
+   var banMax=titles&&side===0?headerX-gap:max;
+   var banX=Math.max(banMin,Math.min(banMax-banWidth,center+(side===0?-outward:outward)-banWidth/2));
+   ban.style.width=banWidth+'px';
+   ban.style.height=(30*scale)+'px';
+   ban.style.position=banX+'px '+(7+15*(1-scale))+'px 0px';
    ban.visible=true;
-   enabled=true;
   }
   if(!titles)continue;
   header=teamHeader(side,parent);
+  header.style.width=headerWidth+'px';
+  header.style.height=(30*scale)+'px';
+  header.style.position=headerX+'px '+(7+15*(1-scale))+'px 0px';
   header._icon.visible=rosterOptions.teamIcon;header._icon.style.marginRight=rosterOptions.teamName?'6px':'0px';
-  header._name.visible=rosterOptions.teamName;showTeamHeading(header,side);header.style.position=(center-125)+'px 7px 0px';header.visible=true;
+  header._name.visible=rosterOptions.teamName;
+  header._name.style.maxWidth=Math.min(210,headerWidth-40)+'px';
+  showTeamHeading(header,side);header.visible=true;
  }
- ctx.SetHasClass('SpecRosterTeamHeaders',enabled||tournament);
- ctx.SetHasClass('SpecCompactTeamHeader',!!((enabled||tournament)&&compact));
- var feed=find('EventFeed');if(feed)feed.SetHasClass('SpecRosterTeamHeaders',enabled||tournament);
+ ctx.SetHasClass('SpecRosterTeamHeaders',active);
+ var feed=find('EventFeed'),stats=find('StatList');
+ if(feed)feed.SetHasClass('SpecRosterTeamHeaders',active);
+ var feedHeight=feed?Number(feed.actuallayoutheight)/viewport.sy:0;
+ if(stats){
+  var crowded=active&&feedHeight>106&&feedHeight<640;
+  stats.SetHasClass('SpecCompactStatList',crowded);
+  stats.SetHasClass('SpecTightStatList',crowded&&feedHeight>145);
+ }
 }
-function scanPlayers(){players=[];walk(ctx,function(p){if(p.paneltype==='CitadelHudTopBarPlayer')players.push(p);},0);refreshNameOwners();}
+function scanPlayers(){
+ var next=[];
+ function collect(panel,depth){
+  if(!panel||depth>24)return;
+  if(panel.paneltype==='CitadelHudTopBarPlayer'){
+   next.push(panel);
+   return;
+  }
+  for(var i=0,count=panel.GetChildCount();i<count;i++)collect(panel.GetChild(i),depth+1);
+ }
+ collect(ctx,0);
+ players=next;
+ refreshNameOwners();
+}
 function card(p,index){var id='SpecEventCard'+index,n=p.FindChildTraverse(id);if(!n){n=$.CreatePanel('Panel',p,id);n.hittest=false;n.style.ignoreParentFlow=true;n.style.position='0px '+(CARD_TOP+index*36)+'px 0px';n.style.width='140px';n.style.height='32px';n.style.horizontalAlign='center';n.style.backgroundColor='#191c1bff';n.style.zIndex='100';n.style.border='1px solid #756e56';n.style.borderRadius='0px';var accent=$.CreatePanel('Panel',n,'SpecCategoryAccent');accent.hittest=false;accent.style.ignoreParentFlow=true;accent.style.position='0px 0px 0px';accent.style.width='3px';accent.style.height='100%';var content=$.CreatePanel('Panel',n,'SpecEventContent');content.hittest=false;content.style.ignoreParentFlow=true;content.style.horizontalAlign='center';content.style.verticalAlign='center';content.style.width='fit-children';content.style.maxWidth='124px';content.style.height='18px';content.style.flowChildren='right';var image=$.CreatePanel('Image',content,'SpecEventIcon');image.hittest=false;image.style.width='16px';image.style.height='16px';image.style.marginRight='4px';image.style.verticalAlign='center';var kind=$.CreatePanel('Panel',content,'SpecEventKind');kind.hittest=false;kind.style.width='18px';kind.style.height='18px';kind.style.marginRight='4px';kind.style.verticalAlign='center';kind.style.flowChildren='right';var mark=$.CreatePanel('Image',kind,'SpecEventTierIcon');mark.hittest=false;mark.SetImage('s2r://panorama/images/hud/hero_ability_pip_psd.vtex');mark.style.width='9px';mark.style.height='9px';mark.style.verticalAlign='center';mark.style.washColor='#69e799';var number=$.CreatePanel('Label',kind,'SpecEventTierNumber');number.hittest=false;number.html=false;number.style.width='9px';number.style.height='fit-children';number.style.verticalAlign='center';number.style.fontSize='11px';number.style.transform='translateY(1px)';number.style.fontFamily='sans';number.style.fontWeight='semi-bold';number.style.padding='0px';number.style.margin='0px';number.style.color='#69e799';number.style.textAlign='center';var unlockIcon=$.CreatePanel('Image',kind,'SpecEventUnlockIcon');unlockIcon.hittest=false;unlockIcon.SetImage('s2r://panorama/images/hud/unlock_icon.vsvg');unlockIcon.style.width='14px';unlockIcon.style.height='14px';unlockIcon.style.verticalAlign='center';unlockIcon.style.washColor='#69e799';var area=$.CreatePanel('Panel',content,'SpecEventNameArea');area.hittest=false;area.style.width='fit-children';area.style.maxWidth='104px';area.style.height='18px';var name=$.CreatePanel('Label',area,'SpecEventName');name.hittest=false;name.html=false;name.style.fontSize='11px';name.style.fontFamily='sans';name.style.fontWeight='semi-bold';name.style.whiteSpace='nowrap';name.style.textAlign='center';name.style.color='#f0eee6';name.style.padding='0px';name.style.margin='0px';name.style.width='fit-children';name.style.maxWidth='104px';name.style.height='fit-children';name.style.verticalAlign='center';name.style.textOverflow='shrink';}return n;}
 function validEventImage(e){return typeof e.image==='string'&&(e.kind==='購入'?e.image.indexOf('s2r://panorama/images/items/')===0:e.image.indexOf('s2r://panorama/images/hud/abilities/')===0);}
 
@@ -218,22 +269,91 @@ function advantage(now){leftBadge.visible=false;rightBadge.visible=false;if(now<
 function splitName(name){return [String(name).replace(/[\r\n]+/g,' '),''];}
 function eventColor(e){if(e.kind==='強化'||e.kind==='解放')return '#69e799';if(e.kind!=='購入')return '#b9c3cf';var path=e.image||'';return path.indexOf('/items/weapon/')>=0?'#d9aa53':path.indexOf('/items/vitality/')>=0?'#8fbc67':path.indexOf('/items/spirit/')>=0?'#b599d9':'#a7a7a0';}
 function remember(key){if(purchaseSeen[key])return;purchaseSeen[key]=true;purchaseOrder.push(key);if(purchaseOrder.length>1024)delete purchaseSeen[purchaseOrder.shift()];}
-function teamKills(id){var team=find(id),ps=[];walk(team,function(p){if(p.paneltype==='CitadelHudTopBarPlayer')ps.push(p);},0);if(ps.length!==6)return -1;var sum=0;for(var i=0;i<ps.length;i++){var n=integer(text(all(ps[i],'kills')[0]));if(n<0)return -1;sum+=n;}return sum;}
 function mapSupported(){var p=ctx,n=0;while(p&&n++<30){if(p.BHasClass('dl_midtown'))return true;p=p.GetParent();}return all(root(),'dl_midtown').length>0;}
 function clock(s){s=Math.max(0,Math.floor(s));return Math.floor(s/60)+':'+('0'+s%60).slice(-2);}
 // Verified local default + two Midtown map spawners. This is a schedule, not pickup detection.
 function bridgeSchedule(now){var first=300,interval=300;var next=now<first?first:first+(Math.floor((now-first)/interval)+1)*interval;return {next:next,remaining:next-now,boundary:now>=first&&(now-first)%interval===0};}
-var midbossClock=-1,midbossDeadline=-1;
-function midbossRemaining(now,spawned,timer){
- if(now<midbossClock||now-midbossClock>2||spawned)midbossDeadline=-1;
+var midbossClock=-1,midbossDeadline=-1,midbossNative=-1;
+function midbossRemaining(now,spawned,native){
+ if(now<midbossClock||now-midbossClock>2||spawned)midbossDeadline=midbossNative=-1;
  midbossClock=now;
  if(spawned)return -1;
- var native=timer&&timer.BHasClass('midboss_cooldown')?seconds(text(find('MidbossTimerLabel'))):-1;
- if(native>=0){midbossDeadline=now+native;return native;}
- // The native timer switches to the Rejuvenator state on pickup.
+ // An unchanged native label can be stale in live spectating. Keep its original deadline.
+ if(native>=0&&native!==midbossNative){midbossNative=native;midbossDeadline=now+native;}
  return midbossDeadline>=now?midbossDeadline-now:-1;
 }
-function summary(now){var l=KILL_SOURCE_VERIFIED?teamKills('TeamFriendly'):-1,r=KILL_SOURCE_VERIFIED?teamKills('TeamEnemy'):-1;leftKills.visible=KILL_SOURCE_VERIFIED&&l>=0;rightKills.visible=KILL_SOURCE_VERIFIED&&r>=0;leftKills.text=l>=0?'キル '+l:'';rightKills.text=r>=0?'キル '+r:'';var timer=find('RejuvenatorTimer'),maps=all(root(),'mid_boss'),remain=-1,spawned=false;if(timer)spawned=timer.BHasClass('midboss_available');else for(var i=0;i<maps.length;i++){if(maps[i].actuallayoutwidth>0&&maps[i].BHasClass('midboss_spawned'))spawned=true;}remain=midbossRemaining(now,spawned,timer);mid.visible=spawned||remain>0||maps.length>0;mid.FindChildTraverse('SpecObjectiveValue').text=remain>0?clock(remain):spawned?(typeof SpecLocale==='undefined'?'出現中':SpecLocale.text('出現中')):'—';var nativeLabel=find('MidbossTimerLabel');bridge.visible=mapSupported();if(bridge.visible){var b=bridgeSchedule(now);bridge.FindChildTraverse('SpecObjectiveValue').text=clock(b.boundary?0:b.remaining);}objectiveBox.visible=layoutObjectives()&&(mid.visible||bridge.visible);if(nativeLabel)nativeLabel.style.opacity=objectiveBox.visible&&mid.visible?'0':'1';}
+var midbossArtwork=null,midbossRequest=null,midbossArtworkAt=0,midbossArtworkClock=-1;
+var midbossRequestAt=0,midbossRequestClock=-1,midbossVisualClock=-1;
+
+function removeMidbossImage(image){
+ if(!image)return;
+ image.visible=false;
+ image.DeleteAsync(0);
+}
+
+function updateMidbossImage(now,allow){
+ var label=mid.FindChildTraverse('SpecObjectiveValue'),wall=Date.now();
+ var jumped=now<midbossVisualClock||now-midbossVisualClock>2;
+ midbossVisualClock=now;
+ if(!allow||jumped){
+  removeMidbossImage(midbossArtwork);removeMidbossImage(midbossRequest);
+  midbossArtwork=midbossRequest=null;midbossRequestClock=-1;midbossRequestAt=0;
+ }
+ if(midbossArtwork&&(now-midbossArtworkClock>1||wall-midbossArtworkAt>2600)){
+  removeMidbossImage(midbossArtwork);midbossArtwork=null;
+ }
+ label.visible=!midbossArtwork;
+ if(!allow)return;
+ if(midbossRequest&&(wall-midbossRequestAt>1200||now-midbossRequestClock>1)){
+  removeMidbossImage(midbossRequest);midbossRequest=null;
+ }
+ if(midbossRequest||wall-midbossRequestAt<400||
+    now===midbossRequestClock&&wall-midbossRequestAt<1600)return;
+
+ var image=$.CreatePanel('Image',mid,'SpecMidbossIndexedValue'+wall);
+ midbossRequest=image;midbossRequestClock=now;midbossRequestAt=wall;
+ image.hittest=false;image.visible=false;image.style.ignoreParentFlow=true;
+ image.style.position='48px 19px 0px';image.style.width='56px';image.style.height='24px';
+ $.RegisterEventHandler('ImageLoaded',image,function(){
+  if(midbossRequest!==image)return;
+  midbossRequest=null;
+  if(midbossVisualClock<now||midbossVisualClock-now>1){removeMidbossImage(image);return;}
+  removeMidbossImage(midbossArtwork);midbossArtwork=image;
+  midbossArtworkClock=now;midbossArtworkAt=Date.now();image.visible=true;label.visible=false;
+ });
+ $.RegisterEventHandler('ImageFailedLoad',image,function(){
+  if(midbossRequest!==image)return;
+  midbossRequest=null;removeMidbossImage(image);
+  removeMidbossImage(midbossArtwork);midbossArtwork=null;label.visible=true;
+ });
+ image.SetImage('http://127.0.0.1:49647/midboss.png?token=spec-debuff-local-8a71&clock='+now+'&v='+wall);
+}
+
+function summary(now){
+ var timer=find('RejuvenatorTimer'),nativeLabel=find('MidbossTimerLabel'),maps=all(root(),'mid_boss');
+ var native=timer&&timer.BHasClass('midboss_cooldown')?seconds(text(nativeLabel)):-1;
+ var mapSpawned=false;
+ // The marker container also exists when the boss is absent. Check the native glyph.
+ for(var i=0;i<maps.length;i++){
+  var marker=maps[i],glyph=marker.FindChildTraverse('Spawned');
+  if(!glyph||marker.visible===false||marker.actuallayoutwidth<=0)continue;
+  if(marker.BHasClass('midboss_spawned')&&glyph.visible!==false&&glyph.actuallayoutwidth>0){
+   mapSpawned=true;
+   break;
+  }
+ }
+ // The timer panel can report available before first spawn. Verify it on the minimap.
+ var remain=midbossRemaining(now,false,native);
+ var spawned=remain<=0&&mapSpawned;
+ if(spawned)remain=midbossRemaining(now,true,native);
+ mid.visible=!!timer||remain>0||maps.length>0;
+ mid.FindChildTraverse('SpecObjectiveValue').text=remain>0?clock(remain):spawned?(typeof SpecLocale==='undefined'?'スポーン':SpecLocale.text('スポーン')):'—';
+ bridge.visible=mapSupported();
+ if(bridge.visible){var b=bridgeSchedule(now);bridge.FindChildTraverse('SpecObjectiveValue').text=clock(b.boundary?0:b.remaining);}
+ objectiveBox.visible=layoutObjectives()&&(mid.visible||bridge.visible);
+ updateMidbossImage(now,objectiveBox.visible&&mid.visible&&!spawned&&remain<=0);
+ if(nativeLabel)nativeLabel.style.opacity=objectiveBox.visible&&mid.visible?'0':'1';
+}
 
 function state(p){var key=p.id,s=states[key];var badge=p.FindChildTraverse('HeroBadge'),hero=badge?String(badge.heroid):'';if(!s||s.hero!==hero)s=states[key]={hero:hero,queue:[],level:-1,abilities:[],ready:false};return s;}
 function push(s,kind,name,image,now,tier){s.queue.push({kind:kind,name:name,image:image||'',tier:tier||0,until:now+4});if(s.queue.length>2)s.queue.shift();}
@@ -250,8 +370,9 @@ function renderCards(p,s,now,detail,ready){s.queue=s.queue.filter(function(e){re
 function updateUrn(now){var holders=all(root(),'PlayerIsHoldingIdol'),events=all(root(),'IdolPickedUp');for(var i=0;i<events.length;i++){var ev=events[i];if(seenEvents.indexOf(ev)>=0)continue;seenEvents.push(ev);var name=text(all(ev,'killerInfo')[0]),heroImage=ev.FindChildTraverse('KillerImage'),hero=heroImage?String(heroImage.heroid):'';if(name||(hero&&hero!=='undefined'&&hero!=='0')){pendingName=name;pendingHero=hero;pendingAt=now;}}
  seenEvents=seenEvents.slice(-80);if(now-pendingAt>2){pendingName='';pendingHero='';}if(holders.length!==1){holderName='';holderHero='';holderNode=null;}else{if(holderNode!==holders[0]){holderNode=holders[0];holderSince=now;holderName='';holderHero='';}if((pendingName||pendingHero)&&pendingAt>=holderSince){holderName=pendingName;holderHero=pendingHero;}}var matches=[];for(i=0;i<players.length;i++){var badge=players[i].FindChildTraverse('HeroBadge');if(holderHero&&holderHero!=='undefined'&&holderHero!=='0'&&badge&&String(badge.heroid)===holderHero)matches.push(players[i]);}if(matches.length!==1){matches=[];for(i=0;i<players.length;i++)if(holderName&&clean(text(all(players[i],'PlayerName')[0]))===clean(holderName))matches.push(players[i]);}for(i=0;i<players.length;i++)urnBadge(players[i]).visible=holders.length===1&&matches.length===1&&matches[0]===players[i];}
 function nativeRejuvenatorCount(p){if(!p)return null;var classes=typeof p.GetClasses==='function'?p.GetClasses():null,found=[],i;if(classes){for(i=0;i<classes.length;i++){var m=String(classes[i]).match(/^RejuvCount_(\d+)$/);if(m){var n=Number(m[1]);if(n<0||n>9||!isFinite(n))return null;found.push(n);}}}else for(i=0;i<=9;i++)if(p.BHasClass('RejuvCount_'+i))found.push(i);return found.length===1?found[0]:null;}
-function teamRejuvenatorCounts(active,now){var ids=['RejuvenatorFriendly','RejuvenatorEnemy'];for(var i=0;i<ids.length;i++){var p=find(ids[i]);if(!p)continue;var row=p._specTeamCount;if(!row&&active){var original=all(p,'rejuvIcon')[0];if(!original)continue;row=$.CreatePanel('Panel',p,'SpecTeamRejuvenatorCount');p._specTeamCount=row;row._specOriginal=original;row._specVisibility=original.style.visibility;row.hittest=false;row.style.ignoreParentFlow=true;row.style.horizontalAlign='center';row.style.verticalAlign='bottom';row.style.marginBottom='6px';row.style.width='48px';row.style.height='28px';var icon=$.CreatePanel('Image',row,'SpecTeamRejuvenatorIcon');icon.hittest=false;icon.SetImage('s2r://panorama/images/hud/icons/rejuvenator.vsvg');icon.style.horizontalAlign='left';icon.style.verticalAlign='center';icon.style.width='20px';icon.style.height='20px';icon.style.washColor='#FFCC00';icon.style.imgShadow='0px 0px 3px 2.0 #000000';var label=$.CreatePanel('Label',row,'SpecTeamRejuvenatorNumber');label.hittest=false;label.html=false;label.style.position='22px 0px 0px';label.style.verticalAlign='center';label.style.width='26px';label.style.height='22px';label.style.fontFamily='sans';label.style.fontSize='18px';label.style.fontWeight='semi-bold';label.style.color='#eee6cd';label.style.textShadow='0px 1px 3px #000000ee';label.style.textAlign='left';label.style.whiteSpace='nowrap';label.style.textOverflow='shrink';}if(!row)continue;var count=active?nativeRejuvenatorCount(p):null,known=count!==null;row.visible=active&&known&&count>0;row._specOriginal.style.visibility=active&&known?'collapse':(row._specVisibility===undefined?'':row._specVisibility);var value=row.FindChildTraverse('SpecTeamRejuvenatorNumber');value.text=known?'×'+count:'';var signature=String(active)+'/'+String(count);if(row._specSignature!==signature){row._specSignature=signature;if(typeof SPEC_RESEARCH_LOGS!=='undefined'&&SPEC_RESEARCH_LOGS)$.Msg('[SpecTeamRejuvenatorCount] '+JSON.stringify({clock:clock(now),team:ids[i],count:count,shown:row.visible,native_fallback:!known}));}}}
-function playerRejuvenator(p,now){var slot=nameOwners.indexOf(p);if(slot<0)return null;var parent=ctx.GetParent(),n=rejuvenatorPanels[slot];if(!n){n=$.CreatePanel('Image',parent,'SpecPersonalRejuvenator'+slot);rejuvenatorPanels[slot]=n;overlays.push(n);n.hittest=false;n.SetImage('s2r://panorama/images/hud/icons/rejuvenator.vsvg');n.style.ignoreParentFlow=true;n.style.horizontalAlign='left';n.style.verticalAlign='top';n.style.washColor='#FFCC00';n.style.imgShadow='0px 0px 3px 2.0 #000000';n.style.zIndex='111';}var held=p.BHasClass('HasRejuvenator')||p.BHasClass('HasRebirthAndRejuv'),dead=p.BHasClass('Dead'),pos=p.GetPositionWithinWindow(),origin=parent.GetPositionWithinWindow(),scale=Number(parent.actualuiscale_x)||1,ratio=(Number(p.actualuiscale_x)||scale)/scale,center=(pos.x-origin.x)/scale+Number(p.actuallayoutwidth)*ratio/2,left=center<Number(parent.actuallayoutwidth)/2,x=center+(left?12:-32)*ratio,y=(pos.y-origin.y)/scale+125*ratio,size=20*ratio;var u=p.FindChildTraverse('UltimateStatus');if(u&&Number(u.actuallayoutwidth)>0&&Number(u.actuallayoutheight)>0){var up=u.GetPositionWithinWindow();if(isFinite(up.x)&&isFinite(up.y)){x=(up.x-origin.x)/scale+(left?22:-22)*ratio;y=(up.y-origin.y)/scale;}}var valid=isFinite(x)&&isFinite(y)&&isFinite(size)&&size>0&&size<=88&&x>=0&&x+size<=Number(parent.actuallayoutwidth)&&y>=0&&y+size<420;n.visible=held&&!dead&&valid;if(valid){n.style.position=x+'px '+y+'px 0px';n.style.width=size+'px';n.style.height=size+'px';}var signature=String(held)+'/'+String(dead);if(p._specRejuvenatorState!==signature){p._specRejuvenatorState=signature;var b=p.FindChildTraverse('HeroBadge');$.Msg('[SpecRejuvenatorState] '+JSON.stringify({clock:clock(now),hero:b?String(b.heroid):'',native_has_rejuvenator:p.BHasClass('HasRejuvenator'),native_combined:p.BHasClass('HasRebirthAndRejuv'),dead:dead,shown:n.visible,rect:valid?[x,y,size,size]:null}));}return n;}
+// Center the team count under its team total, leaving space around the native state icon.
+function teamRejuvenatorCounts(active,now){var ids=['RejuvenatorFriendly','RejuvenatorEnemy'];for(var i=0;i<ids.length;i++){var p=find(ids[i]);if(!p)continue;var row=p._specTeamCount;if(!row&&active){var original=all(p,'rejuvIcon')[0];if(!original)continue;row=$.CreatePanel('Panel',p,'SpecTeamRejuvenatorCount');p._specTeamCount=row;row._specOriginal=original;row._specVisibility=original.style.visibility;row.hittest=false;row.style.ignoreParentFlow=true;row.style.horizontalAlign='center';row.style.verticalAlign='bottom';row.style.marginBottom='11px';row.style.width='50px';row.style.height='26px';var icon=$.CreatePanel('Image',row,'SpecTeamRejuvenatorIcon');icon.hittest=false;icon.SetImage('s2r://panorama/images/hud/icons/rejuvenator.vsvg');icon.style.horizontalAlign='left';icon.style.verticalAlign='center';icon.style.width='22px';icon.style.height='22px';icon.style.washColor='#FFCC00';icon.style.imgShadow='0px 0px 3px 2.0 #000000';var label=$.CreatePanel('Label',row,'SpecTeamRejuvenatorNumber');label.hittest=false;label.html=false;label.style.position='25px 0px 0px';label.style.verticalAlign='center';label.style.width='25px';label.style.height='24px';label.style.fontFamily='sans';label.style.fontSize='20px';label.style.fontWeight='semi-bold';label.style.color='#eee6cd';label.style.textShadow='0px 1px 3px #000000ee';label.style.textAlign='left';label.style.whiteSpace='nowrap';label.style.textOverflow='shrink';}if(!row)continue;var count=active?nativeRejuvenatorCount(p):null,known=count!==null;row.visible=active&&known&&count>0;row._specOriginal.style.visibility=active&&known?'collapse':(row._specVisibility===undefined?'':row._specVisibility);var value=row.FindChildTraverse('SpecTeamRejuvenatorNumber');value.text=known?'×'+count:'';var signature=String(active)+'/'+String(count);if(row._specSignature!==signature){row._specSignature=signature;if(typeof SPEC_RESEARCH_LOGS!=='undefined'&&SPEC_RESEARCH_LOGS)$.Msg('[SpecTeamRejuvenatorCount] '+JSON.stringify({clock:clock(now),team:ids[i],count:count,shown:row.visible,native_fallback:!known}));}}}
+function playerRejuvenator(p,now){var slot=nameOwners.indexOf(p);if(slot<0)return null;var parent=ctx.GetParent(),n=rejuvenatorPanels[slot];if(!n){n=$.CreatePanel('Image',parent,'SpecPersonalRejuvenator'+slot);rejuvenatorPanels[slot]=n;overlays.push(n);n.hittest=false;n.SetImage('s2r://panorama/images/hud/icons/rejuvenator.vsvg');n.style.ignoreParentFlow=true;n.style.horizontalAlign='left';n.style.verticalAlign='top';n.style.washColor='#FFCC00';n.style.imgShadow='0px 0px 3px 2.0 #000000';n.style.zIndex='111';}var held=p.BHasClass('HasRejuvenator')||p.BHasClass('HasRebirthAndRejuv'),dead=p.BHasClass('Dead'),view=specViewport(parent),box=specPanelBox(p,view),ratio=(Number(p.actualuiscale_x)||Number(parent.actualuiscale_x)||1)/(Number(parent.actualuiscale_x)||1),center=box.x+box.width/2,left=center<view.width/2,x=center+(left?12:-32)*ratio,y=box.y+125*ratio,size=20*ratio;var u=p.FindChildTraverse('UltimateStatus');if(u&&Number(u.actuallayoutwidth)>0&&Number(u.actuallayoutheight)>0){var up=specPanelBox(u,view);if(isFinite(up.x)&&isFinite(up.y)){x=up.x+(left?22:-22)*ratio;y=up.y;}}var valid=isFinite(x)&&isFinite(y)&&isFinite(size)&&size>0&&size<=88&&x>=0&&x+size<=view.width&&y>=0&&y+size<420;n.visible=held&&!dead&&valid;if(valid){n.style.position=x+'px '+y+'px 0px';n.style.width=size+'px';n.style.height=size+'px';}var signature=String(held)+'/'+String(dead);if(p._specRejuvenatorState!==signature){p._specRejuvenatorState=signature;var b=p.FindChildTraverse('HeroBadge');$.Msg('[SpecRejuvenatorState] '+JSON.stringify({clock:clock(now),hero:b?String(b.heroid):'',native_has_rejuvenator:p.BHasClass('HasRejuvenator'),native_combined:p.BHasClass('HasRebirthAndRejuv'),dead:dead,shown:n.visible,rect:valid?[x,y,size,size]:null}));}return n;}
 function hidePlayerBadges(){for(var i=0;i<rejuvenatorPanels.length;i++)if(rejuvenatorPanels[i])rejuvenatorPanels[i].visible=false;}
 var auraPlacement=null;
 function positionAuraDebuffs(active){
@@ -275,7 +396,7 @@ function positionAuraDebuffs(active){
 }
 function controlHints(active){var ids=['spectator_count','spectate_target','next_player','prev_player','camera_section','CitadelHudDamageReport'];for(var i=0;i<ids.length;i++){var p=root().FindChildTraverse(ids[i]);if(p&&hints.indexOf(p)<0){p._specOldVisibility=p.style.visibility;hints.push(p);}}for(i=0;i<hints.length;i++)hints[i].style.visibility=active?'collapse':(hints[i]._specOldVisibility===undefined?'':hints[i]._specOldVisibility);}
 
-function hide(){midbossClock=midbossDeadline=-1;restoreObjectiveLayout();updateRosterTeams(false);hideNames();hidePlayerBadges();detailMode(false);restoreLowerBuildings();nativeBuildingHealth(false);teamRejuvenatorCounts(false,0);buildingSamples=[];for(var i=0;i<overlays.length;i++)overlays[i].visible=false;for(i=0;i<players.length;i++){var name=players[i].FindChildTraverse('SpecPlayerName');if(name)name.visible=false;var probe=players[i].FindChildTraverse('SpecDebuffProbe');if(probe)probe.visible=false;for(var j=0;j<2;j++){var n=players[i].FindChildTraverse('SpecEventCard'+j);if(n)n.visible=false;}var b=players[i].FindChildTraverse('SpecHeroUrn');if(b)b.visible=false;}controlHints(false);positionAuraDebuffs(false);var nativeLabel=find('MidbossTimerLabel');if(nativeLabel)nativeLabel.style.opacity='1';holderName='';pendingName='';holderNode=null;holderHero='';pendingHero='';previous=-1;seenEvents=[];states={};purchaseSeen={};purchaseOrder=[];}
+function hide(){midbossClock=midbossDeadline=midbossNative=-1;updateMidbossImage(-1,false);restoreObjectiveLayout();updateRosterTeams(false);hideNames();hidePlayerBadges();detailMode(false);restoreLowerBuildings();nativeBuildingHealth(false);teamRejuvenatorCounts(false,0);buildingSamples=[];for(var i=0;i<overlays.length;i++)overlays[i].visible=false;for(i=0;i<players.length;i++){var name=players[i].FindChildTraverse('SpecPlayerName');if(name)name.visible=false;var probe=players[i].FindChildTraverse('SpecDebuffProbe');if(probe)probe.visible=false;for(var j=0;j<2;j++){var n=players[i].FindChildTraverse('SpecEventCard'+j);if(n)n.visible=false;}var b=players[i].FindChildTraverse('SpecHeroUrn');if(b)b.visible=false;}controlHints(false);positionAuraDebuffs(false);var nativeLabel=find('MidbossTimerLabel');if(nativeLabel)nativeLabel.style.opacity='1';holderName='';pendingName='';holderNode=null;holderHero='';pendingHero='';previous=-1;seenEvents=[];states={};purchaseSeen={};purchaseOrder=[];}
 // Only detail-mode transitions poll quickly; status/economy scans retain their original cadence.
 // Bounded geometry audit uses native positions, never guessed text widths.
 var hudGeometrySignature='',hudGeometryCount=0;
@@ -289,10 +410,10 @@ function tick(){try{if(!spec()){if(leftBadge&&!normalRestored){hide();normalRest
 var objectiveStyleRows=[],objectiveLayoutAudit='',riftLayoutAudit='',midbossPanel=null;
 function rememberObjectiveStyles(p,keys){for(var i=0;i<objectiveStyleRows.length;i++)if(objectiveStyleRows[i].panel===p)return;var values={};for(var j=0;j<keys.length;j++)values[keys[j]]=p.style[keys[j]];objectiveStyleRows.push({panel:p,values:values});}
 function restoreObjectiveLayout(){if(midbossPanel)midbossPanel.visible=false;for(var i=0;i<objectiveStyleRows.length;i++){var row=objectiveStyleRows[i],p=row.panel;try{if(p.IsValid&&!p.IsValid())continue;for(var key in row.values)p.style[key]=row.values[key]===undefined?'':row.values[key];}catch(e){}}objectiveStyleRows=[];objectiveLayoutAudit='';riftLayoutAudit='';}
-function objectiveRect(p){if(!p||typeof p.GetPositionWithinWindow!=='function')return null;var pos=p.GetPositionWithinWindow(),sx=Number(p.actualuiscale_x)||1,sy=Number(p.actualuiscale_y)||sx,w=Number(p.actuallayoutwidth)*sx,h=Number(p.actuallayoutheight)*sy;return isFinite(pos.x)&&isFinite(pos.y)&&w>0&&h>0?[pos.x,pos.y,w,h]:null;}
-function midbossGeometry(width){var scale=Math.min(1,width/1920),w=220*scale;return {x:(width-w)/2,y:ctx.BHasClass('SpecTournamentHeaderActive')?182:150,width:w,height:24};}
+function objectiveRect(p){if(!p||typeof p.GetPositionWithinWindow!=='function')return null;var pos=p.GetPositionWithinWindow(),w=Number(p.actuallayoutwidth),h=Number(p.actuallayoutheight);return isFinite(pos.x)&&isFinite(pos.y)&&w>0&&h>0?[pos.x,pos.y,w,h]:null;}
+function midbossGeometry(width){var scale=Math.min(1,width/1920),w=220*scale;return {x:(width-w)/2,y:182,width:w,height:24};}
 function midbossGauge(parent){if(midbossPanel&&(!midbossPanel.IsValid||midbossPanel.IsValid()))return midbossPanel;var n=$.CreatePanel('Panel',parent,'SpecMidbossHP');n.hittest=false;n.style.ignoreParentFlow=true;n.style.horizontalAlign='left';n.style.verticalAlign='top';n.style.height='24px';n.style.backgroundColor='#171b18ee';n.style.border='1px solid #758a79';n.style.borderRadius='3px';n.style.overflow='clip';var fill=$.CreatePanel('Panel',n,'Fill');fill.hittest=false;fill.style.height='100%';fill.style.backgroundColor='#587967';var value=$.CreatePanel('Label',n,'Value');value.hittest=false;value.style.ignoreParentFlow=true;value.style.horizontalAlign='center';value.style.verticalAlign='center';value.style.width='100%';value.style.textAlign='center';value.style.fontFamily='sans';value.style.fontWeight='bold';value.style.fontSize='13px';value.style.color='#f1f0e8';value.style.whiteSpace='nowrap';value.style.textShadow='0px 1px 2px #000000';n.visible=false;overlays.push(n);midbossPanel=n;return n;}
-function nativeObjectiveLayout(now){var host=ctx.GetParent(),width=Number(host.actuallayoutwidth),neutral=find('team_neutral_container'),cards=[];
+function nativeObjectiveLayout(now){var host=ctx.GetParent(),width=specViewport(host).width,neutral=find('team_neutral_container'),cards=[];
  for(var i=0;i<players.length;i++)for(var j=0;j<2;j++){var n=players[i].FindChildTraverse('SpecEventCard'+j),box=n&&n.visible===true?objectiveRect(n):null;if(box){cards.push(box);}}
  var boss=null,nodes=all(neutral,'objective');for(i=0;i<nodes.length;i++)if(nodes[i].BHasClass('is_mid')&&nodes[i].BHasClass('is_active')&&!nodes[i].BHasClass('is_dead')){boss=nodes[i];break;}
  var fraction=boss?healthFraction(boss.FindChildTraverse('healthbar_progress')):null,g=midbossGeometry(width),panel=midbossGauge(host);panel.visible=isFinite(width)&&width>=960&&fraction!==null&&fraction>0;
@@ -317,13 +438,13 @@ function buildingTitle(name,kind){if(typeof SpecLocale!=='undefined'&&!SpecLocal
 function buildingAudit(rows,stamp,now){if(typeof SPEC_RESEARCH_LOGS==='undefined'||!SPEC_RESEARCH_LOGS)return;if(stamp-buildingAuditAt<2)return;buildingAuditAt=stamp;var signature=JSON.stringify(rows);if(signature===buildingAuditSignature)return;buildingAuditSignature=signature;for(var i=0;i<rows.length;i++)$.Msg('[SpecBuildingState] '+JSON.stringify({clock:clock(now),index:i,count:rows.length,row:rows[i],limits_per_team:{tower:3,core:3}}));}
 var lowerBuildingRows=[],gridAuditKey='',gridAuditAt=0,towerAuditKey='';
 function restoreLowerBuildings(){lowerBuildingRows=[];}
-function layoutLowerBuildings(){var parent=ctx.GetParent(),pw=Number(parent.actuallayoutwidth);if(!isFinite(pw)||pw<960||pw>7680)return;var counts={team_friendly_container:{tower:0,core:0,shrine:0},team_enemy_container:{tower:0,core:0,shrine:0}},rects=[],scale=Math.min(1,pw/1920),top=specBuildingHudTop(ctx);
+function layoutLowerBuildings(){var parent=ctx.GetParent(),viewport=specViewport(parent),pw=viewport.width;if(!isFinite(pw)||pw<960||pw>7680)return;var counts={team_friendly_container:{tower:0,core:0,shrine:0},team_enemy_container:{tower:0,core:0,shrine:0}},rects=[],scale=Math.min(1,pw/1920),top=specBuildingHudTop(ctx);
  for(var i=0;i<lowerBuildingRows.length;i++){var row=lowerBuildingRows[i],p=row.panel,left=row.side==='team_friendly_container',core=row.core===true,group=core?'core':'tower',slot=core?counts[row.side][group]++:row.slot,w=(core?300:210)*scale,h=(core?34:32)*scale,x=left?16:pw-16-w,y=top+slot*40*scale;
   if(!core&&slot!==0&&slot!==1&&slot!==2){p.visible=false;continue;}
   if(!core&&row.column===1)x+=left?218*scale:-218*scale;
-  if(core){var team=find(left?'TeamFriendly':'TeamEnemy'),center=pw*(left?.225:.775);if(team&&typeof team.GetPositionWithinWindow==='function'&&typeof parent.GetPositionWithinWindow==='function'){var tp=team.GetPositionWithinWindow(),pp=parent.GetPositionWithinWindow(),ps=Number(parent.actualuiscale_x)||1,ts=Number(team.actualuiscale_x)||ps,tw=Number(team.actuallayoutwidth)*ts/ps,c=(tp.x-pp.x)/ps+tw/2;if(isFinite(c)&&tw>0&&tw<pw*.6&&c>pw*(left?.12:.62)&&c<pw*(left?.38:.88))center=c;}x=center-w/2;if(row.kind==='shrine'){var column=counts[row.side].shrine++;w=220*scale;h=30*scale;var span=448*scale,start=center-span/2;start=left?Math.max(start,16+232*scale):Math.min(start,pw-16-232*scale-span);x=start+column*228*scale;y=top;}else if(row.kind==='patron'||row.kind==='patron_weakened')y=top+40*scale;}
+  if(core){var team=find(left?'TeamFriendly':'TeamEnemy'),center=pw*(left?.225:.775);if(team&&typeof team.GetPositionWithinWindow==='function'&&typeof parent.GetPositionWithinWindow==='function'){var box=specPanelBox(team,viewport),tw=box.width,c=box.x+tw/2;if(isFinite(c)&&tw>0&&tw<pw*.6&&c>pw*(left?.12:.62)&&c<pw*(left?.38:.88))center=c;}x=center-w/2;if(row.kind==='shrine'){var column=counts[row.side].shrine++;w=220*scale;h=30*scale;var span=448*scale,start=center-span/2;start=left?Math.max(start,16+232*scale):Math.min(start,pw-16-232*scale-span);x=start+column*228*scale;y=top;}else if(row.kind==='patron'||row.kind==='patron_weakened')y=top+40*scale;}
   p.style.horizontalAlign='left';p.style.marginLeft='0px';p.style.marginRight='0px';p.style.position=x+'px '+y+'px 0px';p.style.width=w+'px';p.style.height=h+'px';var icon=p.FindChildTraverse('Icon'),gauge=p.FindChildTraverse('Gauge'),title=p.FindChildTraverse('Value');var fill=p.FindChildTraverse('Fill'),lane=p.FindChildTraverse('Lane'),iconSize=core?h-2:24*scale,iconX=core?1:4*scale,contentX=core?h+2:40*scale,contentWidth=w-contentX-4*scale;if(icon){icon.style.position=iconX+'px '+(core?1:(h-iconSize)/2)+'px 0px';icon.style.width=iconSize+'px';icon.style.height=iconSize+'px';}if(gauge){gauge.style.position=contentX+'px 0px 0px';gauge.style.width=(core?w-h-4:contentWidth)+'px';gauge.style.height=(h-2)+'px';}if(fill){fill.style.position='0px 0px 0px';fill.style.height='100%';}if(title){title.style.fontFamily='07TetsubinGothic';title.style.fontWeight='normal';title.style.textShadow='0px 1px 0px #000000c8';title.style.width=(core?w-h-6:contentWidth)+'px';title.style.height=(core?h-2:20*scale)+'px';title.style.position=core?'0px 3px 0px':'0px '+13*scale+'px 0px';title.style.fontSize=Math.round(14*scale)+'px';}if(lane){lane.style.fontFamily='Noto Sans JP';lane.style.fontWeight='normal';lane.style.color='#ddd8cd';lane.style.backgroundColor='#00000000';lane.style.textShadow='0px 1px 1px #00000080';lane.visible=!core;lane.style.position='0px '+1*scale+'px 0px';lane.style.width=contentWidth+'px';lane.style.height=12*scale+'px';lane.style.fontSize=Math.round(10*scale)+'px';}if(!core){var laneBox=p.FindChildTraverse('LaneBox'),titleBox=p.FindChildTraverse('TitleBox'),captionBoxes=[laneBox,titleBox],captions=[lane,title];for(var captionIndex=0;captionIndex<2;captionIndex++){var holder=captionBoxes[captionIndex],caption=captions[captionIndex];if(!holder||!caption)continue;holder.style.overflow='noclip';var laneInset=captionIndex?0:4*scale,laneTop=typeof SpecLocale==='undefined'||SpecLocale.japanese?5:3;holder.style.position=laneInset+'px '+(captionIndex?14:laneTop)*scale+'px 0px';holder.style.width=(contentWidth-laneInset)+'px';holder.style.height=(captionIndex?18:10)*scale+'px';caption.style.position='0px 0px 0px';caption.style.width='fit-children';caption.style.maxWidth=contentWidth+'px';caption.style.height=(captionIndex?24:18)*scale+'px';caption.style.textOverflow='ellipsis';caption.style.horizontalAlign=captionIndex?'center':'left';caption.style.verticalAlign='center';caption.style.margin='0px';caption.style.padding='0px';}}if(core&&title){var coreTitleBox=p.FindChildTraverse('TitleBox');if(coreTitleBox){coreTitleBox.style.overflow='noclip';coreTitleBox.style.position='0px '+5*scale+'px 0px';coreTitleBox.style.width=(w-h-6)+'px';coreTitleBox.style.height=(h-2)+'px';title.style.position='0px 0px 0px';title.style.width='fit-children';title.style.maxWidth=(w-h-6)+'px';title.style.height=24*scale+'px';title.style.textOverflow='ellipsis';title.style.horizontalAlign='center';title.style.verticalAlign='center';title.style.margin='0px';title.style.padding='0px';}}rects.push({team:row.side,group:group,kind:row.kind||group,slot:core?-1:slot,column:core?0:row.column||0,x:x,y:y,width:w,height:h});}
- var key=JSON.stringify(rects),wall=Date.now();if(key!==gridAuditKey){gridAuditKey=key;if(typeof SPEC_RESEARCH_LOGS!=='undefined'&&SPEC_RESEARCH_LOGS)$.Msg('[SpecObjectiveGrid] '+JSON.stringify({schema:2,clock:clock(previous),columns:5,shrine_columns:2,max_rows:3,separate_core:true,bars:rects}));}var compact=rects.filter(function(row){return row.group==='tower';}).map(function(row){return {group:'tower',team:row.team,kind:row.kind,slot:row.slot};}),towerKey=JSON.stringify(compact);if(towerKey!==towerAuditKey||wall-gridAuditAt>=1000){towerAuditKey=towerKey;gridAuditAt=wall;$.Msg('[SpecTowerLayout] '+JSON.stringify({schema:2,clock:clock(previous),columns:5,bars:compact}));}
+ if(typeof SPEC_RESEARCH_LOGS!=='undefined'&&SPEC_RESEARCH_LOGS){var key=JSON.stringify(rects);if(key!==gridAuditKey){gridAuditKey=key;$.Msg('[SpecObjectiveGrid] '+JSON.stringify({schema:2,clock:clock(previous),columns:5,shrine_columns:2,max_rows:3,separate_core:true,bars:rects}));}}var wall=Date.now(),compact=rects.filter(function(row){return row.group==='tower';}).map(function(row){return {group:'tower',team:row.team,kind:row.kind,slot:row.slot};}),towerKey=JSON.stringify(compact);if(towerKey!==towerAuditKey||wall-gridAuditAt>=1000){towerAuditKey=towerKey;gridAuditAt=wall;$.Msg('[SpecTowerLayout] '+JSON.stringify({schema:2,clock:clock(previous),columns:5,bars:compact}));}
 }
 function buildingReceipt(sample,fraction,damaged,stamp,baseline){
  var hit=sample?sample.lastHit:-1;
@@ -361,16 +482,31 @@ function make(index){var image=$.CreatePanel('Image',parent,'SpecDebuffFrame'+in
 $.RegisterEventHandler('ImageLoaded',image,function(){if(index!==pending)return;pending=-1;if(!active||!spec()||Date.now()<guardUntil){image.visible=false;return;}if(front>=0&&front!==index)images[front].visible=false;front=index;lastReady=Date.now();image.visible=true;});
 $.RegisterEventHandler('ImageFailedLoad',image,function(){if(index===pending)pending=-1;if(index!==front)image.visible=false;});}
 make(0);make(1);
-function moneyMeta(p){var n=p.FindChildTraverse('SoulsValue');if(!n)return null;var c=p._specNativeMoney,node=c&&c.front>=0?c.images[c.front]:c&&c.state==='unknown'?c.fallback:n;if(typeof node.GetPositionWithinWindow!=='function')return null;var pos=node.GetPositionWithinWindow(),scale=Number(node.actualuiscale_x)||1;return {total:String(n.text||'').replace(/<[^>]*>/g,''),rect:[pos.x,pos.y,Number(node.actuallayoutwidth)*scale,Number(node.actuallayoutheight)*scale],dead:p.BHasClass('Dead')};}
-function visibleCards(p){var result=[];for(var j=0;j<2;j++){var n=p.FindChildTraverse('SpecEventCard'+j);if(!n||n.visible!==true||typeof n.GetPositionWithinWindow!=='function')continue;var pos=n.GetPositionWithinWindow(),width=Number(n.actuallayoutwidth),height=Number(n.actuallayoutheight);if(isFinite(pos.x)&&isFinite(pos.y)&&width>0&&height>0)result.push([pos.x,pos.y,width,height]);}return result;}
+function moneyMeta(p,viewport){var n=p.FindChildTraverse('SoulsValue');if(!n)return null;var c=p._specNativeMoney,node=c&&c.front>=0?c.images[c.front]:c&&c.state==='unknown'?c.fallback:n;if(typeof node.GetPositionWithinWindow!=='function')return null;var b=specPanelBox(node,viewport);return {total:String(n.text||'').replace(/<[^>]*>/g,''),rect:[b.x,b.y,b.width,b.height],dead:p.BHasClass('Dead')};}
+function visibleCards(p,viewport){var result=[];for(var j=0;j<2;j++){var n=p.FindChildTraverse('SpecEventCard'+j);if(!n||n.visible!==true||typeof n.GetPositionWithinWindow!=='function')continue;var b=specPanelBox(n,viewport);if([b.x,b.y,b.width,b.height].every(isFinite)&&b.width>0&&b.height>0)result.push([b.x,b.y,b.width,b.height]);}return result;}
 function tick(){try{
 var wall=Date.now(),p=spec()?ctx.FindChildTraverse('GameTime'):null,clock=p?String(p.text):'',m=clock.match(/^(\d+):(\d\d)$/);if(!m&&postgame()&&previous>=0){clock=Math.floor(previous/60)+':'+String(previous%60).replace(/^(\d)$/,'0$1');m=clock.match(/^(\d+):(\d\d)$/);}active=spec()&&!!m&&Number(m[2])<60;
 if(!active){hide();front=-1;pending=-1;lastReady=0;previous=-1;$.Schedule(0.5,tick);return;}
 var now=Number(m[1])*60+Number(m[2]);if(previous<0||now<previous||now-previous>2){guardUntil=wall+2000;hide();front=-1;lastReady=0;}previous=now;
-var ps=ctx.FindChildrenWithClassTraverse('SoulsValue'),out=[],seen={};
-for(var i=0;i<ps.length;i++){if(ps[i].id!=='SoulsValue')continue;var x=ps[i].GetParent();while(x&&x.paneltype!=='CitadelHudTopBarPlayer')x=x.GetParent();if(x&&x.actuallayoutwidth>=80){var b=x.FindChildTraverse('HeroBadge'),hero=b?String(b.heroid):'',pos=x.GetPositionWithinWindow();if(hero&&!seen[hero]&&isFinite(pos.x)&&isFinite(pos.y)){seen[hero]=true;var labels=x.FindChildrenWithClassTraverse('HeroName');out.push({hero:hero,name:labels.length?String(labels[0].text):'',pos:pos,width:x.actuallayoutwidth,scale:x.actualuiscale_x,cards:visibleCards(x),notice_top:x._specNoticeTop,two_name_rows:x._specTwoNameRows===true,detail:!!x._specDetailOpen,money:moneyMeta(x)});}}}
+var viewport=specViewport(parent),ps=ctx.FindChildrenWithClassTraverse('SoulsValue'),out=[],seen={};
+for(var i=0;i<ps.length;i++){
+ if(ps[i].id!=='SoulsValue')continue;
+ var player=ps[i].GetParent();
+ while(player&&player.paneltype!=='CitadelHudTopBarPlayer')player=player.GetParent();
+ if(!player||player.actuallayoutwidth<80)continue;
+ var badge=player.FindChildTraverse('HeroBadge'),hero=badge?String(badge.heroid):'';
+ var pos=specPanelBox(player,viewport);
+ if(!hero||seen[hero]||!isFinite(pos.x)||!isFinite(pos.y))continue;
+ var portrait=specPanelBox(badge,viewport),labels=player.FindChildrenWithClassTraverse('HeroName');
+ seen[hero]=true;
+ out.push({hero:hero,name:labels.length?String(labels[0].text):'',pos:{x:pos.x,y:pos.y},
+  width:pos.width,scale:(Number(player.actualuiscale_y)||viewport.sy)/viewport.sy,
+  portrait:[portrait.x,portrait.y,portrait.width,portrait.height],cards:visibleCards(player,viewport),
+  notice_top:player._specNoticeTop,two_name_rows:player._specTwoNameRows===true,
+  identity_anchor:player._specIdentityAnchor,detail:!!player._specDetailOpen,money:moneyMeta(player,viewport)});
+}
 if(out.length!==12||wall<guardUntil||wall-lastReady>3000)hide();
-if(out.length===12){var state={time:clock,postgame:postgame(),players:out,width:parent.actuallayoutwidth,language:typeof SpecLocale==='undefined'?'ja':SpecLocale.language};if(wall-lastHeartbeat>=500){$.Msg('[SpecDebuffHeartbeat] '+JSON.stringify({time:clock,heroes:out.map(function(p){return p.hero;})}));lastHeartbeat=wall;}if(pending<0||wall-pendingSince>=1500){var back=front===0?1:0;pending=back;pendingSince=wall;images[back].visible=false;images[back].style.height=out.some(function(p){return p.detail===true;})?'900px':'420px';images[back].SetImage('http://127.0.0.1:49647/frame.png?token=spec-debuff-local-8a71&seq='+(seq++)+'&state='+encodeURIComponent(JSON.stringify(state)));}}
+if(out.length===12){var state={time:clock,postgame:postgame(),players:out,width:Math.round(viewport.width),language:typeof SpecLocale==='undefined'?'ja':SpecLocale.language};if(wall-lastHeartbeat>=500){$.Msg('[SpecDebuffHeartbeat] '+JSON.stringify({time:clock,heroes:out.map(function(p){return p.hero;})}));lastHeartbeat=wall;}if(pending<0||wall-pendingSince>=1500){var back=front===0?1:0;pending=back;pendingSince=wall;images[back].visible=false;images[back].style.height=out.some(function(p){return p.detail===true;})?'900px':'420px';images[back].SetImage('http://127.0.0.1:49647/frame.png?token=spec-debuff-local-8a71&seq='+(seq++)+'&state='+encodeURIComponent(JSON.stringify(state)));}}
 }catch(e){hide();$.Msg('[SpecDebuffError] '+String(e));}$.Schedule(active?0.016:0.5,tick);
 }$.Schedule(1,tick);
 })();
@@ -422,13 +558,13 @@ function tick(){try{
 (function(){'use strict';var ctx=$.GetContextPanel(),parent=ctx.GetParent(),image=null,guardian=null,active=false,serial=0;
 var hpFront=-1,hpPending=-1,hpStarted=0,hpReady=0,hpPrevious=-1;
 function statusGeometry(w,h,mapX){var width=240,x=(isFinite(mapX)?mapX:w*.8)-width-16;return {x:Math.max(0,Math.min(w-width,x)),y:Math.max(0,h-96),width:width,height:40};}
-// Reposition the native pause panel with the existing bottom-status geometry.
+// Leave a full row below the pause notice for the native extra ability slots.
 var pauseNode=null,pauseStyle=null;
 function pauseLayout(g){
  if(pauseNode&&pauseNode.IsValid&&!pauseNode.IsValid()){pauseNode=null;pauseStyle=null;}
  if(!g){if(pauseNode&&pauseStyle){for(var k in pauseStyle)pauseNode.style[k]=pauseStyle[k];}pauseNode=null;pauseStyle=null;return;}
  if(!pauseNode){var r=ctx;for(var i=0;r&&i<30&&!r.BHasClass('spec_mode');i++)r=r.GetParent();var n=r&&r.FindChildTraverse&&r.FindChildTraverse('PausedContainer');for(i=0;n&&i<8&&n.paneltype!=='CitadelPaused';i++)n=n.GetParent();if(!n||n.paneltype!=='CitadelPaused')return;pauseNode=n;pauseStyle={};var keys=['horizontalAlign','verticalAlign','marginTop','marginBottom','marginLeft','marginRight','position','ignoreParentFlow'];for(i=0;i<keys.length;i++)pauseStyle[keys[i]]=n.style[keys[i]];}
- pauseNode.style.horizontalAlign='left';pauseNode.style.verticalAlign='top';pauseNode.style.marginTop='0px';pauseNode.style.marginBottom='0px';pauseNode.style.marginLeft='0px';pauseNode.style.marginRight='0px';pauseNode.style.ignoreParentFlow=true;pauseNode.style.position=g.x+'px '+Math.max(0,g.y-48)+'px 0px';
+ pauseNode.style.horizontalAlign='left';pauseNode.style.verticalAlign='top';pauseNode.style.marginTop='0px';pauseNode.style.marginBottom='0px';pauseNode.style.marginLeft='0px';pauseNode.style.marginRight='0px';pauseNode.style.ignoreParentFlow=true;pauseNode.style.position=g.x+'px '+Math.max(0,g.y-96)+'px 0px';
 }
 function spec(){for(var p=ctx,i=0;p&&i<30;i++,p=p.GetParent())if(p.BHasClass('spec_mode'))return true;return false;}
 function hpClock(){var p=ctx.FindChildTraverse('GameTime'),m=p&&String(p.text||'').match(/^(\d+):([0-5]\d)$/);return m?Number(m[1])*60+Number(m[2]):-1;}
@@ -441,7 +577,7 @@ function hpTick(w){var wall=Date.now(),clock=hpClock();if(clock<0||hpPrevious>=0
  if(!guardian)guardian=[hpCreate(0),hpCreate(1)];var top=specBuildingHudTop(ctx);for(var i=0;i<guardian.length;i++){guardian[i].style.width=w+'px';guardian[i].style.position='0px '+top+'px 0px';}
  if(hpReady&&wall-hpReady>=2000)hpHide(false);if(hpPending>=0&&wall-hpStarted<1500)return;hpPending=hpFront===0?1:0;hpStarted=wall;var p=guardian[hpPending];p.visible=false;p._specClock=clock;p.SetImage('http://127.0.0.1:49647/guardian.png?token=spec-debuff-local-8a71&width='+w+'&seq='+serial);}
 function tick(){try{active=spec();if(!active){pauseLayout(null);if(image)image.visible=false;hpHide(true);hpPrevious=-1;$.Schedule(.5,tick);return;}if(!image){image=$.CreatePanel('Image',parent,'SpecBottomStatus');image.hittest=false;image.style.ignoreParentFlow=true;image.style.horizontalAlign='left';image.style.verticalAlign='top';image.style.zIndex='110';$.RegisterEventHandler('ImageLoaded',image,function(){image.visible=active&&spec();});$.RegisterEventHandler('ImageFailedLoad',image,function(){image.visible=false;});}
- var w=Number(parent.actuallayoutwidth),h=Number(parent.actuallayoutheight),origin=parent.GetPositionWithinWindow(),scale=Number(parent.actualuiscale_x)||1,maps=parent.FindChildrenWithClassTraverse('HudMinimap'),mx=NaN;for(var i=0;i<maps.length;i++)if(maps[i].actuallayoutwidth>200){mx=(maps[i].GetPositionWithinWindow().x-origin.x)/scale;break;}
+ var viewport=specViewport(parent),w=viewport.width,h=viewport.height,maps=parent.FindChildrenWithClassTraverse('HudMinimap'),mx=NaN;for(var i=0;i<maps.length;i++)if(maps[i].visible!==false&&maps[i].actuallayoutwidth>200){mx=specPanelBox(maps[i],viewport).x;break;}
  if(w>=640&&h>=420){hpTick(w);var g=statusGeometry(w,h,mx);pauseLayout(g);image.style.position=g.x+'px '+g.y+'px 0px';image.style.width=g.width+'px';image.style.height=g.height+'px';image.SetImage('http://127.0.0.1:49647/status.png?token=spec-debuff-local-8a71&seq='+(serial++));}}
  catch(e){if(image)image.visible=false;hpHide(true);}$.Schedule(.5,tick);}$.Schedule(1,tick);
 })();
@@ -486,7 +622,7 @@ if(!canHold(c,wall))unknown(c);else if(wall-c.ready>750)hold(c,wall);
 if(c.pending>=0&&wall-c.started<=1500)continue;if(c.pending>=0){metrics.timeouts++;c.pending=-1;hold(c,wall);}if(wall<c.next)continue;
 var back=c.front===0?1:0;c.pending=back;c.started=wall;c.requested=now;c.total=raw(c.original);c.next=wall+500;c.images[back].style.visibility='collapse';metrics.requests++;
 c.images[back].SetImage('http://127.0.0.1:49647/money.png?token=spec-debuff-local-8a71&hero='+encodeURIComponent(String(badge.heroid))+'&clock='+encodeURIComponent(clock)+'&total='+encodeURIComponent(c.total)+'&tone='+nativeTone(c.player)+'&seq='+(seq++));}
-if(wall-lastReport>=2000){var states={fresh:0,held:0,frozen:0,ended:0,unknown:0};for(var i=0;i<players.length;i++){var c=players[i]._specNativeMoney;if(c&&states[c.state]!==undefined)states[c.state]++;}if(typeof SPEC_RESEARCH_LOGS!=='undefined'&&SPEC_RESEARCH_LOGS)$.Msg('[SpecMoneyTransport] '+JSON.stringify({clock:clock,states:states,counters:metrics}));lastReport=wall;}
+if(typeof SPEC_RESEARCH_LOGS!=='undefined'&&SPEC_RESEARCH_LOGS&&wall-lastReport>=2000){var states={fresh:0,held:0,frozen:0,ended:0,unknown:0};for(var i=0;i<players.length;i++){var c=players[i]._specNativeMoney;if(c&&states[c.state]!==undefined)states[c.state]++;}$.Msg('[SpecMoneyTransport] '+JSON.stringify({clock:clock,states:states,counters:metrics}));lastReport=wall;}
 }catch(e){$.Msg('[SpecMoneyNativeError] '+String(e));for(var j=0;j<controls.length;j++)try{restore(controls[j]);}catch(ignore){}}$.Schedule(.1,tick);}
 $.Schedule(1,tick);
 })();
@@ -528,12 +664,17 @@ function hide(){for(var i=0;i<images.length;i++)images[i].visible=false;}
 function make(index){var n=$.CreatePanel('Image',parent,'SpecDrawingInk'+index);n.hittest=false;n.hittestchildren=false;n.style.ignoreParentFlow=true;n.style.position='0px 0px 0px';n.style.width='100%';n.style.height='100%';n.style.zIndex='130';n.visible=false;images.push(n);
  $.RegisterEventHandler('ImageLoaded',n,function(){if(pending!==index)return;pending=-1;if(!active||!spec()){n.visible=false;return;}if(front>=0&&front!==index)images[front].visible=false;front=index;lastReady=Date.now();n.visible=true;});
  $.RegisterEventHandler('ImageFailedLoad',n,function(){if(pending===index)pending=-1;if(index!==front)n.visible=false;});}
-function mapRect(map,viewport){if(!map||typeof map.GetPositionWithinWindow!=='function')return null;var a=map.GetPositionWithinWindow(),b=parent.GetPositionWithinWindow(),scale=Number(parent.actualuiscale_x)||1,ms=Number(map.actualuiscale_x)||scale;var rect=[(a.x-b.x)/scale/viewport.width,(a.y-b.y)/scale/viewport.height,Number(map.actuallayoutwidth)*ms/scale/viewport.width,Number(map.actuallayoutheight)*ms/scale/viewport.height];if(rect.some(function(x){return !isFinite(x)||x<0||x>1;})||rect[2]<=0||rect[3]<=0||rect[0]+rect[2]>1.001||rect[1]+rect[3]>1.001)return null;return rect;}
+function mapRect(map,viewport){
+ if(!map||typeof map.GetPositionWithinWindow!=='function')return null;
+ var b=specPanelBox(map,viewport),rect=[b.x/viewport.width,b.y/viewport.height,b.width/viewport.width,b.height/viewport.height];
+ if(rect.some(function(x){return !isFinite(x)||x<0||x>1;})||rect[2]<=0||rect[3]<=0||rect[0]+rect[2]>1.001||rect[1]+rect[3]>1.001)return null;
+ return rect;
+}
 make(0);make(1);
 function tick(){try{var t=spec()?ctx.FindChildTraverse('GameTime'):null,m=(t?String(t.text):'').match(/^(\d+):(\d\d)$/),wall=Date.now();active=spec()&&!!m&&Number(m[2])<60;
  if(!active){hide();front=-1;pending=-1;lastReady=0;$.Schedule(.25,tick);return;}
- var context={width:Number(parent.actuallayoutwidth),height:Number(parent.actuallayoutheight),clock:Number(m[1])*60+Number(m[2]),map:null},maps=parent.FindChildrenWithClassTraverse('HudMinimap');
- for(var i=0;i<maps.length;i++)if(maps[i].visible!==false&&Number(maps[i].actuallayoutwidth)>200){context.map=mapRect(maps[i],context);if(context.map)break;}
+ var viewport=specViewport(parent),context={width:viewport.width,height:viewport.height,clock:Number(m[1])*60+Number(m[2]),map:null},maps=parent.FindChildrenWithClassTraverse('HudMinimap');
+ for(var i=0;i<maps.length;i++)if(maps[i].visible!==false&&Number(maps[i].actuallayoutwidth)>200){context.map=mapRect(maps[i],viewport);if(context.map)break;}
  if(wall-lastReady>3000)hide();
  if(context.width>=640&&context.height>=360&&(pending<0||wall-requested>=1500)){var index=front===0?1:0;pending=index;requested=wall;images[index].visible=false;images[index].SetImage('http://127.0.0.1:49647/ink.png?token=spec-debuff-local-8a71&seq='+(serial++)+'&context='+encodeURIComponent(JSON.stringify(context)));}
  }catch(e){hide();}$.Schedule(.05,tick);}
@@ -544,12 +685,18 @@ $.Schedule(1,tick);
 (function(){
 'use strict';
 var ctx=$.GetContextPanel(),parent=ctx.GetParent(),panels=[],front=-1,pending=-1;
-var serial=0,requested=0,ready=0,previous=-1,active=false,epoch=0,requestEpoch=0;
+var serial=0,requested=0,ready=0,previous=-1,active=false,epoch=0,requestEpoch=0,requestedClock=-1;
 function spectator(){
  for(var p=ctx,i=0;p&&i<30;i++,p=p.GetParent()){
   if(p.BHasClass('spec_mode')||p.BHasClass('replay_playback')||p.BHasClass('TeamSpectator'))return true;
  }
  return false;
+}
+function currentClock(){
+ var clock=spectator()?ctx.FindChildTraverse('GameTime'):null;
+ var match=clock?String(clock.text).match(/^(\d{1,3}):(\d\d)$/):null;
+ if(!match||Number(match[2])>=60)return -1;
+ return Number(match[1])*60+Number(match[2]);
 }
 function hide(){
  for(var i=0;i<panels.length;i++)panels[i].visible=false;
@@ -566,24 +713,27 @@ function make(index){
  $.RegisterEventHandler('ImageLoaded',image,function(){
   if(pending!==index||panels[index]!==image)return;
   pending=-1;
-  if(!active||!spectator()||requestEpoch!==epoch){image.visible=false;return;}
+  var clock=currentClock();
+  if(!active||requestEpoch!==epoch||clock<requestedClock||clock-requestedClock>1){image.visible=false;return;}
   if(front>=0&&front!==index)panels[front].visible=false;
   front=index;
   ready=Date.now();
   image.visible=true;
  });
  $.RegisterEventHandler('ImageFailedLoad',image,function(){
-  if(pending===index&&panels[index]===image){pending=-1;hide();}
+  // A temporary clock mismatch must not replace the last valid panel.
+  // The tick still expires an image after 1.1 seconds without a valid refresh.
+  if(pending===index&&panels[index]===image){pending=-1;image.visible=false;}
  });
 }
 make(0);
 make(1);
 function layout(){
- var timer=parent.FindChildTraverse('SpecObjectivePanel');
- if(!timer||!timer.visible||Number(timer.actuallayoutwidth)<=0)return false;
- var origin=parent.GetPositionWithinWindow(),pos=timer.GetPositionWithinWindow();
- var sx=Number(parent.actualuiscale_x)||1,sy=Number(parent.actualuiscale_y)||sx;
- var right=(pos.x-origin.x)/sx+Number(timer.actuallayoutwidth),bottom=(pos.y-origin.y)/sy-12;
+ var timer=parent.FindChildTraverse('SpecObjectivePanel'),box=timer&&timer._specBounds;
+ // Keep stats available when neither objective has a visible timer.
+ var view=specViewport(parent);
+ var right=box?box.x+box.width:view.width-28;
+ var bottom=box?box.y-12:view.height*.54;
  var scale=Math.min(1,(right-16)/480,(bottom-16)/278);
  if(!isFinite(scale)||scale<=0)return false;
  var width=Math.floor(480*scale),height=Math.floor(278*scale);
@@ -598,15 +748,12 @@ function layout(){
 function tick(){
  if(!ctx.IsValid())return;
  try{
-  var clock=spectator()?ctx.FindChildTraverse('GameTime'):null;
-  var m=clock?String(clock.text).match(/^(\d{1,3}):(\d\d)$/):null;
-  var wall=Date.now();
-  active=!!m&&Number(m[2])<60&&layout();
+  var now=currentClock(),wall=Date.now();
+  active=now>=0&&layout();
   if(!active){
    if(previous>=0){epoch++;hide();}
    previous=-1;
   }else{
-   var now=Number(m[1])*60+Number(m[2]);
    if(previous>=0&&(now<previous||now-previous>2)){epoch++;hide();}
    previous=now;
    if(wall-ready>1100)hide();
@@ -621,9 +768,10 @@ function tick(){
     pending=index;
     requested=wall;
     requestEpoch=epoch;
+    requestedClock=now;
     var image=panels[index];
     image.visible=false;
-    image.SetImage('http://127.0.0.1:49647/stats.png?token=spec-debuff-local-8a71&seq='+(serial++)+'&clock='+encodeURIComponent(String(clock.text)));
+    image.SetImage('http://127.0.0.1:49647/stats.png?token=spec-debuff-local-8a71&seq='+(serial++)+'&clock='+Math.floor(now/60)+':'+('0'+now%60).slice(-2));
    }
   }
  }catch(e){hide();}

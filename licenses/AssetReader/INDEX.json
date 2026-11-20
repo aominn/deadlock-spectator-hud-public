@@ -1,6 +1,6 @@
 {
-  "decoder": "7f8767ca797e122034c866d51c5dbcc3d96bb3b05a5c27dd5b1bb74d553da344",
-  "runtime": "Microsoft.NETCore.App.Runtime.win-x64/10.0.12",
+  "decoder": "4254efcb745a859ac977bb4b47046080e5e195b59b25f0fb0cd2f9a78bd25717",
+  "runtime": "Microsoft.NETCore.App.Runtime.win-x64/10.0.15",
   "dependencies": [
     {
       "package": "Blake3/3.0.2",
@@ -46,7 +46,7 @@
       "metadata_copyright": []
     },
     {
-      "package": "Microsoft.NET.ILLink.Tasks/10.0.12",
+      "package": "Microsoft.NET.ILLink.Tasks/10.0.15",
       "license": [
         {
           "type": "expression",
@@ -56,9 +56,9 @@
       "build_only": true,
       "files": [
         {
-          "file": "Microsoft.NET.ILLink.Tasks-10.0.12/THIRD-PARTY-NOTICES.TXT",
+          "file": "Microsoft.NET.ILLink.Tasks-10.0.15/THIRD-PARTY-NOTICES.TXT",
           "sha256": "6d15e10a101c6bfff2ab4429ed061bf76c456fc4b23ad6b03e0d0f8377148a21",
-          "source": "NuGet Microsoft.NET.ILLink.Tasks/10.0.12 THIRD-PARTY-NOTICES.TXT"
+          "source": "NuGet Microsoft.NET.ILLink.Tasks/10.0.15 THIRD-PARTY-NOTICES.TXT"
         }
       ]
     },

@@ -4,8 +4,8 @@ using System.Text.Json.Serialization;
 internal sealed record HudKey(int Code, int Modifiers)
 {
     public static HudKey DrawingDefault => new(0x77, 0);
-    public static HudKey DamageDefault => new(0x78, 6);
-    public static HudKey GraphDefault => new(0x79, 6);
+    public static HudKey DamageDefault => new(0x78, 0);
+    public static HudKey GraphDefault => new(0x79, 0);
 
     [JsonIgnore]
     public bool IsValid =>
@@ -49,18 +49,7 @@ internal sealed record HudKeys(HudKey Drawing, HudKey Damage, HudKey Graph, bool
         catch (JsonException) { return Defaults; }
     }
 
-    public void Save(string home)
-    {
-        if (!IsValid) throw new InvalidOperationException();
-        Directory.CreateDirectory(home);
-        string path = PathFor(home), temp = path + "." + Guid.NewGuid().ToString("N");
-        try
-        {
-            File.WriteAllText(temp, JsonSerializer.Serialize(this, Json));
-            File.Move(temp, path, true);
-        }
-        finally { if (File.Exists(temp)) File.Delete(temp); }
-    }
+    public string ToJson() => JsonSerializer.Serialize(this, Json);
 }
 
 internal sealed class KeyCapture : TextBox
@@ -73,7 +62,6 @@ internal sealed class KeyCapture : TextBox
         this.feedback = feedback;
         ReadOnly = true;
         ShortcutsEnabled = false;
-        Width = 175;
         ShowBinding(binding);
     }
 
@@ -81,7 +69,7 @@ internal sealed class KeyCapture : TextBox
     protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
     {
         var code = keyData & Keys.KeyCode;
-        if (code == Keys.Tab || code is Keys.ShiftKey or Keys.ControlKey or Keys.Menu)
+        if (code is Keys.Tab or Keys.Escape || code is Keys.ShiftKey or Keys.ControlKey or Keys.Menu)
             return base.ProcessCmdKey(ref msg, keyData);
         var binding = new HudKey((int)code, (keyData.HasFlag(Keys.Control) ? 2 : 0) +
             (keyData.HasFlag(Keys.Shift) ? 4 : 0) + (keyData.HasFlag(Keys.Alt) ? 1 : 0));

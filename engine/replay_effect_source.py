@@ -6,6 +6,7 @@ The caller must apply the existing two-slot, two-second notification policy.
 from pathlib import Path
 import bisect,collections,hashlib,json,math,re
 from bridge_buffs import BridgeTimeline
+from midboss_timer import MidbossTimeline
 from money_hud import MoneyTimeline
 from spectator_stats import StatsTimeline
 from economy_hud import EconomyTimeline,EconomyCursor
@@ -14,6 +15,7 @@ class ReplayEffectSource:
  def __init__(self,index):
   if index.get('schema')!=2 or not index.get('success'):raise ValueError('unverified index')
   self.base_guardians=index.get('base_guardians');self.match=str(index.get('match',''))
+  self.midboss=MidbossTimeline(index.get('midboss_timer'))
   if not re.fullmatch(r'\d{6,12}',self.match):raise ValueError('match')
   self.digest=index.get('source_sha256','')
   if not re.fullmatch(r'[0-9a-f]{64}',self.digest):raise ValueError('digest')
@@ -45,6 +47,10 @@ class ReplayEffectSource:
 
  def money_at(self,clock,heroes):
   return self.money.at(clock,heroes) if self.bound else []
+
+ def midboss_at(self,clock,heroes):
+  if not self.bound or len(heroes)!=12 or set(heroes)!=self.heroes:return None
+  return self.midboss.remaining(clock)
 
  def stats_at(self,clock,heroes):
   return self.stats.at(clock) if self.bound and len(heroes)==12 and set(heroes)==self.heroes else ((),())

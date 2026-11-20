@@ -6,13 +6,305 @@ internal sealed record TeamHeading(string Name, byte[]? Icon, int[]? Bans = null
 
 internal sealed partial class ManagerForm
 {
-    Task ShowTeamSettings()
+    Control BuildTeams()
     {
-        var closeGame = L("チーム設定を変更する前にゲームを終了してください。", "Close the game before changing team settings.");
-        if (GameRunning()) throw new InvalidOperationException(closeGame);
+        var file = Path.Combine(Program.Home, "team-headings.json");
+        var catalog = ReadBanHeroes();
+        var eligible = catalog.Select(hero => hero.Id).ToHashSet();
+        var page = Stack();
+        TextLine(page, L("左右は観戦画面での位置です。名前やロゴを指定しない場合はゲーム標準の表示を使います。",
+            "Left and right refer to the spectator HUD. Empty names and logos use the game's defaults."));
+        var visibility = Row();
+        var showNames = new CheckBox { Text = L("チーム名を表示", "Show team names"), AutoSize = true };
+        var showIcons = new CheckBox { Text = L("チームロゴを表示", "Show team logos"), AutoSize = true };
+        visibility.Controls.AddRange(new Control[] { showNames, showIcons });
+        page.Controls.Add(visibility);
 
-        var path = Path.Combine(Program.Home, "team-headings.json");
-        var saved = new[] { new TeamHeading("", null), new TeamHeading("", null) };
+        var size = Selection(L("チーム名・ロゴの大きさ", "Team name and logo size"), 150);
+        size.Items.AddRange(new object[] { L("小", "Small"), L("標準", "Standard"), L("大", "Large") });
+        var format = Selection(L("大会ヘッダー", "Tournament header"), 135);
+        format.Items.AddRange(new object[] { L("オフ", "Off"), "BO3", "BO5" });
+        var options = Row();
+        AddInput(options, size);
+        AddInput(options, format);
+        var wins = new ComboBox[2];
+        var winFields = new Control[2];
+        for (int side = 0; side < wins.Length; side++)
+        {
+            string caption = side == 0 ? L("左の取得本数", "Left wins") : L("右の取得本数", "Right wins");
+            wins[side] = Selection(caption, 112);
+            winFields[side] = AddInput(options, wins[side]);
+        }
+        format.SelectedIndexChanged += (_, _) => UpdateSeries();
+        page.Controls.Add(options);
+
+        var names = new TextBox[2];
+        var icons = new byte[]?[2];
+        var bans = new int[2][];
+        var imageStatus = new Label[2];
+        var banStatus = new Label[2];
+        var banButtons = new Button[2];
+        var teams = Row();
+        var groups = new GroupBox[2];
+        var teamPage = ScrollPage(page);
+        var content = new Panel { Dock = DockStyle.Fill, BackColor = SystemColors.Window };
+        content.Controls.Add(teamPage);
+        var picker = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 1, RowCount = 3,
+            Padding = new Padding(16, 12, 16, 12), Visible = false };
+        picker.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100));
+        picker.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        picker.RowStyles.Add(new RowStyle(SizeType.Percent, 100));
+        picker.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+        var pickerTitle = new Label { AutoSize = true, Margin = new Padding(3, 3, 3, 8) };
+        picker.Controls.Add(pickerTitle, 0, 0);
+        var heroes = new CheckedListBox { Dock = DockStyle.Fill, CheckOnClick = true, IntegralHeight = false,
+            AccessibleName = L("BAN候補", "Available heroes for bans") };
+        picker.Controls.Add(heroes, 0, 1);
+        content.Controls.Add(picker);
+        int? activeSide = null;
+        var pickerButtons = Row();
+        pickerButtons.Controls.Add(ActionButton(L("選択を適用", "Apply selections"), () =>
+        {
+            if (activeSide is not int side) return Task.CompletedTask;
+            bans[side] = heroes.CheckedItems.Cast<BanHero>().Select(hero => hero.Id).ToArray();
+            ClosePicker();
+            RefreshTeam(side);
+            banButtons[side].Focus();
+            return Task.CompletedTask;
+        }, serialize: false));
+        pickerButtons.Controls.Add(ActionButton(L("選択を取り消す", "Cancel selection"), () =>
+        {
+            var side = activeSide;
+            ClosePicker();
+            if (side is int previous) banButtons[previous].Focus();
+            return Task.CompletedTask;
+        }, serialize: false));
+        picker.Controls.Add(pickerButtons, 0, 2);
+        heroes.KeyDown += (_, e) =>
+        {
+            if (e.KeyCode != Keys.Escape) return;
+            e.Handled = true;
+            e.SuppressKeyPress = true;
+            var side = activeSide;
+            ClosePicker();
+            if (side is int previous) banButtons[previous].Focus();
+        };
+        heroes.ItemCheck += (_, change) =>
+        {
+            if (change.NewValue == CheckState.Checked && heroes.CheckedItems.Count >= 6)
+            {
+                change.NewValue = change.CurrentValue;
+                output.Text = L("1チームにつき6体まで選べます。", "Select up to six heroes per team.");
+            }
+        };
+        for (int side = 0; side < groups.Length; side++)
+        {
+            int index = side;
+            string label = SideName(side);
+            var group = new GroupBox { Text = label, AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink, Margin = new Padding(0, 4, 5, 4) };
+            var form = Stack(new Padding(7, 5, 7, 5));
+            names[side] = new TextBox { MaxLength = 64, Dock = DockStyle.Top,
+                AccessibleName = label + " " + L("チーム名", "team name"), PlaceholderText = L("チーム名", "Team name") };
+            form.Controls.Add(InputFrame(names[side]));
+            imageStatus[side] = new Label { AutoSize = true };
+            var logos = Row();
+            logos.Controls.Add(ActionButton(L("ロゴ画像を選ぶ", "Choose logo"), () =>
+            {
+                using var dialog = new OpenFileDialog { Filter = "PNG / JPEG|*.png;*.jpg;*.jpeg", CheckFileExists = true };
+                if (dialog.ShowDialog(this) != DialogResult.OK) return Task.CompletedTask;
+                try { icons[index] = LoadTeamIcon(dialog.FileName); RefreshTeam(index); }
+                catch (Exception ex) when (ex is ArgumentException or IOException or UnauthorizedAccessException or OutOfMemoryException or System.Runtime.InteropServices.ExternalException)
+                {
+                    output.Text = L("8MB以下、4096×4096以下のPNGまたはJPEGを選択してください。", "Choose a PNG or JPEG up to 8 MB and 4096×4096 pixels.");
+                }
+                return Task.CompletedTask;
+            }, serialize: false));
+            logos.Controls.Add(ActionButton(L("ロゴを解除", "Clear logo"), () => { icons[index] = null; RefreshTeam(index); return Task.CompletedTask; }, serialize: false));
+            form.Controls.Add(logos);
+            TextLine(form, imageStatus[side]);
+            var banRow = Row();
+            banButtons[side] = ActionButton(L("BANを選ぶ", "Choose bans"), () => { OpenPicker(index); return Task.CompletedTask; }, serialize: false);
+            banButtons[side].Enabled = catalog.Length > 0;
+            banButtons[side].AccessibleName = label + " " + banButtons[side].Text;
+            banRow.Controls.Add(banButtons[side]);
+            banRow.Controls.Add(ActionButton(L("BANをクリア", "Clear bans"), () =>
+            {
+                bans[index] = Array.Empty<int>();
+                if (activeSide is not null) ClosePicker();
+                RefreshTeam(index);
+                return Task.CompletedTask;
+            }, serialize: false));
+            form.Controls.Add(banRow);
+            banStatus[side] = new Label { AutoSize = true };
+            TextLine(form, banStatus[side]);
+            group.Controls.Add(form);
+            groups[side] = group;
+            teams.Controls.Add(group);
+        }
+        teams.SizeChanged += (_, _) => FitTeams();
+        page.Controls.Add(teams);
+        FitTeams();
+        if (catalog.Length == 0)
+            TextLine(page, L("この版のBAN候補を確認できません。画像の再取得や版を確認してください。",
+                "The BAN roster is unavailable. Check the installed version and files."));
+        Reset();
+        readTeamEdits = ReadEdits;
+        resetSettings[2] = Reset;
+        return content;
+
+        static ComboBox Selection(string caption, int width)
+        {
+            var input = new ComboBox
+            {
+                DropDownStyle = ComboBoxStyle.DropDownList, DrawMode = DrawMode.OwnerDrawFixed,
+                AccessibleName = caption, Width = width
+            };
+            void FitItems() => input.ItemHeight = input.LogicalToDeviceUnits(26);
+            input.HandleCreated += (_, _) => FitItems();
+            input.DpiChangedAfterParent += (_, _) => FitItems();
+            input.DrawItem += (_, e) =>
+            {
+                if (e.Index < 0) return;
+                e.DrawBackground();
+                var bounds = e.Bounds;
+                bounds.X += input.LogicalToDeviceUnits(4);
+                bounds.Width -= input.LogicalToDeviceUnits(4);
+                TextRenderer.DrawText(e.Graphics, input.GetItemText(input.Items[e.Index]), e.Font ?? input.Font,
+                    bounds, e.ForeColor, TextFormatFlags.SingleLine | TextFormatFlags.VerticalCenter | TextFormatFlags.NoPrefix);
+                e.DrawFocusRectangle();
+            };
+            return input;
+        }
+
+        static Control AddInput(FlowLayoutPanel row, ComboBox input)
+        {
+            var field = new FlowLayoutPanel
+            {
+                FlowDirection = FlowDirection.TopDown, WrapContents = false,
+                AutoSize = true, AutoSizeMode = AutoSizeMode.GrowAndShrink,
+                Margin = new Padding(0, 0, 18, 3)
+            };
+            field.Controls.Add(new Label { Text = input.AccessibleName, AutoSize = true, Margin = new Padding(0, 3, 0, 2) });
+            int inputWidth = input.Width;
+            var frame = InputFrame(input);
+            int width = inputWidth + frame.Padding.Horizontal;
+            frame.Dock = DockStyle.None;
+            frame.Width = width;
+            frame.MinimumSize = frame.MaximumSize = new Size(width, 0);
+            field.Controls.Add(frame);
+            row.Controls.Add(field);
+            return field;
+        }
+
+        void UpdateSeries()
+        {
+            bool enabled = format.SelectedIndex > 0;
+            foreach (var field in winFields) field.Visible = enabled;
+            int maximum = enabled ? format.SelectedIndex + 1 : 3;
+            foreach (var input in wins)
+            {
+                int value = Math.Clamp(input.SelectedIndex, 0, maximum);
+                input.Items.Clear();
+                for (int count = 0; count <= maximum; count++) input.Items.Add(count);
+                input.SelectedIndex = value;
+            }
+        }
+
+        void FitTeams()
+        {
+            if (teams.Width <= 0) return;
+            int minimum = LogicalToDeviceUnits(265);
+            int available = teams.ClientSize.Width;
+            int width = available >= 2 * minimum ? available / 2 - groups[0].Margin.Horizontal - 2 :
+                available - groups[0].Margin.Horizontal - 2;
+            foreach (var group in groups)
+            {
+                if (width <= 0 || group.MaximumSize.Width == width) continue;
+                group.MinimumSize = new Size(width, 0);
+                group.MaximumSize = new Size(width, 0);
+            }
+        }
+
+        void OpenPicker(int side)
+        {
+            activeSide = side;
+            pickerTitle.Text = SideName(side) + " · " + L("BAN候補（最大6体）", "Available bans (up to six)");
+            heroes.BeginUpdate();
+            try
+            {
+                heroes.Items.Clear();
+                foreach (var hero in catalog.Where(hero => !bans[1 - side].Contains(hero.Id)))
+                    heroes.Items.Add(hero, bans[side].Contains(hero.Id));
+            }
+            finally { heroes.EndUpdate(); }
+            teamBanPickerOpen = true;
+            settingsActions.Visible = false;
+            teamPage.Visible = false;
+            picker.Visible = true;
+            picker.BringToFront();
+            heroes.Focus();
+        }
+
+        void ClosePicker()
+        {
+            picker.Visible = false;
+            teamPage.Visible = true;
+            activeSide = null;
+            teamBanPickerOpen = false;
+            if (settingsTabs.SelectedIndex == 2) settingsActions.Visible = true;
+        }
+
+        void RefreshTeam(int side)
+        {
+            imageStatus[side].Text = icons[side] is null ? L("標準アイコン", "Default icon") : L("ロゴ画像を設定済み", "Custom logo selected");
+            var chosen = catalog.Where(hero => bans[side].Contains(hero.Id)).Select(hero => hero.Name).ToArray();
+            banStatus[side].Text = chosen.Length == 0 ? L("BANの指定なし", "No bans selected")
+                : string.Join(L("、", ", "), chosen);
+        }
+
+        void Reset()
+        {
+            var saved = LoadTeamSettings(file);
+            int flags = ReadRosterFlags();
+            showNames.Checked = (flags & 4) != 0;
+            showIcons.Checked = (flags & 8) != 0;
+            size.SelectedIndex = saved[0].Size is >= 0 and <= 2 ? saved[0].Size.GetValueOrDefault() : 1;
+            format.SelectedIndex = saved[0].BestOf switch { 3 => 1, 5 => 2, _ => 0 };
+            UpdateSeries();
+            ClosePicker();
+            for (int side = 0; side < groups.Length; side++)
+            {
+                names[side].Text = saved[side].Name;
+                icons[side] = saved[side].Icon;
+                bans[side] = saved[side].Bans?.Where(id => catalog.Length == 0 || eligible.Contains(id)).Distinct().Take(6).ToArray() ?? Array.Empty<int>();
+                wins[side].SelectedIndex = Math.Clamp(saved[side].Wins ?? 0, 0, wins[side].Items.Count - 1);
+                RefreshTeam(side);
+            }
+            savedTeamSnapshot = ReadTeamJson();
+        }
+
+        (string Json, int Flags) ReadEdits()
+        {
+            if (format.SelectedIndex > 0 && wins.All(input => input.SelectedIndex == input.Items.Count - 1))
+                throw new InvalidOperationException(L("両チームを勝利に必要な本数に設定できません。", "Both teams cannot have the wins needed to take the series."));
+            if (activeSide is not null)
+                throw new InvalidOperationException(L("BANの選択を適用するか、取り消してから保存してください。", "Apply or cancel the BAN selection before saving."));
+            return (ReadTeamJson(), (showNames.Checked ? 4 : 0) | (showIcons.Checked ? 8 : 0));
+        }
+
+        string ReadTeamJson()
+        {
+            int bestOf = format.SelectedIndex == 0 ? 0 : 2 * format.SelectedIndex + 1;
+            var teams = names.Select((name, side) => new TeamHeading(name.Text.Trim(), icons[side], bans[side],
+                size.SelectedIndex, side == 0 ? bestOf : null, wins[side].SelectedIndex)).ToArray();
+            return JsonSerializer.Serialize(teams);
+        }
+    }
+
+    static string SideName(int side) => side == 0 ? L("左チーム", "Left team") : L("右チーム", "Right team");
+
+    static TeamHeading[] LoadTeamSettings(string path)
+    {
         try
         {
             var file = new FileInfo(path);
@@ -20,152 +312,10 @@ internal sealed partial class ManagerForm
                 JsonSerializer.Deserialize<TeamHeading[]>(File.ReadAllText(path)) is { Length: 2 } loaded &&
                 loaded.All(team => team is not null && team.Name is { Length: <= 64 } &&
                     (team.Icon is null || team.Icon.Length <= 64 * 1024)))
-                saved = loaded;
+                return loaded;
         }
         catch (JsonException) { }
-
-        using var dialog = new Form
-        {
-            Text = L("チーム設定", "Team settings"), ClientSize = new Size(550, 508),
-            StartPosition = FormStartPosition.CenterParent, Font = Font,
-            FormBorderStyle = FormBorderStyle.FixedDialog, MaximizeBox = false, MinimizeBox = false
-        };
-        var layout = new FlowLayoutPanel
-        {
-            Dock = DockStyle.Fill, FlowDirection = FlowDirection.TopDown,
-            WrapContents = false, Padding = new Padding(16), AutoScroll = true
-        };
-        dialog.Controls.Add(layout);
-        layout.Controls.Add(new Label
-        {
-            Text = L("画面上部の左右に表示する名前と画像です。未指定の項目はゲーム標準です。表示する項目は「表示設定」で選びます。",
-                     "Set names and icons for the left and right teams. Empty fields use the game defaults. Choose which fields to show in Display settings."),
-            AutoSize = true, MaximumSize = new Size(505, 0)
-        });
-        var sizeRow = Row();
-        var size = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Width = 145 };
-        size.Items.AddRange(new object[] { L("小", "Small"), L("標準", "Standard"), L("大", "Large") });
-        size.SelectedIndex = saved[0].Size is >= 0 and <= 2 ? saved[0].Size.GetValueOrDefault() : 1;
-        sizeRow.Controls.Add(new Label { Text = L("チーム名・アイコンの大きさ", "Team name and icon size"), AutoSize = true, Margin = new Padding(2, 6, 8, 0) });
-        sizeRow.Controls.Add(size);
-        layout.Controls.Add(sizeRow);
-        var series = Row();
-        var format = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Width = 125,
-            AccessibleName = L("大会ヘッダー", "Tournament header") };
-        format.Items.AddRange(new object[] { L("オフ", "Off"), "BO3", "BO5" });
-        format.SelectedIndex = saved[0].BestOf switch { 3 => 1, 5 => 2, _ => 0 };
-        series.Controls.Add(new Label { Text = format.AccessibleName, AutoSize = true, Margin = new Padding(2, 6, 8, 0) });
-        series.Controls.Add(format);
-        layout.Controls.Add(series);
-        var score = Row();
-        var wins = new NumericUpDown[2];
-        for (int side = 0; side < wins.Length; side++)
-        {
-            string caption = side == 0 ? L("左の取得本数", "Left wins") : L("右の取得本数", "Right wins");
-            wins[side] = new NumericUpDown { Width = 48, Maximum = 3, AccessibleName = caption,
-                Value = Math.Clamp(saved[side].Wins ?? 0, 0, 3) };
-            score.Controls.Add(new Label { Text = caption, AutoSize = true, Margin = new Padding(2, 6, 6, 0) });
-            score.Controls.Add(wins[side]);
-        }
-        void RefreshSeries()
-        {
-            score.Enabled = format.SelectedIndex != 0;
-            if (!score.Enabled) return;
-            foreach (var input in wins) input.Maximum = format.SelectedIndex + 1;
-        }
-        format.SelectedIndexChanged += (_, _) => RefreshSeries();
-        RefreshSeries();
-        layout.Controls.Add(score);
-        var names = new TextBox[2];
-        var icons = saved.Select(team => team.Icon).ToArray();
-        var catalog = ReadBanHeroes();
-        var eligibleBans = catalog.Select(hero => hero.Id).ToHashSet();
-        var bans = saved.Select(team => team.Bans?.Where(eligibleBans.Contains).Distinct().Take(6).ToArray() ?? Array.Empty<int>()).ToArray();
-        for (int side = 0; side < 2; side++)
-        {
-            int index = side;
-            var group = new GroupBox
-            {
-                Text = side == 0 ? L("左チーム", "Left team") : L("右チーム", "Right team"),
-                Size = new Size(505, 126)
-            };
-            var name = new TextBox { Text = saved[side].Name, MaxLength = 64, Width = 455,
-                Location = new Point(10, 23), AccessibleName = group.Text + " " + L("チーム名", "team name"),
-                PlaceholderText = L("ゲーム標準のチーム名", "Default team name") };
-            group.Controls.Add(name);
-            names[side] = name;
-            var select = new Button { Text = L("画像を選ぶ", "Choose image"), AutoSize = true, Location = new Point(10, 54) };
-            var clear = new Button { Text = L("標準に戻す", "Use default"), AutoSize = true, Location = new Point(126, 54) };
-            var status = new Label { AutoSize = true, Location = new Point(242, 59) };
-            void RefreshIcon() => status.Text = icons[index] is null ? L("標準アイコン", "Default icon") : L("画像を設定済み", "Custom image selected");
-            RefreshIcon();
-            select.Click += (_, _) =>
-            {
-                using var picker = new OpenFileDialog { Filter = "PNG / JPEG|*.png;*.jpg;*.jpeg", CheckFileExists = true };
-                if (picker.ShowDialog(dialog) != DialogResult.OK) return;
-                try
-                {
-                    icons[index] = LoadTeamIcon(picker.FileName);
-                    RefreshIcon();
-                }
-                catch (Exception ex) when (ex is ArgumentException or IOException or UnauthorizedAccessException or OutOfMemoryException or System.Runtime.InteropServices.ExternalException)
-                {
-                    MessageBox.Show(dialog, L("8MB以下、4096×4096以下のPNGまたはJPEGを選択してください。",
-                        "Choose a PNG or JPEG up to 8 MB and 4096×4096 pixels."), dialog.Text);
-                }
-            };
-            clear.Click += (_, _) => { icons[index] = null; RefreshIcon(); };
-            group.Controls.Add(select);
-            group.Controls.Add(clear);
-            group.Controls.Add(status);
-            var chooseBans = new Button { Text = L("BANを選ぶ", "Choose bans"), AutoSize = true, Location = new Point(10, 86), Enabled = catalog.Length > 0 };
-            var clearBans = new Button { Text = L("BANをクリア", "Clear bans"), AutoSize = true, Location = new Point(126, 86) };
-            var banStatus = new Label { AutoSize = true, Location = new Point(242, 91) };
-            void RefreshBans() => banStatus.Text = L($"{bans[index].Length}体を設定", $"{bans[index].Length} selected");
-            RefreshBans();
-            chooseBans.Click += (_, _) =>
-            {
-                var other = bans[1 - index];
-                if (PickBans(dialog, catalog.Where(hero => !other.Contains(hero.Id)).ToArray(), bans[index]) is { } selected)
-                    bans[index] = selected;
-                RefreshBans();
-            };
-            clearBans.Click += (_, _) => { bans[index] = Array.Empty<int>(); RefreshBans(); };
-            group.Controls.Add(chooseBans);
-            group.Controls.Add(clearBans);
-            group.Controls.Add(banStatus);
-            layout.Controls.Add(group);
-        }
-        var buttons = Row();
-        var save = new Button { Text = L("保存", "Save"), AutoSize = true, DialogResult = DialogResult.OK };
-        var cancel = new Button { Text = L("キャンセル", "Cancel"), AutoSize = true, DialogResult = DialogResult.Cancel };
-        buttons.Controls.Add(save);
-        save.Click += (_, _) =>
-        {
-            if (format.SelectedIndex == 0 || !wins.All(input => input.Value == input.Maximum)) return;
-            dialog.DialogResult = DialogResult.None;
-            MessageBox.Show(dialog, L("両チームを勝利に必要な本数に設定することはできません。",
-                "Both teams cannot reach the winning score."), dialog.Text);
-        };
-        buttons.Controls.Add(cancel);
-        layout.Controls.Add(buttons);
-        dialog.AcceptButton = save;
-        dialog.CancelButton = cancel;
-        if (dialog.ShowDialog(this) != DialogResult.OK) return Task.CompletedTask;
-        if (GameRunning()) throw new InvalidOperationException(closeGame);
-
-        int bestOf = format.SelectedIndex == 0 ? 0 : 2 * format.SelectedIndex + 1;
-        var settings = names.Select((name, index) => new TeamHeading(name.Text.Trim(), icons[index], bans[index],
-            size.SelectedIndex, index == 0 ? bestOf : null, (int)wins[index].Value)).ToArray();
-        Directory.CreateDirectory(Program.Home);
-        var temp = path + "." + Guid.NewGuid().ToString("N");
-        try
-        {
-            File.WriteAllText(temp, JsonSerializer.Serialize(settings));
-            File.Move(temp, path, true);
-        }
-        finally { if (File.Exists(temp)) File.Delete(temp); }
-        return Task.CompletedTask;
+        return new[] { new TeamHeading("", null), new TeamHeading("", null) };
     }
 
     sealed record BanHero(int Id, string Name)
@@ -175,41 +325,12 @@ internal sealed partial class ManagerForm
 
     BanHero[] ReadBanHeroes()
     {
-        using var catalog = JsonDocument.Parse(File.ReadAllText(Path.Combine(bundle, "engine", "ban-heroes.json")));
+        string path = Path.Combine(bundle, "engine", "ban-heroes.json");
+        if (!File.Exists(path)) return Array.Empty<BanHero>();
+        using var catalog = JsonDocument.Parse(File.ReadAllText(path));
         return catalog.RootElement.EnumerateObject()
             .Select(hero => new BanHero(int.Parse(hero.Name), hero.Value.GetProperty(Ui.Japanese ? "ja" : "en").GetString()!))
             .OrderBy(hero => hero.Name, StringComparer.CurrentCulture).ToArray();
-    }
-
-    int[]? PickBans(Form owner, BanHero[] catalog, int[] chosen)
-    {
-        using var picker = new Form
-        {
-            Text = L("このチームがBANしたヒーロー", "Heroes banned by this team"),
-            ClientSize = new Size(345, 420), StartPosition = FormStartPosition.CenterParent, Font = Font,
-            FormBorderStyle = FormBorderStyle.FixedDialog, MaximizeBox = false, MinimizeBox = false
-        };
-        var heroes = new CheckedListBox { Dock = DockStyle.Fill, CheckOnClick = true, IntegralHeight = false };
-        foreach (var hero in catalog) heroes.Items.Add(hero, chosen.Contains(hero.Id));
-        heroes.ItemCheck += (_, change) =>
-        {
-            if (change.NewValue == CheckState.Checked && heroes.CheckedItems.Count >= 6)
-                change.NewValue = change.CurrentValue;
-        };
-        var hint = new Label { Text = L("最大6体。相手側で選択済みのヒーローは除きます。", "Up to 6. Heroes selected by the other side are omitted."), Dock = DockStyle.Top, Height = 32 };
-        var buttons = Row();
-        buttons.Dock = DockStyle.Bottom;
-        var apply = new Button { Text = L("適用", "Apply"), AutoSize = true, DialogResult = DialogResult.OK };
-        var cancel = new Button { Text = L("キャンセル", "Cancel"), AutoSize = true, DialogResult = DialogResult.Cancel };
-        buttons.Controls.Add(apply);
-        buttons.Controls.Add(cancel);
-        picker.Controls.Add(heroes);
-        picker.Controls.Add(hint);
-        picker.Controls.Add(buttons);
-        picker.AcceptButton = apply;
-        picker.CancelButton = cancel;
-        return picker.ShowDialog(owner) == DialogResult.OK
-            ? heroes.CheckedItems.Cast<BanHero>().Select(hero => hero.Id).ToArray() : null;
     }
 
     static byte[] LoadTeamIcon(string filename)

@@ -24,9 +24,51 @@ for source,cssfile in items:
  entries.append((source.stem,bytes(out)));proof.append(dict(source=str(source),source_sha256=hashlib.sha256(raw).hexdigest(),compiled_sha256=hashlib.sha256(out).hexdigest(),preserved_non_data=True,css=cssfile,scoped=True))
 import sys; sys.path.insert(0,str(r))
 from panorama_writer import layout,script,vpk
+def add_spectator_menu(data):
+ def insert(anchor, addition):
+  nonlocal data
+  if data.count(anchor)!=1:raise ValueError('Unexpected escape menu structure')
+  data=data.replace(anchor, addition+anchor)
+ if data.count(b'</styles>')!=1:raise ValueError('Unexpected escape menu styles')
+ data=data.replace(b'</styles>', b'</styles><scripts><include src="s2r://panorama/scripts/drawing_fps_menu.vjs" /></scripts>')
+ menu_style=(
+  'horizontal-align: right; vertical-align: bottom; margin: 0px 460px 108px 0px;'
+  'width: 304px; height: fit-children; flow-children: down; padding: 8px 12px;'
+  'background-color: #171715ee; border: 1px solid #81786577; border-radius: 3px;'
+ )
+ label_style='width: 100%; height: 29px; text-align: left; font-size: 19px; padding-left: 12px;'
+ command_style=(
+  'width: 100%; height: 18px; text-align: left; font-family: monospace;'
+  'font-size: 12px; font-weight: normal; padding: 0px 0px 0px 12px; color: #aaa18e;'
+ )
+ def fps_button(panel_id):
+  return (
+   f'<Button id="{panel_id}" class="nav_menu_item minor" visible="false"'
+   ' style="width: 100%; flow-children: down; padding-bottom: 4px;">'
+   f'<Label id="{panel_id}Label" class="menuButtonLabel" style="{label_style}" />'
+   f'<Label id="{panel_id}Command" hittest="false" style="{command_style}" />'
+   '</Button>\n'
+  )
+ menu_items=(
+  f'<Panel id="SpecEscapeTools" hittest="false" visible="false" style="{menu_style}">\n'
+  '<Label id="SpecEscapeToolsTitle" style="font-size: 16px; font-weight: semi-bold; color: #d6d3c9; margin-bottom: 4px;" />\n'
+  '<Button id="SpecOpenLiveWatch" class="nav_menu_item minor" style="width: 100%;" onactivate="CitadelShowWatchPage( true )">'
+  f'<Label text="#Citadel_Watch_Title" class="menuButtonLabel" style="{label_style}" /></Button>\n'
+  f'<Button id="SpecReplayBarToggle" class="nav_menu_item minor" style="width: 100%;" visible="false"><Label id="SpecReplayBarToggleLabel" class="menuButtonLabel" style="{label_style}" /></Button>\n'
+  + fps_button('SpecDrawingFpsEnable')
+  + fps_button('SpecDrawingFpsReset')
+  + '</Panel>\n'
+ ).encode('ascii')
+ insert(b'</CitadelHudEscapeMenu>',menu_items)
+ return data
+
 files={'panorama/styles/'+name+'.vcss_c':body for name,body in entries}
-for path,fn,src in [('panorama/layout/citadel_hud_top_bar.vxml_c',layout,'citadel_hud_top_bar.xml'),('panorama/scripts/spectator_probe.vjs_c',script,'spectator_probe.js'),('panorama/layout/citadel_hud_hero_shop.vxml_c',layout,'citadel_hud_hero_shop.xml'),('panorama/layout/hud_escape_menu.vxml_c',layout,'hud_escape_menu.xml')]:
- data=(r/src).read_bytes();data=(b''.join((r/name).read_bytes() for name in ['asset-map.js','identity-data.js','locale.js'])+data) if src=='spectator_probe.js' else data;body=fn('panorama/'+('layout/' if src.endswith('.xml') else 'scripts/')+src,data);files[path]=body;target=r/'compiled'/path;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(body)
+for path,fn,src in [('panorama/layout/citadel_hud_top_bar.vxml_c',layout,'citadel_hud_top_bar.xml'),('panorama/scripts/spectator_probe.vjs_c',script,'spectator_probe.js'),('panorama/layout/citadel_hud_hero_shop.vxml_c',layout,'citadel_hud_hero_shop.xml'),('panorama/layout/hud_escape_menu.vxml_c',layout,'hud_escape_menu.xml'),('panorama/scripts/drawing_fps_menu.vjs_c',script,'drawing_fps_menu.js')]:
+ data=(r/src).read_bytes()
+ if src=='spectator_probe.js':data=b''.join((r/name).read_bytes() for name in ['asset-map.js','identity-data.js','locale.js'])+data
+ if src=='hud_escape_menu.xml':data=add_spectator_menu(data)
+ body=fn('panorama/'+('layout/' if src.endswith('.xml') else 'scripts/')+src,data)
+ files[path]=body;target=r/'compiled'/path;target.parent.mkdir(parents=True,exist_ok=True);target.write_bytes(body)
  proof.append(dict(source=src,compiled_sha256=hashlib.sha256(body).hexdigest(),method='reviewed local writer; primary MIT format reference'))
 vpk=vpk(files);(r/'pak99_dir.vpk').write_bytes(vpk)
 result=dict(resources=proof,vpk_sha256=hashlib.sha256(vpk).hexdigest(),archive_roundtrip=False,scope='spectator native HUD plus fixed loopback PNG from local read-only snapshot companion; no memory hooks')

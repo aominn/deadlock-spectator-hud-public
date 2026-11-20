@@ -5,13 +5,13 @@
     "sha256": "90905e64a840557d8c1bc4f5b74db3d7ee85e3ffb217611cac1c7813acea4159"
   },
   "pillow": {
-    "version": "12.3.0",
-    "url": "https://files.pythonhosted.org/packages/f1/e0/492879f69d94f91f60fc8cd05ba03650e9520afebb2fb7aa12777d7c7f38/pillow-12.3.0-cp314-cp314-win_amd64.whl",
-    "sha256": "fdafc9cce40277e0f7a0feabce0ee50dd2fa1800f3b38015e51296b5e814048d"
+    "version": "13.0.0",
+    "url": "https://files.pythonhosted.org/packages/50/e2/7ad17747517e4c813dca78257d6bb593466f8231baf1384bc98d92745edb/pillow-13.0.0-cp314-cp314-win_amd64.whl",
+    "sha256": "f7cbb7a64e7ec664775195e4f81923bc8a93d9451b963f844e59118f63147a7a"
   },
   "node": {
-    "version": "24.19.0",
-    "sha256": "3602f2bb1a10f2cbab4c36886218a33c1ab3db87290e73b033c46c77147d0237",
-    "source": "https://nodejs.org/dist/v24.19.0/SHASUMS256.txt"
+    "version": "24.22.3",
+    "sha256": "86fc4785327db5f5c7558dc6156c543b433c313e813a222e088086222ab4afa6",
+    "source": "https://nodejs.org/dist/v24.22.3/SHASUMS256.txt"
   }
 }

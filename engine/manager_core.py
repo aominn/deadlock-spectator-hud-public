@@ -280,14 +280,30 @@ class Manager:
     if old==command:winreg.DeleteValue(k,APP_ID)
   except FileNotFoundError:pass
   c=self.config();c['autostart']=False;save(self.config_file,c);return {'autostart':False}
- def launch(self):
+ def focus_status(self):
+  from focus_fps import FocusFps, RECORD
+  if not (self.home/RECORD).exists():return {'state':'none'}
+  self.idle()
+  return {'state':FocusFps(self.home,game_root(self.config().get('game',''))).reconcile()}
+ def launch(self,focus=None):
   self.idle();c=self.config()
+  if focus not in (None,'enable','restore'):raise Refused('FPS対策の操作を確認できません。')
   if not c.get('game'):raise Refused('先にセットアップしてください。')
+  if focus=='enable' and not c.get('enabled'):raise Refused('FPS対策を使うには先にHUDを有効にしてください。')
   g=game_root(c['game']);exe=g.parent/'bin/win64/deadlock.exe';log=safe(c['log']);log.parent.mkdir(parents=True,exist_ok=True)
   if log.exists() and log.stat().st_size>16*1024*1024:shutil.move(str(log),str(log.with_name('game-'+str(time.time_ns())+'.log')))
-  if c.get('enabled'):self.check_mount();self.start_service()
-  proc=subprocess.Popen([str(exe),'-steam','-console','-con_logfile',str(log)],cwd=g.parent)
-  return {'game_pid':proc.pid,'message':'ゲームを起動しました。'}
+  if c.get('enabled'):self.check_mount()
+  args=();focus_state=None
+  if focus is not None:
+   from focus_fps import FocusFps
+   args,focus_state=FocusFps(self.home,g).prepare(focus)
+   if focus=='restore' and not args:return {'focus':focus_state,'message':'FPS設定の書き換えは不要です。'}
+  if c.get('enabled'):self.start_service()
+  proc=subprocess.Popen([str(exe),'-steam','-console','-con_logfile',str(log),*args],cwd=g.parent)
+  message={'enable':'FPS対策用の設定でゲームを起動しました。','restore':'復元用の設定でゲームを起動しました。ゲーム終了後に確認します。'}.get(focus_state,'ゲームを起動しました。')
+  result={'game_pid':proc.pid,'message':message}
+  if focus_state is not None:result['focus']=focus_state
+  return result
  def status(self):
   c=self.config();status=read_json(self.home/'service.json') if (self.home/'service.json').exists() else {'state':'stopped'}
   return {'window_owned':self.window_service_ready(),'version':c.get('version'),'enabled':c.get('enabled',False),'autostart':c.get('autostart',False),'game':c.get('game',''),'bundle':c.get('bundle',str(self.bundle)),'repository':c.get('repository',''),'service':status.get('state'),'service_message':status.get('message',''),'needs_recovery':(self.home/'mount.json').exists() and not c.get('enabled'),'message':'HUD有効' if c.get('enabled') else ('復旧待ち' if (self.home/'mount.json').exists() else '通常モード')}

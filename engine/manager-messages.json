@@ -80,5 +80,16 @@
   "別の設定操作が実行中です。少し待ってください。": "Another settings operation is running. Please wait.",
   "補助アプリの停止を要求しました。": "Companion shutdown requested.",
   "同梱ファイルの整合性は正常です。": "Package files verified successfully.",
-  "対応していない操作です。": "This operation is not supported."
+  "対応していない操作です。": "This operation is not supported.",
+  "Steamを開き、使用するアカウントを選択してください。": "Open Steam and select the account you want to use.",
+  "Deadlockの現在のFPS設定を確認できません。設定の変更を中止しました。": "The current Deadlock FPS setting could not be verified. The change was canceled.",
+  "FPS設定の復元記録とSteamアカウントまたはゲームの場所が一致しません。": "The FPS recovery record does not match this Steam account or game folder.",
+  "専用cfgに別の内容があります。上書きや削除を中止しました。": "The FPS cfg has different contents. It was left in place.",
+  "専用cfgと同じ名前のファイルがあります。既存ファイルは変更していません。": "A file with the same name as the FPS cfg already exists. It was left in place.",
+  "Deadlockのcfgフォルダーを確認できません。": "The Deadlock cfg folder could not be found.",
+  "FPS対策の操作を確認できません。": "The requested FPS operation is invalid.",
+  "FPS対策を使うには先にHUDを有効にしてください。": "Enable the HUD before launching with the FPS option.",
+  "FPS設定の書き換えは不要です。": "The FPS setting does not need to be changed.",
+  "FPS対策用の設定でゲームを起動しました。": "The game was launched with the FPS cfg.",
+  "復元用の設定でゲームを起動しました。ゲーム終了後に確認します。": "The game was launched with the restore cfg. The result is checked after the game exits."
 }

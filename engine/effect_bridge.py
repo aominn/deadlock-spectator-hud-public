@@ -5,7 +5,8 @@ from urllib.parse import urlparse,parse_qs
 import io,json,re,time,threading,os,argparse,collections,functools,math,base64
 from PIL import Image,ImageDraw,ImageFont
 from native_session import mode_signal,lobby_line,resume_log
-from team_header import series_png, team_bans_png, team_header_png
+from manager_core import save
+from team_header import clean_team_name, series_png, team_bans_png, team_header_png, team_settings
 ROOT=Path(__file__).resolve().parent
 STATE=Path(os.environ.get('SPEC_HUD_STATE',str(ROOT))).resolve();STATE.mkdir(parents=True,exist_ok=True)
 CAT=json.loads((ROOT/'effect-catalog.json').read_text(encoding='utf-8'))
@@ -25,6 +26,7 @@ LIVE=None;LIVE_PATH=None;LIVE_WINDOWS={}
 from money_hud import money_records,game_fonts,glyph_png,native_matches
 from economy_hud import EconomyView,economy_glyph_png,native_receipt_owner
 from live_effect_source import LiveEffectSource
+from midboss_timer import MidbossTimeline
 from replay_effect_source import ReplayEffectSource
 from base_guardian_hud import GuardianView,draw_guardian_rows,TowerGrid
 from drawing_hud import DrawingStore
@@ -38,10 +40,11 @@ class State:
  def __init__(self):
   self.language="ja";self.drawing=DrawingStore();self.tower_grid=TowerGrid();self.guardian_view=GuardianView();self.guardian_rows=[];self.kda_hold={};self.sale_ready=False;self.sale_seen=collections.deque(maxlen=2000);self.sale_active={};self.economy_view=EconomyView();self.money_rows=[];self.bridge_view=BridgeView();self.bridge_rows=None;self.notice_order=0;self.feeds={};self.camera_owner=None;self.camera_since=0;self.camera_at=0;self.entities={};self.snapshots={};self.observed={};self.notifications={};self.last_notice={};self.history=collections.deque(maxlen=3000);self.history_saved=None;self.record_saved=None;self.metrics=collections.Counter();self.suppressed=collections.deque(maxlen=1000);self.status_saved=0
   self.stats_keys=DEFAULT_STATS_KEYS;self.stats_panels=StatsPanels();self.live_stats=LiveStats();self.live_stats_rows=()
-  self.session_signal=None;self.native_confirmed=False;self.native_sequence=None
+  self.session_signal=None;self.native_confirmed=False;self.native_sequence=None;self.midboss_remaining=None
   self.current=None;self.rows=[];self.last_http=0;self.last_clock=None;self.postgame=False;self.stable_after=0;self.frames=0;self.samples=0;self.roster=[];self.lock=threading.RLock();self.last_cfg=None;self.last_heartbeat=None;self.native_at=0;self.stop=False
  def reset(self):
-  self.postgame=False
+  self.stats_panels.snapshot=None
+  self.postgame=False;self.midboss_remaining=None
   self.tower_grid.clear();self.guardian_view.clear();self.guardian_rows=[];self.kda_hold.clear();self.sale_ready=False;self.sale_seen.clear();self.sale_active.clear();self.economy_view.clear();self.money_rows=[];self.bridge_view.clear();self.bridge_rows=None;self.live_bridge_rows=[]
   if REPLAY is not None:REPLAY.reset_cursor();REPLAY_WINDOWS.clear()
   if LIVE is not None:LIVE.reset();LIVE_WINDOWS.clear()
@@ -87,7 +90,10 @@ class State:
     self.native_confirmed=False;self.reset()
    elif signal['kind']=='spectator' and LIVE is not None and LIVE.route or signal['kind']=='replay' and REPLAY is not None and getattr(REPLAY,'target',None):self.native_confirmed=True
    self.session_signal=signal
-   pending=STATE/'session-mode.pending';pending.write_text(json.dumps(signal,ensure_ascii=False),encoding='utf-8');os.replace(pending,STATE/'session-mode.json')
+   # Windows readers can temporarily block atomic replacement of a diagnostic file.
+   # Each new signal refreshes the file. The in-memory session is authoritative.
+   try:save(STATE/'session-mode.json',signal)
+   except OSError:self.metrics['session_status_write_failures']+=1
    return
   if MARKER_IN_LINE(line):self.native_confirmed=False;self.drawing.clear();self.live_stats_rows=()
   if lobby_line(line):self.live_stats=LiveStats()
@@ -182,7 +188,16 @@ NOTICE_SPAN=142
 CARD_TOP=184
 
 def corner_geometry(player,canvas_width):
- # Expand into the gap, retaining the portrait-facing edge and top alignment.
+ portrait=player.get('portrait')
+ if isinstance(portrait,list) and len(portrait)==4 and all(type(v) in (int,float) and math.isfinite(v) for v in portrait):
+  left,top,width,height=portrait
+  if 0<=left<=canvas_width-width and 48<=width<=144 and 0<=top<260 and 40<=height<=180:
+   side='left' if left+width/2<canvas_width/2 else 'right'
+   gap=4
+   x=math.ceil(left+width+gap) if side=='left' else math.floor(left-gap-NOTICE_WIDTH)
+   if 0<=x<=canvas_width-NOTICE_WIDTH:
+    return x,round(top),NOTICE_WIDTH,side
+ # Older clients do not report the portrait bounds.
  cell_width=float(player.get('width',140));center=float(player['pos']['x'])+cell_width/2
  side='left' if center<canvas_width/2 else 'right'
  x=round(center+45 if side=='left' else center-45-NOTICE_WIDTH)
@@ -329,7 +344,7 @@ def render(data,record=False):
   if REPLAY is not None and getattr(REPLAY,'automatic',False):
    REPLAY.poll();key=REPLAY.session_key
    if key!=REPLAY_SESSION:S.reset();REPLAY_SESSION=key
-  S.money_rows=[]
+  S.money_rows=[];S.midboss_remaining=None
   if REPLAY is not None and REPLAY.bound:apply_replay(now)
   elif LIVE is not None:apply_live(now)
   S.bridge_rows=None
@@ -360,7 +375,7 @@ def render(data,record=False):
    S.record_saved=time.monotonic()
    try:
     if any(v['kind']=='sale' for v in identity_rows):(STATE/'last-identity-visible.json').write_text(json.dumps({'clock':data['time'],'rows':identity_rows},ensure_ascii=False,indent=2),encoding='utf-8')
-    (STATE/'last-frame.json').write_text(json.dumps({'at':time.time(),'clock':data['time'],'events':events,'base_guardians':guardian_rows,'bridge_buffs':bridge_records,'money':money_rows,'economy':list(S.economy_view.audit),'economy_display':economy_rows,'identity_notices':identity_rows,'mode':'3-second animated receipt stack','diagnostic':{'entities':S.entities,'pending':[(k,[(x,v['until']-time.monotonic()) for x,v in d.items()]) for k,d in S.notifications.items() if d],'guard':S.stable_after-time.monotonic(),'native_age':time.monotonic()-S.native_at}},ensure_ascii=False,indent=2),encoding='utf-8')
+    (STATE/'last-frame.json').write_text(json.dumps({'at':time.time(),'clock':data['time'],'canvas':list(im.size),'events':events,'base_guardians':guardian_rows,'bridge_buffs':bridge_records,'money':money_rows,'economy':list(S.economy_view.audit),'economy_display':economy_rows,'identity_notices':identity_rows,'mode':'3-second animated receipt stack','diagnostic':{'entities':S.entities,'pending':[(k,[(x,v['until']-time.monotonic()) for x,v in d.items()]) for k,d in S.notifications.items() if d],'guard':S.stable_after-time.monotonic(),'native_age':time.monotonic()-S.native_at}},ensure_ascii=False,indent=2),encoding='utf-8')
     if events:
      (STATE/'last-visible.json').write_text(json.dumps({'at':time.time(),'events':events,'mode':'3-second animated receipt stack'},ensure_ascii=False,indent=2),encoding='utf-8')
      if S.frames%4==0:im.save(STATE/'last-visible.png')
@@ -440,7 +455,12 @@ def render_identity_notices(im,clock):
   if isinstance(kda,list) and len(kda)==3:S.kda_hold[hero]=kda
   else:kda=S.kda_hold.get(hero)
   if ready and isinstance(kda,list) and len(kda)==3:
-   label='K '+str(kda[0])+'  D '+str(kda[1])+'  A '+str(kda[2]);x=round(center-60);y=round(base-(42 if p.get('two_name_rows') is True else 30));im.alpha_composite(kda_texture(tuple(kda)),(x,y));records.append({'hero':hero,'kind':'kda','text':label,'rect':[x,y,120,16]})
+   anchor=p.get('identity_anchor')
+   if isinstance(anchor,list) and len(anchor)==2 and all(type(n) in (int,float) for n in anchor) and 0<=anchor[0]<=im.width-120 and 0<=anchor[1]<=im.height-16:
+    x,y=map(round,anchor)
+   else:
+    x=round(center-60);y=round(base-(42 if p.get('two_name_rows') is True else 30))
+   label='K '+str(kda[0])+'  D '+str(kda[1])+'  A '+str(kda[2]);im.alpha_composite(kda_texture(tuple(kda)),(x,y));records.append({'hero':hero,'kind':'kda','text':label,'rect':[x,y,120,16]})
   for e in v.get('sales',[]):
    key=str(e['id'])
    if key in S.sale_seen:continue
@@ -487,6 +507,7 @@ def apply_replay(now):
  if set(heroes)!=REPLAY.heroes or len(heroes)!=12:
   REPLAY_WINDOWS.clear();S.notifications.clear();S.observed.clear();S.snapshots.clear();S.metrics['replay_roster_rejected']+=1;return
  if callable(getattr(REPLAY,'economy_advance',None)):S.economy_view.push(REPLAY.economy_advance(now,heroes,stamp),stamp)
+ S.midboss_remaining=REPLAY.midboss_at(now,heroes) if not S.postgame else None
  apply_events(fresh,REPLAY_WINDOWS,'replay-index','replay')
 
 def apply_events(fresh,windows,scope,metric_prefix):
@@ -528,6 +549,8 @@ def apply_live(now):
  except (OSError,ValueError):snapshot=None
  heroes=[int(p['hero']) for p in S.roster]
  fresh=LIVE.advance(snapshot,now,heroes,stamp,time.time(),postgame=S.postgame)
+ if LIVE.bound and LIVE.phase in ('ready','paused','baselining') and not S.postgame:
+  S.midboss_remaining=MidbossTimeline(snapshot.get('midboss_timer')).remaining(now)
  S.live_stats_rows=S.live_stats.update(snapshot if LIVE.bound else None,LIVE.route,now,heroes)
  if was_bound!=LIVE.bound or old_generation!=(LIVE.session,LIVE.generation):
   S.economy_view.clear()
@@ -712,25 +735,69 @@ def stats_scope():
   return signal.get('kind'),signal.get('id'),getattr(REPLAY,'target',None),getattr(LIVE,'route',None)
  return None
 
+def roster_display_mask(home):
+ try:
+  mask=int((home/'roster-display').read_text(encoding='ascii'))
+  return mask if 0<=mask<=15 else 2
+ except (OSError,ValueError):
+  return 2
+
+
+@functools.lru_cache(maxsize=128)
+def midboss_png(remaining):
+ im=Image.new('RGBA',(112,48))
+ value='—' if remaining is None else f'{remaining//60}:{remaining%60:02}'
+ ImageDraw.Draw(im).text((0,24),value,font=font_at(34),
+  fill=(214,211,201,255),anchor='lm')
+ out=io.BytesIO();im.save(out,format='PNG');return out.getvalue()
+
+def midboss_image(query):
+ with S.lock:
+  now=S.last_clock;scope=stats_scope()
+  if (now is None or scope is None or not S.native_confirmed or S.postgame or
+      time.monotonic()-S.last_http>2 or
+      query.get('clock')!=[str(now)] or S.midboss_remaining is None):
+   return midboss_png(None)
+  source=REPLAY if scope[0]=='replay' else LIVE
+  return midboss_png(S.midboss_remaining if getattr(source,'bound',False) else None)
+
+def capture_stats(scope,now):
+ # Called with S.lock held so one opening owns exactly one image.
+ panels=S.stats_panels
+ if panels.snapshot is not None:return panels.snapshot
+ if len(S.roster)!=12 or time.monotonic()<S.stable_after:return None
+ names=tuple((str(p['hero']),re.sub(r'<[^>]*>','',str(p.get('name','')))[:80]) for p in sorted(S.roster,key=lambda p:p['pos']['x']))
+ heroes=[int(hero) for hero,_ in names]
+ panel=panels.open
+ if scope[0]=='replay' and getattr(REPLAY,'bound',False) and hasattr(REPLAY,'stats_at'):
+  rows,history=REPLAY.stats_at(now,heroes)
+  if panel=='damage' and rows and history:now=history[-1][0]
+ elif scope[0]=='spectator' and getattr(LIVE,'bound',False):
+  rows,history=S.live_stats_rows,S.live_stats.through(now) if panel=='graph' else ()
+ else:return None
+ if (panel=='damage' and not rows) or (panel=='graph' and not history):return None
+ if panel=='damage':
+  rows=tuple(row[:3] for row in rows);history=()
+ else:rows=();names=()
+ home=STATE.parent
+ titles=tuple(clean_team_name(team.get('Name')) for team in team_settings(home)) if roster_display_mask(home)&4 else ('','')
+ panels.snapshot=panel_png(panel,rows,names,history,now,S.language=='ja',titles)
+ return panels.snapshot
+
 def stats_image(query):
  with S.lock:
   clock=query.get('clock',[''])[0]
-  panel=S.stats_panels.open
+  panels=S.stats_panels
   now=S.last_clock
-  if not panel or stats_scope()!=S.stats_panels.scope or now is None or clock!=f'{now//60}:{now%60:02}' or time.monotonic()-S.last_http>2:
+  scope=stats_scope()
+  if not panels.open or scope is None or scope!=panels.scope or now is None or time.monotonic()-S.last_http>2:
    return panel_png(None,(),(),(),0,True)
-  names=tuple((str(p['hero']),re.sub(r'<[^>]*>','',str(p.get('name','')))[:80]) for p in sorted(S.roster,key=lambda p:p['pos']['x']))
-  heroes=[int(hero) for hero,_ in names]
-  if getattr(REPLAY,'bound',False) and hasattr(REPLAY,'stats_at'):
-   rows,history=REPLAY.stats_at(now,heroes)
-  elif getattr(LIVE,'bound',False):
-   rows,history=S.live_stats_rows,S.live_stats.through(now) if panel=='graph' else ()
-  else:
-   rows,history=(),()
-  if panel!='damage':rows=();names=()
-  if panel!='graph':history=()
-  ja=S.language=='ja'
- return panel_png(panel,rows,names,history,now,ja)
+  if clock!=f'{now//60}:{now%60:02d}':
+   match=re.fullmatch(r'(\d{1,3}):([0-5]\d)',clock)
+   if match and abs(int(match[1])*60+int(match[2])-now)==1:
+    return None  # Panorama keeps the current panel while the two clocks align.
+   return panel_png(None,(),(),(),0,True)
+  return capture_stats(scope,now) or panel_png(panels.open,(),(),(),0,S.language=='ja')
 
 class ThreadingHTTPServer(_ThreadingHTTPServer):
  # Native image requests arrive in bursts across twelve player panels.
@@ -752,7 +819,7 @@ class H(BaseHTTPRequestHandler):
   try:
    if len(self.path)>16000:raise ValueError('length')
    p=urlparse(self.path);q=parse_qs(p.query)
-   if q.get('token')!=[TOKEN] or p.path not in ('/frame.png','/money.png','/status.png','/guardian.png','/ink.png','/stats.png','/drawing-state','/roster-option.png','/team-heading.png'):self.send_error(404);return
+   if q.get('token')!=[TOKEN] or p.path not in ('/frame.png','/money.png','/status.png','/midboss.png','/guardian.png','/ink.png','/stats.png','/drawing-state','/roster-option.png','/team-heading.png'):self.send_error(404);return
    if p.path=='/team-heading.png':
     side=q.get('side',[''])[0];mode=q.get('mode',[''])[0];language=q.get('lang',[''])[0]
     if side not in ('0','1') or mode not in ('1','2','3','4','5') or language not in ('ja','en'):raise ValueError('team heading')
@@ -773,10 +840,7 @@ class H(BaseHTTPRequestHandler):
     key=q.get('option',[''])[0]
     bit={'player':1,'hero':2,'teamName':4,'teamIcon':8}.get(key)
     if bit is None:raise ValueError('roster option')
-    try:
-     mask=int((STATE.parent/'roster-display').read_text(encoding='ascii'))
-     if not 0<=mask<=15:mask=2
-    except (OSError,ValueError):mask=2
+    mask=roster_display_mask(STATE.parent)
     b=ROSTER_OPTION_PNG if (mask ^ 2) & bit else b''
     self.send_response(200 if b else 204)
     self.send_header('Cache-Control','no-store')
@@ -793,8 +857,12 @@ class H(BaseHTTPRequestHandler):
    if p.path=='/ink.png':
     context=json.loads(q.get('context',['{}'])[0])
     with S.lock:S.drawing.update_context(context,S.session_signal);b=S.drawing.png()
-   elif p.path=='/stats.png':b=stats_image(q)
+   elif p.path=='/stats.png':
+    b=stats_image(q)
+    if b is None:
+     self.send_response(503);self.send_header('Cache-Control','no-store');self.send_header('Content-Length','0');self.end_headers();return
    elif p.path=='/status.png':b=status_image()
+   elif p.path=='/midboss.png':b=midboss_image(q)
    elif p.path=='/guardian.png':b=guardian_image(q.get('width',['1920'])[0])
    elif p.path=='/money.png':b=money_image(q)
    else:
@@ -848,6 +916,8 @@ def watch(log, hotkeys_path=None):
      scope=stats_scope()
      events=keys.events(scope is not None) if keys else ()
      S.stats_panels.poll(scope,events)
+     if events and scope is not None and S.stats_panels.open and S.last_clock is not None and time.monotonic()-S.last_http<2:
+      capture_stats(scope,S.last_clock)
     if can_resume and key!=resume_key:
      seed,newpos,newpartial,meta=resume_log(log,not_before=started);resume_key=key
      with S.lock:
@@ -855,7 +925,9 @@ def watch(log, hotkeys_path=None):
       if meta.get('reason')=='restored':S.metrics['session_restores']+=1
      pos=newpos;partial=newpartial
     if time.monotonic()-lastbeat>10:
-     lastbeat=time.monotonic();(STATE/'bridge-status.json').write_text(json.dumps({'at':time.time(),'frames':S.frames,'samples':S.samples,'entities':len(S.entities),'active':time.monotonic()-S.last_http<2,'log_size':size,'mode':'automatic replay and native spectator broadcast','session_mode':S.session_signal,'session_resume':meta,'hotkeys_unavailable':keys.failed if keys else [],'live_source':{'bound':LIVE.bound,'metrics':dict(LIVE.metrics)} if LIVE is not None else None}),encoding='utf-8')
+     lastbeat=time.monotonic()
+     try:(STATE/'bridge-status.json').write_text(json.dumps({'at':time.time(),'frames':S.frames,'samples':S.samples,'entities':len(S.entities),'active':time.monotonic()-S.last_http<2,'log_size':size,'mode':'automatic replay and native spectator broadcast','session_mode':S.session_signal,'session_resume':meta,'hotkeys_unavailable':keys.failed if keys else [],'live_source':{'bound':LIVE.bound,'metrics':dict(LIVE.metrics)} if LIVE is not None else None}),encoding='utf-8')
+     except OSError:S.metrics['bridge_status_write_failures']+=1
     if size>256*1024*1024:raise RuntimeError('Diagnostic log limit reached; collector must be restarted with a new session log.')
    except FileNotFoundError:pass
    except Exception as e:

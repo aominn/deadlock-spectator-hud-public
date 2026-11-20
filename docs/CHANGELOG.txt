@@ -1,3 +1,21 @@
+0.7.10 — Replay performance and spectator stats
+
+- Reduced repeated work in the hero HUD and soul-change notifications.
+- Damage Dealt and Soul Lead show a snapshot. Reopen a panel to refresh it. Seeking in a replay refreshes the panel at the new position.
+- Names and K/D/A hold their normal positions during kill-streak animations.
+- Team Rejuvenator counts sit below the corresponding team totals, with added separation from the central timer icon.
+
+0.7.9 — Replay HUD spacing
+
+- Hiding replay controls moves the ability, inventory, soul and status displays down to their live spectator positions. Showing the controls restores the replay layout.
+
+0.7.8 — Release candidate
+
+- The manager Home page handles setup and everyday actions. The guides match the Japanese and English screens.
+- Esc and Back to game return input to Deadlock while keeping drawings and the toolbar visible. The overlay requests focus for the game before closing the drawing surface.
+- F9 (Damage Dealt) and F10 (Soul Lead) are the default keys for new settings. Existing bindings are preserved.
+- The drawing guide explains what 0 changes and when to restore the default value of 20.
+
 0.6.1 — resume drawing with F8
 
 After Esc / Watch, F8 resumes drawing without hiding the toolbar. While drawing, F8 hides the toolbar and returns to game controls. All transitions retain the lines. Existing spectator gates, input surface and transport timing are unchanged.

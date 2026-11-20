@@ -5,18 +5,18 @@ The authored portions are licensed under MIT; see LICENSE. This grant does not r
 
 Component / version / terms / original notices
 
-Deadlock Spectator HUD (authored portions) / 0.6.0 / MIT
+Deadlock Spectator HUD (authored portions) / 0.7.0 / MIT
   LICENSE
 Modlock-derived code / attributed source portions / MIT
   licenses/Modlock-LICENSE.txt
 Python / 3.14.10 / PSF-2.0 and bundled third-party terms
   licenses/Python-LICENSE.txt
-Pillow / 12.3.0 / MIT-CMU and bundled codec/library terms
+Pillow / 13.0.0 / MIT-CMU and bundled codec/library terms
   licenses/Pillow-LICENSE.txt
-Node.js / 24.19.0 / MIT and bundled third-party terms
+Node.js / 24.22.3 / MIT and bundled third-party terms
   licenses/Node-LICENSE.txt
-.NET manager runtime / 10.0.12 / MIT and bundled third-party terms
-  licenses/DotNet-LICENSE.txt, licenses/DotNet-THIRD-PARTY-NOTICES.txt
+.NET manager runtime / 10.0.15 / MIT and bundled third-party terms
+  licenses/DotNet-LICENSE.txt, licenses/DotNet-THIRD-PARTY-NOTICES.txt, licenses/DotNet-WindowsDesktop-LICENSE.txt
 Noto Sans JP Bold / 2.004-H2 / OFL-1.1
   licenses/Noto-OFL.txt
 @deademx/engine / 4.0.2 / MIT
@@ -35,8 +35,8 @@ K4os.Compression.LZ4/1.3.8 / See original notice
   licenses/AssetReader/K4os.Compression.LZ4-1.3.8/UPSTREAM-LICENSE.txt
 KeyValues2/0.8.0 / See original COPYING
   licenses/AssetReader/KeyValues2-0.8.0/COPYING
-Microsoft.NET.ILLink.Tasks/10.0.12 / MIT
-  licenses/DotNet-LICENSE.txt, licenses/AssetReader/Microsoft.NET.ILLink.Tasks-10.0.12/THIRD-PARTY-NOTICES.TXT
+Microsoft.NET.ILLink.Tasks/10.0.15 / MIT
+  licenses/DotNet-LICENSE.txt, licenses/AssetReader/Microsoft.NET.ILLink.Tasks-10.0.15/THIRD-PARTY-NOTICES.TXT
 SharpGLTF.Core/1.0.6 / MIT
   licenses/AssetReader/SharpGLTF.Core-1.0.6/UPSTREAM-LICENSE.txt
 SharpGLTF.Runtime/1.0.6 / MIT
@@ -69,8 +69,8 @@ Vortice.SpirvCross/1.5.4 / MIT
   licenses/AssetReader/Vortice.SpirvCross-1.5.4/UPSTREAM-LICENSE.txt
 ZstdSharp.Port/0.8.8 / MIT
   licenses/AssetReader/ZstdSharp.Port-0.8.8/UPSTREAM-LICENSE.txt
-.NET asset-reader runtime / 10.0.12 / MIT and bundled third-party terms
-  licenses/AssetReader/DotNet10.0.12-LICENSE.TXT, licenses/AssetReader/DotNet10.0.12-THIRD-PARTY-NOTICES.TXT
+.NET asset-reader runtime / 10.0.15 / MIT and bundled third-party terms
+  licenses/AssetReader/DotNet10.0.15-LICENSE.TXT, licenses/AssetReader/DotNet10.0.15-THIRD-PARTY-NOTICES.TXT
 
 licenses/THIRD-PARTY-INDEX.json records notice hashes and sources. Original notice text is preserved, including codec/native library notices inside Python, Pillow, Node and.NET texts.
 

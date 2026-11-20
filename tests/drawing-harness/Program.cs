@@ -9,15 +9,82 @@ internal static class Harness {
   var rect=new RectangleF(.74f,.58f,.23f,.37f);DrawingController? controller=null;int clicks=0;
   var clickTarget=new Button{Text="ゲーム側UI操作確認",Location=new Point(30,110),Size=new Size(210,38)};clickTarget.Click+=(_,_)=>{clicks++;clickTarget.Text="操作確認 "+clicks;};form.Controls.Add(clickTarget);
   if(live)form.Text="実ゲーム描画コントローラ検証";
-  form.Paint+=(_,e)=>{using var font=new Font("Yu Gothic UI",18);e.Graphics.DrawString("合成入力テスト：Ctrl+Shift+Dで表示切替 / 描く・観戦へで操作切替",font,Brushes.White,30,40);using var map=new SolidBrush(Color.FromArgb(47,58,54));e.Graphics.FillRectangle(map,rect.X*1280,rect.Y*720,rect.Width*1280,rect.Height*720);e.Graphics.DrawString("ミニマップ",font,Brushes.White,960,460);};
+  form.Paint+=(_,e)=>{using var font=new Font("Yu Gothic UI",18);e.Graphics.DrawString("合成入力テスト：Ctrl+Shift+Dで表示切替 / 描く・ゲーム操作へで操作切替",font,Brushes.White,30,40);using var map=new SolidBrush(Color.FromArgb(47,58,54));e.Graphics.FillRectangle(map,rect.X*1280,rect.Y*720,rect.Width*1280,rect.Height*720);e.Graphics.DrawString("ミニマップ",font,Brushes.White,960,460);};
   form.Shown+=(_,_)=>{controller=live?new DrawingController(message=>File.AppendAllText(Path.Combine(artifacts,"events.txt"),message+"\n")):new DrawingController(message=>File.AppendAllText(Path.Combine(artifacts,"events.txt"),message+"\n"),h=>h==form.Handle,()=>Task.FromResult<DrawingContext?>(new DrawingContext("harness-session",rect)));if(live)typeof(DrawingController).GetField("sequence",BindingFlags.Instance|BindingFlags.NonPublic)!.SetValue(controller,DateTime.UtcNow.Ticks);controller.Configure(true,args.Contains("--f8")?HudKey.DrawingDefault:new HudKey(0x44, 6));};
   using var timer=new System.Windows.Forms.Timer{Interval=300};timer.Tick+=(_,_)=>{if(controller==null)return;var model=(InkModel)typeof(DrawingController).GetField("model",BindingFlags.Instance|BindingFlags.NonPublic)!.GetValue(controller)!;var canvas=typeof(DrawingController).GetField("canvas",BindingFlags.Instance|BindingFlags.NonPublic)!.GetValue(controller);File.WriteAllText(Path.Combine(artifacts,"state.json"),JsonSerializer.Serialize(new{synthetic=!live,drawing=canvas!=null,toolbar=typeof(DrawingController).GetField("toolbar",BindingFlags.Instance|BindingFlags.NonPublic)!.GetValue(controller)!=null,clicks,strokes=model.Strokes.Count,points=model.Strokes.Sum(s=>s.Points.Count),width=model.Width,color=model.ColorName,space=model.Space,revision=model.Revision}));};timer.Start();form.FormClosed+=(_,_)=>controller?.Dispose();Application.Run(form);
  }
  static void Transport(string route){using var http=new System.Net.Http.HttpClient(new System.Net.Http.HttpClientHandler{UseProxy=false});var context=System.Text.Json.Nodes.JsonNode.Parse(http.GetStringAsync(route).GetAwaiter().GetResult())!;using var body=DrawingController.EncodeSnapshot(new{epoch=context["epoch"]!.GetValue<string>(),sequence=0,drawing=true,strokes=new[]{new{space="screen",tool="pen",color="cyan",width=3,points=new[]{new[]{.2,.2},new[]{.6,.5}}}}});var length=body.Headers.ContentLength;using var result=http.PostAsync(route,body).GetAwaiter().GetResult();if((int)result.StatusCode!=204)throw new Exception("Production sender refused: "+result.StatusCode);Console.WriteLine(JsonSerializer.Serialize(new{passed=true,content_length=length,response=(int)result.StatusCode,scope="production C# sender to Python loopback reader"}));}
+ static void VerifyFocusHandoff(Action<bool> check)
+ {
+  const BindingFlags flags = BindingFlags.Instance | BindingFlags.NonPublic;
+  var type = typeof(DrawingController);
+  using var game = new Form();
+  using var other = new Form();
+
+  void Run(string action, bool restore, bool toolbarFocused, bool foreignFocused, bool targetValid)
+  {
+   var model = new InkModel();
+   using var surface = new InkCanvas(new Rectangle(0, 0, 1280, 720), model, () => null, () => {});
+   using var bar = new InkToolbar(model, () => {}, () => {}, () => {});
+   bar.Owner = surface;
+   var foreground = foreignFocused ? other.Handle : toolbarFocused ? bar.Handle : surface.Handle;
+   var expected = restore && !foreignFocused && targetValid;
+   int transfers = 0;
+   using var controller = new DrawingController(_ => {}, handle => targetValid && handle == game.Handle,
+       () => Task.FromResult<DrawingContext?>(new("focus-test", null)), () => foreground, handle =>
+       {
+        check(handle == game.Handle && !surface.IsDisposed && !bar.IsDisposed);
+        transfers++;
+       });
+   type.GetField("target", flags)!.SetValue(controller, game.Handle);
+   type.GetField("canvas", flags)!.SetValue(controller, surface);
+   type.GetField("toolbar", flags)!.SetValue(controller, bar);
+   type.GetMethod(action, flags, null, new[] { typeof(bool) }, null)!.Invoke(controller, new object[] { restore });
+   check(transfers == (expected ? 1 : 0));
+   check(surface.IsDisposed);
+   check(action == "HideToolbar" ? bar.IsDisposed : !bar.IsDisposed && bar.Owner == null);
+  }
+
+  Run("PauseDrawing", true, false, false, true);
+  Run("PauseDrawing", true, true, false, true);
+  Run("HideToolbar", true, false, false, true);
+  Run("HideToolbar", false, false, false, true);
+  Run("PauseDrawing", true, false, true, true);
+  Run("PauseDrawing", true, false, false, false);
+ }
+
  static void SelfTest(){int checks=0;void Check(bool value){if(!value)throw new Exception("Drawing model test "+checks);checks++;}
+  VerifyFocusHandoff(Check);
   using(var body=DrawingController.EncodeSnapshot(new{test=true})){Check(body.Headers.ContentLength>0);Check(body.Headers.ContentType!.MediaType=="application/json");}
   var now=DateTime.UtcNow;Check(DrawingController.KeepContextOnFailure(now,now.AddMilliseconds(2999)));Check(!DrawingController.KeepContextOnFailure(now,now.AddMilliseconds(3001)));Check(!DrawingController.KeepContextOnFailure(now,now.AddMilliseconds(-1)));
   Check(DrawingController.SameMap(new RectangleF(.7f,.6f,.2f,.3f),new RectangleF(.7001f,.6f,.2f,.3f)));Check(!DrawingController.SameMap(new RectangleF(.7f,.6f,.2f,.3f),null));
+  foreach (var size in new[] { new Size(1280, 720), new Size(1920, 1080), new Size(2560, 1440), new Size(3840, 2160) })
+  foreach (int dpi in new[] { 96, 120, 144, 192 })
+  {
+   var screen = new Rectangle(new Point(-size.Width, 120), size);
+   var toolbar = new Size(450 * dpi / 96, 35 * dpi / 96);
+   var home = DrawingController.ToolbarLocation(screen, toolbar, null, dpi);
+   Check(screen.Contains(new Rectangle(home, toolbar)));
+   Check(screen.Bottom - home.Y - toolbar.Height == 24 * dpi / 96);
+   var dragged = DrawingController.ToolbarLocation(screen, toolbar, new PointF(.25f, .35f), dpi);
+   var anchor = DrawingController.ToolbarAnchor(screen, new Rectangle(dragged, toolbar));
+   Check(Math.Abs(anchor.X - .25f) < .005f && Math.Abs(anchor.Y - .35f) < .005f);
+  }
+  using (var toolbar = new InkToolbar(new InkModel(), () => {}, () => {}, () => {}))
+  {
+   var dimensions = new Size(3840, 2160);
+   Check(toolbar.FitToGame(dimensions, 96));
+   var standard = toolbar.Size;
+   Check(toolbar.FitToGame(dimensions, 288));
+   Check(toolbar.Width > standard.Width && toolbar.Height > standard.Height);
+   Check(new Rectangle(Point.Empty, dimensions).Contains(toolbar.Bounds));
+   Check(toolbar.FitToGame(dimensions, 96) && toolbar.Size == standard);
+   var smaller = new Size(1280, 720);
+   Check(toolbar.FitToGame(smaller, 96) && toolbar.Height < standard.Height);
+   Check(new Rectangle(Point.Empty, smaller).Contains(toolbar.Bounds));
+   var row = toolbar.Controls.OfType<FlowLayoutPanel>().Single();
+   Check(row.Controls.Cast<Control>().All(control => row.ClientRectangle.Contains(control.Bounds)));
+  }
   var model=new InkModel();RectangleF map=new(.7f,.6f,.25f,.35f);model.Begin(new(.1f,.1f),map);model.Move(new(.5f,.5f),map);model.End();Check(model.Strokes.Count==1&&model.Strokes[0].Points.Count==2);
   model.Space="map";model.Begin(new(.1f,.1f),map);Check(model.Strokes.Count==1);model.Begin(new(.8f,.7f),map);model.Move(new(1.2f,1.4f),map);model.End();Check(model.Strokes[1].Points[^1]==new PointF(1,1));model.Undo();Check(model.Strokes.Count==1);
   model.Tool="arrow";model.Space="screen";model.Begin(new(.2f,.2f),map);for(int i=0;i<100;i++)model.Move(new(i/100f,.7f),map);model.End();Check(model.Strokes[^1].Points.Count==2);

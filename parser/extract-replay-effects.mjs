@@ -1,4 +1,5 @@
 import {attachBaseGuardians} from './base-guardian-parser.mjs';
+import {attachMidbossTimer} from './midboss-timer.mjs';
 import {attachEconomy} from './economy-parser.mjs';
 import {attachMoney,attachSales} from './money-parser.mjs';
 import {attachSpectatorStats} from './spectator-stats.mjs';
@@ -43,6 +44,7 @@ export async function extract(match,inputOverride=null){
  const bridge=attachBridgeBuffs(parser,{pawnIdentity,basis:'replay'});
  const money=attachMoney(parser),sales=attachSales(parser),stats=attachSpectatorStats(parser);
  const economy=attachEconomy(parser);const baseGuardians=attachBaseGuardians(parser);
+ const midboss=attachMidbossTimer(parser);
  demo.stringTableContainer.subscribe(StringTableEvent.TABLE_CHANGED,(_,table,entries)=>{
   if(table.type!==StringTableType.ACTIVE_MODIFIERS)return;updates++;
   const gameRules=demo.getEntitiesByClassName('CCitadelGameRulesProxy');
@@ -69,7 +71,7 @@ export async function extract(match,inputOverride=null){
  let timedOut=false;const begin=Date.now(),timer=setTimeout(()=>{timedOut=true;parser.abort();},60000);
  try{await parser.parse(createReadStream(input));if(timedOut)throw Error('replay parser deadline; incomplete result rejected');success=true;}catch(e){error=String(e);}finally{clearTimeout(timer);}
  await parser.dispose();const after=statSync(input);if(before.size!==after.size||before.mtimeMs!==after.mtimeMs){success=false;error='replay changed while reading';}
- const result={schema:2,source_sha256:sourceSha256,source_bytes:before.size,match,success,error,seconds_to_parse:(Date.now()-begin)/1000,package:'deadem@4.0.2',warnings,updates,player_values:playerValues,roster:[...roster.values()],events,removals,base_guardians:baseGuardians.snapshot(),bridge:bridge.snapshot(),money:{...money.snapshot(),sales:sales.snapshot()},economy:economy.snapshot(),spectator_stats:stats.snapshot(),counts:{approved_applications:events.length,refresh_updates_suppressed:refreshUpdates,changed_applied_time_updates:rawClockCorrections,initial_entries_suppressed:initialEntries,by_path:byPath,per_hero:perHero},rejections,unmapped:[...unmapped].sort((a,b)=>b[1]-a[1]).slice(0,50),hash_collisions:catalog.collisions,scope:'local replay file only; no upload, game connection, memory read or input; not proof of live coverage; source hash mapping and first-entry timestamps require runtime cross-check'};
+ const result={schema:2,source_sha256:sourceSha256,source_bytes:before.size,match,success,error,seconds_to_parse:(Date.now()-begin)/1000,package:'deadem@4.0.2',warnings,updates,player_values:playerValues,roster:[...roster.values()],events,removals,base_guardians:baseGuardians.snapshot(),midboss_timer:midboss.snapshot(),bridge:bridge.snapshot(),money:{...money.snapshot(),sales:sales.snapshot()},economy:economy.snapshot(),spectator_stats:stats.snapshot(),counts:{approved_applications:events.length,refresh_updates_suppressed:refreshUpdates,changed_applied_time_updates:rawClockCorrections,initial_entries_suppressed:initialEntries,by_path:byPath,per_hero:perHero},rejections,unmapped:[...unmapped].sort((a,b)=>b[1]-a[1]).slice(0,50),hash_collisions:catalog.collisions,scope:'local replay file only; no upload, game connection, memory read or input; not proof of live coverage; source hash mapping and first-entry timestamps require runtime cross-check'};
  return result;
 }
 if(process.argv[1]&&import.meta.url===pathToFileURL(process.argv[1]).href){const match=process.argv[2];const result=await extract(match,process.argv[3]||null);writeFileSync(process.argv[4]||new URL('./replay-effects-'+match+'.json',import.meta.url),JSON.stringify(result,null,2));console.log(JSON.stringify({success:result.success,error:result.error,match,seconds:result.seconds_to_parse,roster:result.roster.length,events:result.events.length,per_hero:result.counts.per_hero,collisions:result.hash_collisions.length}));if(!result.success)process.exitCode=1;}

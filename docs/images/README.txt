@@ -1,10 +1,20 @@
 Documentation photographs
 
-The current READMEs use real application/game screenshots. The manager screenshot uses 0.6.1. Most game captures were taken on 2026-11-01 with public HUD 0.6.0, game build 6839, Japanese UI, 1920x1080, using replays 128579313 and 128582896. The colored drawing example was supplied by the user; its exact HUD version has not been independently established. The displayed drawing tools match 0.6.0.
+The READMEs use real game and manager screenshots. The overview, tournament header, Rejuvenator counts, minimap timers, statistics, drawing, hidden replay controls and manager use HUD 0.7.10. The smaller feature examples use HUD 0.6.0, game build 6839, with the Japanese UI at 1920x1080. They were captured on 2026-11-01 in replays 128579313 and 128582896.
 
 Editing is limited to continuous crops, proportional resizing, JPEG encoding and letterboxing for the overview. Game values, names, icons and drawn strokes are not synthesized, inpainted or repositioned. Drawing shapes in the demonstration are actual pen/arrow output from the tool, not added editorial annotations. Cursor pixels are outside selected crops.
 
-Current selected images and sources
+0.7.10 screenshots
+Captured on 2026-11-20 on Deadlock build 6864 with the Japanese UI and a 1920x1080 borderless replay. TEAM AMBER and TEAM BLUE are example display names entered in the manager. The game screens are from replay 138426226, except the amber-team Rejuvenator close-up, which uses replay 124885053.
+- spectator-overview-0.7.10-ja.jpg and replay-controls-hidden-0.7.10-ja.jpg: the same frame at 38:00 with the seek bar shown and hidden. The original screen edges were cropped symmetrically.
+- tournament-header-0.7.10-ja.jpg: a continuous full-width crop of the centered tournament header and roster at 38:00.
+- damage-dealt-0.7.10-ja.jpg and soul-lead-0.7.10-ja.jpg: the panels open separately at 37:29, with narrow outer edges cropped.
+- drawing-0.7.10-ja.jpg: the paused view at 37:29 shows two arrows drawn with the actual tool and the Japanese toolbar. The original screen edges were cropped symmetrically.
+- rejuvenator-team-blue-0.7.10-ja.jpg and rejuvenator-team-amber-0.7.10-ja.jpg: centered crops from the respective replays at 38:00 and 23:32. Each shows ×3 under the team total.
+- map-timers-0.7.10-ja.jpg: a continuous minimap crop at 38:00. Mid Boss is on the left and Bridge Buff is on the right.
+- manager-0.7.10-ja.jpg: the actual Home tab of the Windows manager in normal mode.
+
+0.6.0 feature close-ups and earlier examples
 - spectator-overview-0.6.0.jpg: actual replay overview; cropped/letterboxed 16:9 so outer heroes remain visible.
 - notification-purchase-context-0.6.0.jpg: replay-128579313-01.png, crop(1347,17)-(1495,248). Hero portrait through the purchase notice immediately below.
 - notification-upgrade-context-0.6.0.jpg: same source, crop(285,17)-(439,248). Portrait through the upgrade notice.
@@ -18,7 +28,7 @@ Current selected images and sources
 - lane-building-hp-0.6.0.jpg: replay-128582896-02.png, crop(8,316)-(705,383). Same-lane Walker and two individual Base Guardian HP entries.
 - map-timers-0.6.0.jpg: same source, crop(1508,585)-(1918,1018). Timers with the actual minimap below.
 - drawing-colored-example.jpg: user-supplied 1920x1080 screenshot of replay 124306727 at 1:02, crop(0,8)-(1920,1020). Actual red circle/arrow, cyan/yellow strokes, white thick strokes and toolbar retained; only the FPS edge and lower replay seek bar removed. No generated demonstration marks.
-- manager-0.6.1.jpg: actual installed 0.6.1 manager window on 2026-11-01 in normal mode; Japanese UI and updated F8 guidance, full window JPEG conversion without reshaping.
+- manager-0.7.0.jpg: actual 0.7.0 Windows manager (Japanese) in normal mode, captured on 2026-11-19 with a dedicated test profile. Client area below the Windows title bar, JPEG conversion without reshaping.
 
 Earlier manager-0.6.0.jpg, drawing-0.6.0.jpg, rejuvenator-centered-0.6.0.jpg and *-0.5.12.png files remain historical/alternative examples and are not referenced by the current READMEs. Original development logs, raw replays and extracted runtime assets are not included here.
 

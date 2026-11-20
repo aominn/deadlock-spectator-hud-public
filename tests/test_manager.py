@@ -7,7 +7,7 @@ import manager_core as c
 def fixture_bundle(root,version='0.1.0',extra=None):
  root.mkdir(parents=True,exist_ok=True);files={'HudManager.exe':b'fixture manager','engine/service.py':b'fixture service\nWINDOW_OWNER_PROTOCOL=1','engine/manager_cli.py':b'fixture cli','runtime/python/pythonw.exe':b'fixture Python','runtime/python/python.exe':b'fixture Python CLI','engine/fonts/NotoSansJP-Bold.ttf':b'fixture font','runtime/node/node.exe':b'fixture Node','mod/pak01_dir.vpk':b'fixture VPK '+version.encode()};files.update(extra or {})
  for n,data in files.items():f=root/n;f.parent.mkdir(parents=True,exist_ok=True);f.write_bytes(data)
- (root/'release.json').write_text(json.dumps({'schema':1,'platform':'win-x64','manager_protocol':1,'game_compatibility':{'pgi_versions':['fixture-pgi']},'version':version,'repository':'aominn/deadlock-spectator-hud','files':{n:c.sha(b) for n,b in files.items()}}),encoding='utf-8');return root
+ (root/'release.json').write_text(json.dumps({'schema':1,'platform':'win-x64','manager_protocol':1,'game_compatibility':{'pgi_versions':['fixture-pgi']},'version':version,'repository':'example/hud-fixture','files':{n:c.sha(b) for n,b in files.items()}}),encoding='utf-8');return root
 
 def fixture_game(root):
  g=root/'SteamLibrary/steamapps/common/Deadlock/game/citadel';g.mkdir(parents=True);exe=g.parent/'bin/win64/deadlock.exe';exe.parent.mkdir(parents=True);exe.write_bytes(b'fixture game')

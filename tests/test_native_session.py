@@ -51,6 +51,20 @@ class Tests(unittest.TestCase):
    state.line(ui('replay',at=time.time(),seq=2));self.assertTrue(state.native_confirmed)
    state.line(ui('lobby',at=time.time(),seq=3));self.assertFalse(state.native_confirmed);self.assertIn('native lobby confirmed',replay.observe_log.call_args.args[0])
    again=replay.observe_log.call_count;state.line(ui('lobby',at=time.time(),seq=3));self.assertEqual(replay.observe_log.call_count,again)
+ def test_busy_session_diagnostic_does_not_interrupt_native_updates(self):
+  import effect_bridge as b
+  with tempfile.TemporaryDirectory(dir=Path.cwd()) as d,patch.object(b,'LIVE',None),patch.object(b,'REPLAY',None),patch.object(b,'STATE',Path(d)):
+   state=b.State()
+   state.line(ui('replay',at=time.time(),seq=1))
+   path=Path(d)/'session-mode.json'
+   with patch('manager_core.os.replace',side_effect=PermissionError('diagnostic file in use')):
+    state.line(ui('spectator',at=time.time(),seq=2))
+   self.assertEqual(state.session_signal['kind'],'spectator')
+   self.assertFalse(state.stop)
+   self.assertEqual(json.loads(path.read_text(encoding='utf-8'))['kind'],'replay')
+   self.assertEqual(list(Path(d).iterdir()),[path])
+   state.line(ui('spectator',at=time.time(),seq=3))
+   self.assertEqual(json.loads(path.read_text(encoding='utf-8'))['seq'],3)
  def test_silent_or_old_heartbeat_does_not_cancel_active_session(self):
   import effect_bridge as b
   live=types.SimpleNamespace(route='a'*64,bound=True,observe_log=Mock(),reset=Mock())

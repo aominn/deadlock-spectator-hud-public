@@ -26,6 +26,10 @@ def team_settings(home):
     return [{}, {}]
 
 
+def clean_team_name(raw_name):
+    return ''.join(c for c in raw_name[:64] if c.isprintable()).strip() if isinstance(raw_name, str) else ''
+
+
 def team_setting(home, side):
     return team_settings(home)[side]
 
@@ -99,8 +103,7 @@ def team_bans_png(home, assets, side, language):
 
 def team_header_png(home, assets, side, mode, language):
     row = team_setting(home, side)
-    raw_name = row.get('Name')
-    name = ''.join(c for c in raw_name[:64] if c.isprintable()).strip() if isinstance(raw_name, str) and mode & 1 else ''
+    name = clean_team_name(row.get('Name')) if mode & 1 else ''
     icon = custom_icon(row.get('Icon')) if mode & 2 else None
     choice = row.get('Size')
     text_size, icon_size = ((16, 17), (19, 21), (22, 25))[choice if type(choice) is int and 0 <= choice <= 2 else 1]

@@ -1,6 +1,13 @@
 /* Scale only native bonus/stat groups. Item grid andwallet are separate panels. */
-.spec_mode #StatList {ui-scale:80%; margin-bottom:256px;}
-.spec_mode #HudStatBlock {ui-scale:80%; margin-bottom:233px;}
+.spec_mode #StatList {ui-scale:80%; margin-bottom:292px;}
+.spec_mode #HudStatBlock {ui-scale:80%; margin-bottom:209px;}
+
+/* Compact rows from the top; keep the lower edge clear of the native stat icons. */
+.spec_mode #StatList.SpecCompactStatList .miniModifier {height:20px; margin-bottom:2px;}
+.spec_mode #StatList.SpecCompactStatList .miniModifierCore Label {font-size:14px; padding:0px;}
+.spec_mode #StatList.SpecCompactStatList #casterList {height:17px; margin-bottom:-2px;}
+.spec_mode #StatList.SpecTightStatList .miniModifier {height:17px; margin-bottom:1px;}
+.spec_mode #StatList.SpecTightStatList .miniModifierCore Label {font-size:13px;}
 
 /* The lower item grid remains visible; only secondary stats pause during build comparison. */
 .spec_mode.SpecBuildDetailsOpen #StatList, .spec_mode.SpecBuildDetailsOpen #HudStatBlock {visibility: collapse;}

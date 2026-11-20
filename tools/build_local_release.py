@@ -30,6 +30,22 @@ def runtime_sources(root):
    if rel.as_posix()!='engine/effect-catalog.json':names.append(rel.as_posix())
  return names
 
+def verify_distribution_files(root):
+ root=Path(root)
+ local_folders={'.git','__pycache__','cache','logs','recovery','replays','research'}
+ local_files={'config.json','credentials.json','focus-fps.json','hosts.yml','hotkeys.json',
+              'mount.json','roster-display','team-headings.json','token.json'}
+ local_suffixes={'.db','.dem','.dmp','.key','.log','.pdb','.pem','.pfx','.pyc','.sqlite','.sqlite3',
+                 '.vpk','.vcss_c','.vsvg_c','.vtex_c','.vxml_c'}
+ for path in root.rglob('*'):
+  relative=path.relative_to(root)
+  parts=tuple(part.casefold() for part in relative.parts)
+  name=parts[-1]
+  if (path.is_symlink() or local_folders.intersection(parts)
+      or name in local_files or name=='.env' or name.startswith('.env.')
+      or path.suffix.casefold() in local_suffixes or name.endswith('.dem.bz2')):
+   raise ValueError('Unexpected local file in distribution: '+relative.as_posix())
+
 def verify_notices(root):
  root=Path(root)
  for name in ['LICENSE','THIRD_PARTY_NOTICES.txt','licenses/THIRD-PARTY-INDEX.json']:
@@ -49,10 +65,15 @@ def verify_notices(root):
 def main():
  ap=argparse.ArgumentParser(description=__doc__)
  for name in ['base-bundle','native-manager','asset-reader','output','version']:ap.add_argument('--'+name,required=True)
- ap.add_argument('--asset-template');ap.add_argument('--verify-game')
+ ap.add_argument('--asset-template');ap.add_argument('--verify-game');ap.add_argument('--runtime-dir')
  q=ap.parse_args();root=Path(__file__).resolve().parents[1];verify_notices(root);sys.path.insert(0,str(root/'engine'));from manager_core import Manager,safe,member;from asset_prepare import verify_tree;from asset_install import PROFILE
- base=safe(q.base_bundle);m=Manager(Path(q.output).parent/'.build-check-home',base,busy=lambda:[]).verify();lock=json.loads((root/'tools/runtime-lock.json').read_text(encoding='utf-8'));origin=json.loads((base/'runtime/python/vendor-manifest.json').read_text(encoding='utf-8'))
- if origin['sources']!={n:lock[n] for n in ['python','pillow']} or sha(base/'runtime/node/node.exe')!=lock['node']['sha256']:raise ValueError('Pinned runtime identity differs')
+ base=safe(q.base_bundle);m=Manager(Path(q.output).parent/'.build-check-home',base,busy=lambda:[]).verify();lock=json.loads((root/'tools/runtime-lock.json').read_text(encoding='utf-8'))
+ runtime=safe(q.runtime_dir) if q.runtime_dir else base/'runtime'
+ vendor_manifest=runtime/'python/vendor-manifest.json'
+ origin=json.loads(vendor_manifest.read_text(encoding='utf-8'))
+ if origin['sources']!={n:lock[n] for n in ['python','pillow']}:raise ValueError('Pinned Python/Pillow identity differs')
+ verify_tree(runtime/'python',{**origin['files'],'vendor-manifest.json':sha(vendor_manifest)})
+ verify_tree(runtime/'node',{'node.exe':lock['node']['sha256']})
  out=safe(q.output)
  if out.exists():raise ValueError('Use a new build folder')
  out.mkdir();package=out/'DeadlockSpectatorHUD';package.mkdir();reader=safe(q.asset_reader);recipe=json.loads((root/'tools/local-assets-recipe.json').read_text(encoding='utf-8'))
@@ -83,8 +104,9 @@ def main():
   from asset_prepare import prepare
   generation=prepare(q.verify_game,root/'tools/local-assets-recipe.json',template,reader,out/'generation-check',flexible=True)
  for n in m['files']:
-  if n.startswith(('runtime/','parser/node_modules/')):
+  if n.startswith('parser/node_modules/'):
    target=package/member(n);target.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(base/n,target)
+ copy_files(runtime,package/'runtime')
  source_names=runtime_sources(root)
  for n in source_names:
   target=package/member(n);target.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(root/n,target)
@@ -99,7 +121,7 @@ def main():
    (package/n).write_text(content,encoding='utf-8',newline='\n')
   else:shutil.copy2(root/n,package/n)
  shutil.copy2(Path(q.native_manager)/'HudManager.exe',package/'HudManager.exe');copy_files(template,package/PROFILE['template']);copy_files(reader.parent,package/'asset-preparation/reader');shutil.copy2(root/'tools/local-assets-recipe.json',package/PROFILE['recipe'])
- verify_notices(package);manifest=dict(m);manifest['repository']='aominn/deadlock-spectator-hud-public';manifest['version']=q.version;manifest['manager_protocol']=2;manifest['game_compatibility']=json.loads((root/'mod-src/compatibility.json').read_text(encoding='utf-8'));manifest['asset_preparation']=PROFILE;manifest.pop('prepared_assets',None);manifest['files']={f.relative_to(package).as_posix():sha(f) for f in sorted(package.rglob('*')) if f.is_file()};(package/'release.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding='utf-8');Manager(out/'.validation-home',package,busy=lambda:[]).verify()
+ verify_distribution_files(package);verify_notices(package);manifest=dict(m);manifest['repository']='aominn/deadlock-spectator-hud-public';manifest['version']=q.version;manifest['manager_protocol']=2;manifest['game_compatibility']=json.loads((root/'mod-src/compatibility.json').read_text(encoding='utf-8'));manifest['asset_preparation']=PROFILE;manifest.pop('prepared_assets',None);python_dll='python'+''.join(lock['python']['version'].split('.')[:2])+'.dll';manifest['runtime']={'python_version':lock['python']['version'],'pillow_version':lock['pillow']['version'],'node_version':lock['node']['version'],'python_source_sha256':lock['python']['sha256'],'python_dll':python_dll,'python_dll_sha256':sha(runtime/'python'/python_dll),'node_sha256':lock['node']['sha256']};manifest['files']={f.relative_to(package).as_posix():sha(f) for f in sorted(package.rglob('*')) if f.is_file()};(package/'release.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2),encoding='utf-8');Manager(out/'.validation-home',package,busy=lambda:[]).verify()
  archive=out/('DeadlockSpectatorHUD-'+q.version+'-win-x64.zip')
  with zipfile.ZipFile(archive,'w',zipfile.ZIP_DEFLATED,compresslevel=6) as z:
   for f in sorted(package.rglob('*')):

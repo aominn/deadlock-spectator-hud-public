@@ -3759,25 +3759,8 @@
     {
       "destination": "mod-src/hud_escape_menu.xml",
       "resource": "a59e889525277efd21fc",
-      "action": "splice",
-      "splices": [
-        {
-          "copy": [
-            0,
-            3273
-          ]
-        },
-        {
-          "text": "\t<Button id=\"SpecOpenLiveWatch\" class=\"nav_menu_item minor\" style=\"margin-left: 24px;\" onactivate=\"CitadelShowWatchPage( true )\">\r\n\t\t\t\t\t\t\t<Label text=\"#Citadel_Watch_Title\" class=\"menuButtonLabel\" />\r\n\t\t\t\t\t\t</Button>\r\n\t\t\t\t\t"
-        },
-        {
-          "copy": [
-            3273,
-            1309
-          ]
-        }
-      ],
-      "expected_sha256": "8d824dd69d49092f2d1f853bfe5e080aba4ebf2c785ff049a5af556b6fdc7150"
+      "action": "copy",
+      "expected_sha256": "f52742f3ca85a53ffba0749bed54983287a8cb39459c137e594fcbca98b95455"
     },
     {
       "destination": "engine/icons/objective-guardian.png",
@@ -4933,25 +4916,26 @@
   "template_sha256": {
     "engine/effect-catalog.json": "ee12d0fbf61c28f14f0cc79fa440171705328c45543802cc2e773e0e4c401bd6",
     "mod-src/asset-map.js": "932d4dc961c32232ad29ee3a39e646ed0ad027b602dd76a1828472945ae1d6d5",
-    "mod-src/bonus-override.css": "b6d905f6a9335f6689f45ace15c51c034343b5ac84b1a96d99de8438e5b40e8c",
-    "mod-src/debug-override.css": "f808ee478cebaa8f0d58c12a52e5f2b0cd49e4e130287964fd4a9e9d9f779fc3",
+    "mod-src/bonus-override.css": "3f206e8366bcc95ba58fc8537ee4e0306a4542e7dc90d62fc94de300720e19a2",
+    "mod-src/debug-override.css": "84734daf0ba10f279c3acb5b2b51e7213901c6c80f9c60fdc956cc1a9f7efb32",
     "mod-src/detail-ability-override.css": "609495e622a1c7e33069e17c6514116a4b241133fa9ad6bf0cc4fed8389a9739",
     "mod-src/detail-inventory-override.css": "cdc9f8e9ca72d9f26f7b0987034b606febc8dff2ab5ae189e71208de6b98b413",
     "mod-src/feed-override.css": "08e738960acc1057408828ed356e37321a03c124592b05d9de47e3bea41e1c80",
     "mod-src/panorama_writer.py": "fb06bdb6c458373fe0118fc08f42c6ab9512181b26051b372c7fd697559a396e",
-    "mod-src/spectator_probe.js": "b053b4dce2c1c690130e939a89b72a5cb06c158eb571560383e2bb76a91d9340",
-    "mod-src/toast-override.css": "e87bb52dc33a106334f94ef6681e2212e073e2b46ff4e6965e01dcaf5f2edeb8",
-    "tools/build_mod.py": "b01f14c940f443ff350bdaa439b09bb9f710b5eb8d3c60579f8f932609e0bc5b",
+    "mod-src/spectator_probe.js": "e961e2e59a758b12893874847c9f8945097e286fc49006d9b58f2878cf413a8a",
+    "mod-src/toast-override.css": "fadd09755c3c04d9d32a2859bf11a9b569724a3128fd42e20fbf1ee157b22480",
+    "tools/build_mod.py": "86a996a983900703762d681c87bf2c5bff4a0b0f35b8adc2b6ee3715a0986274",
     "mod-src/THIRD-PARTY-LICENSE.txt": "1778e3780f31e105eb15a095fd2caac11dea70daf53e5b2b5c7b5200de2264d1",
     "mod-src/identity-data.js": "cddfa1dc469f0335932921885c5591d73df5e18b78df13486d4c9c689547302c",
-    "mod-src/locale.js": "574400e005569cbf5cbe95f5206eede325eb771a75bea3b4fbf109f5442472cd"
+    "mod-src/locale.js": "d9468f727b6c62de07ca5f5828abc8e10a0345533bd5d5ec4dd2a20653f23960",
+    "mod-src/drawing_fps_menu.js": "6a339b64a54cf6f522549a6fade0e6a11382017c07af80c5f3feac509a2d5933"
   },
   "scope": "Local setup/update generation; image content may change; current image then previous matching identity then absent; native UI references remain checked",
-  "reader_sha256": "7f8767ca797e122034c866d51c5dbcc3d96bb3b05a5c27dd5b1bb74d553da344",
+  "reader_sha256": "4254efcb745a859ac977bb4b47046080e5e195b59b25f0fb0cd2f9a78bd25717",
   "reader_files": {
-    "HudAssetReader.exe": "7f8767ca797e122034c866d51c5dbcc3d96bb3b05a5c27dd5b1bb74d553da344"
+    "HudAssetReader.exe": "4254efcb745a859ac977bb4b47046080e5e195b59b25f0fb0cd2f9a78bd25717"
   },
   "game_build": "6821",
   "catalog_expected_sha256": "dece7b1f348b5717cec0f7ef8502a80a4cea6f23a64e90553cf4e4dc0ac56110",
-  "expected_vpk_sha256": "40c4af0e1fa912965aab674540bffcf7e264c43cd4d2c3174d68282dcff48813"
+  "expected_vpk_sha256": "e0187f5f056c1f4786bd18da7f54e49e923d42ce8ab8a9bcaa42bd843a45d47c"
 }

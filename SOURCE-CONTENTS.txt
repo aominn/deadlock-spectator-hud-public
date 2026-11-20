@@ -1,7 +1,11 @@
-Public 0.6.1 source. Based on the reviewed 0.5.12 HUD behavior; earlier private history is not imported.
-Included: authored HUD/manager/parser/build code and tests; minimum compatibility identifiers and display-name mappings; third-party font and license notices.
-Excluded: prior .git history/tags; game images/native UI originals/game fonts/generated VPK; research/history notes and private-only publisher; runtimes/dependencies/build products/logs/replays/settings/authentication.
-Full extracted modifier data is reduced to source/class lookup fields consumed by buildCatalog(). 0.6.1 changes the drawing hotkey transition; other runtime display/timing code is unchanged; update-link default and new source-built package metadata target this repository.
-Game-related names/identifiers belong to their owners. Third-party components retain their licenses. No Valve approval or affiliation is implied.
+Deadlock Spectator HUD 0.7.10 public source.
 
-Documentation photographs: docs/images contains actual game/manager captures for README/article explanations, including verified 0.6.0 captures, retained historical 0.5.12 screenshots and a user-supplied drawing capture whose exact HUD version is unconfirmed. See docs/images/README.txt for provenance. These are distinct from extracted runtime game assets and are excluded from executable ZIPs; game-content rights are not licensed under project MIT.
+Included: project source for the game HUD, Windows manager, replay and live parsers, and build tools. Automated regression tests, compatibility identifiers, display-name mappings, and third-party license notices are also included.
+
+The executable ZIP is built separately. It includes the runtime dependencies and license notices. It omits development tests and harnesses, build intermediates, experiment files, logs, replays, settings, and credentials.
+
+Initial setup prepares the required game images and UI resources from the user's local Deadlock installation. The public source and executable ZIP omit extracted game images, native UI originals, game fonts, and generated VPK files. Modifier mappings contain the identifiers needed by the parser.
+
+The screenshots in docs/images illustrate the interface. See docs/images/README.txt for their sources and versions. Game content in those screenshots remains subject to its original rights. The project's MIT license applies to its own code.
+
+See docs/BUILD.txt for the build procedure and docs/PORTABLE.txt for release checks.

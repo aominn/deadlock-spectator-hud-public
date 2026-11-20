@@ -7,8 +7,27 @@ using System.Windows.Forms;
 
 internal static class Program
 {
+    const string ProductFolder = "DeadlockSpectatorHUD";
+    internal const string PublicRepository = "aominn/deadlock-spectator-hud-public";
     internal static bool RestartRequested;
-    internal static readonly string Home = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Aominn", "DeadlockSpectatorHUD");
+    static readonly (string Home, string InstancePrefix) Profile = SelectProfile(
+        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData));
+    internal static string Home => Profile.Home;
+
+    internal static (string Home, string InstancePrefix) SelectProfile(string localAppData)
+    {
+        string current = Path.Combine(localAppData, ProductFolder);
+        string legacy = Path.Combine(localAppData, "Aominn", ProductFolder);
+        string[] stateFiles = ["config.json", "hotkeys.json", "team-headings.json", "roster-display", "mount.json", "focus-fps.json"];
+        bool legacyRecovery = File.Exists(Path.Combine(legacy, "mount.json")) || File.Exists(Path.Combine(legacy, "focus-fps.json"));
+        // An older install can still hold the absolute paths needed to restore the game.
+        if (legacyRecovery || (!HasState(current) && HasState(legacy)))
+            return (legacy, "AominnDeadlockHud");
+        return (current, ProductFolder);
+
+        bool HasState(string path) => stateFiles.Any(name => File.Exists(Path.Combine(path, name)));
+    }
+
     [STAThread]
     static void Main(string[] args)
     {
@@ -31,8 +50,8 @@ internal static class Program
                 foreach (var arg in args) pi.ArgumentList.Add(arg);
                 Process.Start(pi); return;
             }
-            using var signal = new EventWaitHandle(false, EventResetMode.AutoReset, @"Local\AominnDeadlockHudShow");
-            using var mutex = new Mutex(true, @"Local\AominnDeadlockHudManager", out bool first);
+            using var signal = new EventWaitHandle(false, EventResetMode.AutoReset, $@"Local\{Profile.InstancePrefix}Show");
+            using var mutex = new Mutex(true, $@"Local\{Profile.InstancePrefix}Manager", out bool first);
             if (!first) { signal.Set(); return; }
             Application.Run(new ManagerForm(root, signal));
         }
@@ -43,90 +62,96 @@ internal static class Program
 
 internal sealed partial class ManagerForm : Form
 {
-    string bundle;
+
+    readonly string bundle;
     readonly EventWaitHandle showSignal;
     readonly TextBox game = new() { Dock = DockStyle.Fill, AccessibleName = Ui.T(@"Deadlockのフォルダー（game\citadel）") };
-    readonly Label state = new() { AutoSize = true, Font = new Font("Yu Gothic UI", 16, FontStyle.Bold) };
-    readonly Label details = new() { AutoSize = true, MaximumSize = new Size(690, 0) };
-    readonly TextBox output = new() { Dock = DockStyle.Fill, ReadOnly = true, Multiline = true, ScrollBars = ScrollBars.Vertical };
+    readonly Label state = new() { AutoSize = true };
+    readonly Label details = new() { AutoSize = true };
+    readonly Label keySummary = new() { AutoSize = true };
+    readonly Label output = new() { AutoSize = true, AccessibleName = L("操作結果", "Action result") };
     readonly System.Windows.Forms.Timer timer;
     readonly DrawingController drawing;
-    HudKeys keys = HudKeys.Defaults;
-    readonly Label keySummary = new() { AutoSize = true, Padding = new Padding(0, 9, 0, 0) };
-    bool busy, exiting, closeRequested, stopping;
-    readonly List<Control> actions = new();
+    HudKeys keys;
+    bool busy, exiting, closeRequested, stopping, startupComplete;
 
     public ManagerForm(string root, EventWaitHandle signal)
     {
-        bundle = root; showSignal = signal; keys = HudKeys.Load(Program.Home);
+        bundle = root;
+        showSignal = signal;
+        keys = HudKeys.Load(Program.Home);
         drawing = new DrawingController(message => { if (!IsDisposed) output.Text = message; });
-        Text = Ui.T("Deadlock 観戦HUD"); ClientSize = new Size(760, 550); MinimumSize = new Size(700, 530);
-        Font = new Font(Ui.Japanese ? "Yu Gothic UI" : "Segoe UI", 10); StartPosition = FormStartPosition.CenterScreen;
-        var layout = new TableLayoutPanel { Dock = DockStyle.Fill, Padding = new Padding(22), ColumnCount = 1, RowCount = 9 };
-        layout.RowStyles.Add(new RowStyle(SizeType.AutoSize)); layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        for (int i = 2; i < 8; i++) layout.RowStyles.Add(new RowStyle(SizeType.AutoSize));
-        layout.RowStyles.Add(new RowStyle(SizeType.Percent, 100)); Controls.Add(layout);
-        layout.Controls.Add(state); layout.Controls.Add(details);
-        layout.Controls.Add(new Label { Text = Ui.T("Deadlockのフォルダー（末尾の citadel まで選択）\r\n例：...\\Steam\\steamapps\\common\\Deadlock\\game\\citadel"), AutoSize = true, Margin = new Padding(0, 18, 0, 4) });
-        var pathRow = new TableLayoutPanel { Dock = DockStyle.Top, AutoSize = true, ColumnCount = 2 }; pathRow.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100)); pathRow.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, Ui.Japanese ? 82 : 96));
-        pathRow.Controls.Add(game); var browse = Button(Ui.T("参照"), () => { using var f = new FolderBrowserDialog { Description = Ui.T(@"Deadlock\game\citadel を選択してください（gameinfo.gi があるフォルダー）"), ShowNewFolderButton = false, UseDescriptionForTitle = true, SelectedPath = Directory.Exists(game.Text) ? game.Text : "" }; if (f.ShowDialog() == DialogResult.OK) game.Text = f.SelectedPath; return Task.CompletedTask; }); pathRow.Controls.Add(browse); layout.Controls.Add(pathRow);
-        var primary = Row(); primary.Controls.Add(Button(Ui.T("準備する"), Prepare)); primary.Controls.Add(Button(Ui.T("HUDを有効にする"), async () => { await Run("enable"); await RefreshStatus(); })); primary.Controls.Add(Button(Ui.T("通常モードへ戻す"), async () => { await Run("normal"); await RefreshStatus(); })); primary.Controls.Add(Button(Ui.T("ゲームを起動"), async () => { await Run("launch"); })); layout.Controls.Add(primary);
-        layout.Controls.Add(new Label { Text = Ui.T("観戦中はこの画面を開いておいてください。×で終了、最小化中は動作します。"), AutoSize = true });
-        layout.Controls.Add(new Label { Text = Ui.T("使い方：フォルダーを選び「準備する」→「HUDを有効にする」→「ゲームを起動」。"), AutoSize = true, MaximumSize = new Size(690, 0), Margin = new Padding(0, 6, 0, 4) });
-        var settings = Row();
-        settings.Controls.Add(Button(L("キー設定", "Key bindings"), ShowKeySettings));
-        settings.Controls.Add(Button(L("表示設定", "Display settings"), ShowDisplaySettings));
-        settings.Controls.Add(Button(L("チーム設定", "Team settings"), ShowTeamSettings));
-        settings.Controls.Add(keySummary);
-        UpdateKeySummary();
-        layout.Controls.Add(settings);
-        var menu = new MenuStrip { Font = Font };
-        var help = new ToolStripMenuItem(L("ヘルプ", "Help"));
-        var troubleshooting = new ToolStripMenuItem(Ui.T("困ったとき"));
-        troubleshooting.Click += async (_, _) => { if (!busy) { try { await ShowHelp(); } catch (Exception e) { MessageBox.Show(this, e.Message, Ui.T("観戦HUD")); } } };
-        var releases = new ToolStripMenuItem(Ui.T("最新版をダウンロード"));
-        releases.Click += async (_, _) => await Guard(OpenReleases);
-        help.DropDownItems.Add(troubleshooting);
-        help.DropDownItems.Add(releases);
-        menu.Items.Add(help);
-        MainMenuStrip = menu;
-        Controls.Add(menu);
-        layout.Controls.Add(output);
+        ConfigureFormDpi(this);
+        Text = Ui.T("Deadlock 観戦HUD");
+        ClientSize = new Size(880, 640);
+        StartPosition = FormStartPosition.CenterScreen;
+        BuildWindow();
+
         FormClosing += async (_, e) =>
         {
             if (exiting) return;
-            e.Cancel = true; closeRequested = true;
+            e.Cancel = true;
+            closeRequested = true;
             if (!busy && !stopping) await FinishClose();
         };
-        timer = new System.Windows.Forms.Timer { Interval = 3000 }; timer.Tick += async (_, _) => { if (showSignal.WaitOne(0)) Open(); if (!busy && Visible) { try { await RefreshStatus(); } catch { details.Text = Ui.T("状態を読み込めません。「困ったとき」から確認してください。"); } } }; timer.Start();
-        Shown += async (_, _) => { await Guard(async () => {
-            await RefreshStatus();
+        timer = new System.Windows.Forms.Timer { Interval = 2000 };
+        timer.Tick += async (_, _) =>
+        {
+            if (showSignal.WaitOne(0)) Open();
+            if (!busy && Visible)
+            {
+                try { await RefreshStatus(); }
+                catch { details.Text = L("状態を読み込めません。ヘルプから確認してください。", "Could not read status. See Help."); }
+            }
+        };
+        Shown += async (_, _) => await Guard(async () =>
+        {
             output.Text = Ui.T("起動の準備をしています。しばらくお待ちください。");
+            await RefreshStatus();
             var update = await Run("startup", silent: true);
             if (update["updated"]?.GetValue<bool>() == true) { Program.RestartRequested = true; Close(); return; }
             if (string.IsNullOrEmpty(game.Text)) game.Text = update["game"]?.GetValue<string>() ?? "";
+            startupComplete = true;
             await RefreshStatus();
-            output.Text = Ui.T("更新するときは、ゲームとこの画面を終了してから、最新版を展開し、新しいHudManager.exeを開いてください。");
-        }); };
+            output.Text = "";
+        });
+        timer.Start();
         FormClosed += (_, _) => { drawing.Dispose(); timer.Dispose(); };
     }
-    FlowLayoutPanel Row() => new() { Dock = DockStyle.Top, AutoSize = true, WrapContents = true, Margin = new Padding(0, 8, 0, 4) };
-    Button Button(string text, Func<Task> f, bool guarded = true)
+
+
+    static void ConfigureFormDpi(Form form)
     {
-        var b = new Button { Text = text, AutoSize = true, Padding = new Padding(8, 4, 8, 4), Margin = new Padding(0, 2, 7, 4) };
-        actions.Add(b); b.Click += async (_, _) => {
-            if (guarded) await Guard(f);
-            else if (!busy) { try { await f(); } catch (Exception e) { MessageBox.Show(this, e.Message, Ui.T("観戦HUD")); } }
-        }; return b;
+        // Start each window from the design font, independent of the owner's current DPI.
+        form.Font = new Font(Ui.Japanese ? "Yu Gothic UI" : "Segoe UI", 10);
+        form.AutoScaleMode = AutoScaleMode.Dpi;
+        form.AutoScaleDimensions = new SizeF(96, 96);
+        void FitWorkArea()
+        {
+            if (form.IsDisposed || form.WindowState != FormWindowState.Normal) return;
+            Rectangle area = Screen.FromControl(form).WorkingArea;
+            form.Bounds = FitWindowBounds(form.Bounds, area);
+        }
+        form.Shown += (_, _) => FitWorkArea();
+        form.DpiChanged += (_, _) => form.BeginInvoke(FitWorkArea);
     }
+
+    internal static Rectangle FitWindowBounds(Rectangle window, Rectangle area)
+    {
+        int width = Math.Min(window.Width, area.Width);
+        int height = Math.Min(window.Height, area.Height);
+        return new(Math.Clamp(window.X, area.Left, area.Right - width),
+            Math.Clamp(window.Y, area.Top, area.Bottom - height), width, height);
+    }
+
     void Open() { Show(); WindowState = FormWindowState.Normal; Activate(); }
     JsonNode? Config() { var p = Path.Combine(Program.Home, "config.json"); return File.Exists(p) ? JsonNode.Parse(File.ReadAllText(p)) : null; }
     async Task Guard(Func<Task> f)
     {
-        if (busy) return; busy = true; foreach (var c in actions.Where(c => !c.IsDisposed)) c.Enabled = false;
+        if (busy) return; busy = true; shell.Enabled = false;
         try { await f(); }
-        catch (Exception e) { output.Text = e.Message; if (Visible) MessageBox.Show(this, e.Message, Ui.T("観戦HUD"), MessageBoxButtons.OK, MessageBoxIcon.Information);  }
-        finally { busy = false; if (!IsDisposed) { foreach (var c in actions.Where(c => !c.IsDisposed)) c.Enabled = true; if (closeRequested) await FinishClose(); } }
+        catch (Exception e) { output.Text = e.Message; }
+        finally { busy = false; if (!IsDisposed) { shell.Enabled = true; if (closeRequested) await FinishClose(); } }
     }
     async Task FinishClose()
     {
@@ -156,28 +181,105 @@ internal sealed partial class ManagerForm : Form
         if (!silent && action is not "status" and not "discover")
         {
             output.Text = result["message"]?.GetValue<string>() ?? Ui.T("操作が完了しました。");
-            if (result["assets"] is JsonObject assets) output.AppendText(Ui.T("\r\n画像：ゲームから ") + assets["current"] + Ui.T(" ／ 旧画像 ") + assets["previous"] + Ui.T(" ／ 画像なし ") + assets["missing"]);
-            if (action == "verify") output.AppendText(Ui.T("\r\n版：") + result["version"]?.GetValue<string>() + Ui.T("　検証ファイル数：") + result["files"]?.ToString());
+            if (result["assets"] is JsonObject assets) output.Text += Ui.T("\r\n画像：ゲームから ") + assets["current"] + Ui.T(" ／ 旧画像 ") + assets["previous"] + Ui.T(" ／ 画像なし ") + assets["missing"];
+            if (action == "verify") output.Text += Ui.T("\r\n版：") + result["version"]?.GetValue<string>() + Ui.T("　検証ファイル数：") + result["files"]?.ToString();
         }
         return result;
     }
+    async Task RestoreLegacyFocus()
+    {
+        var result = await Run("launch", new() { ["focus"] = "restore" });
+        await RefreshStatus();
+        if (result["game_pid"]?.GetValue<int>() is int pid && result["focus"]?.GetValue<string>() is "enable" or "restore")
+            _ = CheckFocusAfterExit(pid, "restore");
+        else if (result["focus"]?.GetValue<string>() is "restored" or "different")
+            ShowFocusResult(result["focus"]!.GetValue<string>(), "restore");
+    }
+
+    async Task CheckFocusAfterExit(int pid, string mode)
+    {
+        try
+        {
+            try
+            {
+                using var process = Process.GetProcessById(pid);
+                await process.WaitForExitAsync();
+            }
+            catch (ArgumentException) { }
+            if (IsDisposed || closeRequested || busy) return;
+            await Guard(async () =>
+            {
+                var result = await Run("focus-status", silent: true);
+                await RefreshStatus();
+                ShowFocusResult(result["state"]?.GetValue<string>(), mode);
+            });
+        }
+        catch (Exception)
+        {
+            if (!IsDisposed && !closeRequested)
+                output.Text = L("FPS設定の結果は未確認です。「設定」→「画面への描き込み」から復元できます。", "The FPS setting has not been verified. You can restore it under Settings → Drawing on screen.");
+        }
+    }
+
+    void ShowFocusResult(string? state, string mode)
+    {
+        if (state == "restored")
+            output.Text = L("FPS設定が元の値に戻っていることを確認しました。", "The original FPS setting was verified.");
+        else if (state == "different")
+            output.Text = L("FPS設定は別の値になっています。現在の値を保持しました。", "The FPS setting has a different value. The current value was kept.");
+        else if (state == "pending" && mode == "restore")
+            output.Text = L("FPS設定がまだ0です。復元操作を再試行するか、READMEの手順を使ってください。", "The FPS setting is still 0. Retry the restore action or follow the README.");
+    }
+
     static string ServiceLabel(string? value) => value switch { "waiting" => Ui.T("ゲーム起動待機"), "watching" => Ui.T("観戦・リプレイ待機中"), "stopped" => Ui.T("停止"), "error" => Ui.T("要確認"), _ => Ui.T("準備中") };
     Task RefreshStatus()
     {
-        var c = Config() ?? new JsonObject();
-        var sp = Path.Combine(Program.Home, "service.json");
-        var service = File.Exists(sp) ? JsonNode.Parse(File.ReadAllText(sp)) : null;
-        string headline = c["enabled"]?.GetValue<bool>() == true ? Ui.T("HUD有効") : (File.Exists(Path.Combine(Program.Home, "mount.json")) ? Ui.T("復旧待ち（通常モードへ戻してください）") : Ui.T("通常モード"));
+        var config = Config() ?? new JsonObject();
+        var servicePath = Path.Combine(Program.Home, "service.json");
+        var service = File.Exists(servicePath) ? JsonNode.Parse(File.ReadAllText(servicePath)) : null;
+        bool enabled = config["enabled"]?.GetValue<bool>() == true;
+        bool prepared = config["version"] is not null && config["game"] is not null;
+        bool recover = !enabled && File.Exists(Path.Combine(Program.Home, "mount.json"));
+        bool running = GameRunning();
+        string headline = recover ? L("通常モードへの復旧が必要です", "Normal mode recovery needed")
+            : !prepared ? L("初回セットアップが必要です", "Setup required")
+            : enabled ? Ui.T("HUD有効") : Ui.T("通常モード");
         string serviceMessage = ServiceLabel(service?["state"]?.GetValue<string>());
-        string description = Ui.T("バージョン：") + (c["version"]?.GetValue<string>() ?? Ui.T("準備前")) + (c["enabled"]?.GetValue<bool>() == true ? "　" + serviceMessage : Ui.T("　ゲームは通常の表示です。"));
-        drawing.Configure(keys.DrawingEnabled && c["enabled"]?.GetValue<bool>() == true, keys.Drawing);
-        if (state.Text != headline) state.Text = headline;
-        if (details.Text != description) details.Text = description;
+        string description = running
+            ? L("ゲーム起動中。モードを変更するときはゲームを終了してください。", "Game running. Close the game to change modes.")
+            : recover ? L("ゲームを起動する前に通常モードへ戻します。", "Restore normal mode before launching.")
+            : !prepared ? L("Deadlockの場所を確認し、表示に使う素材を準備します。", "Choose the Deadlock folder and prepare the HUD assets.")
+            : enabled ? serviceMessage + L("。通常プレイの前に通常モードへ戻してください。", ". Restore normal mode before playing.")
+            : L("標準の表示で起動します。観戦用の表示は「HUDを有効にする」から使えます。", "The game launches with its standard display. Enable the HUD before spectating.");
+        state.Text = headline;
+        details.Text = description;
+        versionLabel.Text = config["version"]?.GetValue<string>() is string version ? L("バージョン ", "Version ") + version : "";
+        primaryButton.Visible = prepared || recover;
+        primaryButton.Text = recover ? Ui.T("通常モードへ戻す") : Ui.T("ゲームを起動");
+        primaryButton.Enabled = startupComplete && !running;
+        modeButton.Text = enabled ? Ui.T("通常モードへ戻す") : Ui.T("HUDを有効にする");
+        modeButton.Visible = prepared && !recover;
+        modeButton.Enabled = startupComplete && !running;
+        folderButton.Visible = prepared && !recover;
+        folderButton.Enabled = startupComplete && !running;
+        folderButton.Text = folderSettingsOpen ? L("フォルダー設定を閉じる", "Close folder settings")
+            : L("ゲームフォルダーを変更", "Change game folder");
+        folderSettings.Visible = !recover && (!prepared || folderSettingsOpen);
+        helpWrite.Enabled = startupComplete && !running;
+        setupWrite.Enabled = startupComplete && !running;
+        saveSettings.Enabled = startupComplete && !running;
+        launchPath = recover ? "normal" : "launch";
+        modePath = enabled ? "normal" : "enable";
+        UpdateSettingsNotice(running);
+        UpdateLegacyButton(running);
+        homeHints.Visible = prepared && !recover;
+        drawing.Configure(keys.DrawingEnabled && enabled, keys.Drawing);
         return Task.CompletedTask;
     }
+
     Task OpenReleases()
     {
-        string repo = Config()?["repository"]?.GetValue<string>() ?? "aominn/deadlock-spectator-hud-public";
+        string repo = Config()?["repository"]?.GetValue<string>() ?? Program.PublicRepository;
         if (!Regex.IsMatch(repo, @"^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$")) throw new Exception(Ui.T("GitHubの公開先設定が不正です。"));
         Process.Start(new ProcessStartInfo("https://github.com/" + repo + "/releases") { UseShellExecute = true }); return Task.CompletedTask;
     }
@@ -190,148 +292,22 @@ internal sealed partial class ManagerForm : Form
         bool sameGame = config?["game"]?.GetValue<string>() is string path && Path.GetFullPath(path).TrimEnd('\\').Equals(Path.GetFullPath(game.Text).TrimEnd('\\'), StringComparison.OrdinalIgnoreCase);
         if (sameGame && config?["bundle"] != null) await Run("refresh-assets");
         else await Run("setup", new() { ["game"] = game.Text });
+        folderSettingsOpen = false;
         await RefreshStatus();
+        ShowPage(homePage);
     }
     static string L(string ja, string en) => Ui.Japanese ? ja : en;
 
     void UpdateKeySummary() => keySummary.Text = keys.DrawingEnabled
-        ? L($"描画 {keys.Drawing.Display}", $"Draw {keys.Drawing.Display}")
-            + $"  /  {L("ダメージ", "Damage")} {keys.Damage.Display}  /  {L("資産差", "Net worth")} {keys.Graph.Display}"
-        : L($"ダメージ {keys.Damage.Display}  /  資産差 {keys.Graph.Display}",
-            $"Damage {keys.Damage.Display}  /  Net worth {keys.Graph.Display}");
+        ? L($"描き込み {keys.Drawing.Display}", $"Draw {keys.Drawing.Display}")
+            + $"  /  {L("与ダメージ", "Damage Dealt")} {keys.Damage.Display}  /  {L("ソウル差", "Soul Lead")} {keys.Graph.Display}"
+        : L($"与ダメージ {keys.Damage.Display}  /  ソウル差 {keys.Graph.Display}",
+            $"Damage Dealt {keys.Damage.Display}  /  Soul Lead {keys.Graph.Display}");
 
     static bool GameRunning()
     {
         var games = Process.GetProcessesByName("deadlock");
         foreach (var game in games) game.Dispose();
         return games.Length != 0;
-    }
-
-    Task ShowDisplaySettings()
-    {
-        string closeGame = L("表示設定を変更する前にゲームを終了してください。", "Close the game before changing display settings.");
-        if (GameRunning()) throw new InvalidOperationException(closeGame);
-        string path = Path.Combine(Program.Home, "roster-display");
-        int mask = File.Exists(path) && int.TryParse(File.ReadAllText(path), out int saved) && saved is >= 0 and <= 15 ? saved : 2;
-        using var dialog = new Form
-        {
-            Text = L("表示設定", "Display settings"), ClientSize = new Size(470, 280),
-            StartPosition = FormStartPosition.CenterParent, Font = Font,
-            FormBorderStyle = FormBorderStyle.FixedDialog, MaximizeBox = false, MinimizeBox = false
-        };
-        var fields = new FlowLayoutPanel
-        {
-            Dock = DockStyle.Fill, FlowDirection = FlowDirection.TopDown, WrapContents = false,
-            Padding = new Padding(16)
-        };
-        dialog.Controls.Add(fields);
-        fields.Controls.Add(new Label
-        {
-            AutoSize = true, MaximumSize = new Size(420, 0), Margin = new Padding(3, 0, 3, 10),
-            Text = L("観戦・リプレイの画面上部に表示する項目です。", "Choose what appears across the top of the spectator and replay HUD.")
-        });
-        var options = new CheckBox[]
-        {
-            new() { Text = L("プレイヤー名", "Player names") },
-            new() { Text = L("キャラ名", "Hero names") },
-            new() { Text = L("チーム名", "Team names") },
-            new() { Text = L("チームアイコン", "Team icons") }
-        };
-        for (int i = 0; i < options.Length; i++)
-        {
-            options[i].AutoSize = true;
-            options[i].Checked = (mask & (1 << i)) != 0;
-            fields.Controls.Add(options[i]);
-        }
-        var buttons = Row();
-        var save = new Button { Text = L("保存", "Save"), AutoSize = true, DialogResult = DialogResult.OK };
-        var cancel = new Button { Text = L("キャンセル", "Cancel"), AutoSize = true, DialogResult = DialogResult.Cancel };
-        buttons.Controls.Add(save); buttons.Controls.Add(cancel); fields.Controls.Add(buttons);
-        dialog.AcceptButton = save; dialog.CancelButton = cancel;
-        if (dialog.ShowDialog(this) != DialogResult.OK) return Task.CompletedTask;
-        if (GameRunning()) throw new InvalidOperationException(closeGame);
-        mask = 0;
-        for (int i = 0; i < options.Length; i++)
-            if (options[i].Checked) mask |= 1 << i;
-        Directory.CreateDirectory(Program.Home);
-        string temp = path + "." + Guid.NewGuid().ToString("N");
-        try
-        {
-            File.WriteAllText(temp, mask.ToString(System.Globalization.CultureInfo.InvariantCulture));
-            File.Move(temp, path, true);
-        }
-        finally { if (File.Exists(temp)) File.Delete(temp); }
-        return Task.CompletedTask;
-    }
-
-    async Task ShowKeySettings()
-    {
-        string closeGame = L("キー設定を変更する前にゲームを終了してください。", "Close the game before changing key bindings.");
-        if (GameRunning()) throw new InvalidOperationException(closeGame);
-        using var dialog = new Form
-        {
-            Text = L("キー設定", "Key bindings"), ClientSize = new Size(550, 305),
-            StartPosition = FormStartPosition.CenterParent, Font = Font,
-            FormBorderStyle = FormBorderStyle.FixedDialog, MaximizeBox = false, MinimizeBox = false
-        };
-        var fields = new TableLayoutPanel { Dock = DockStyle.Fill, ColumnCount = 2, Padding = new Padding(16) };
-        fields.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 54));
-        fields.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 46));
-        var note = new Label { AutoSize = true, Text = L("欄を選び、割り当てたいキーを押してください。", "Select a field and press the shortcut you want.") };
-        fields.Controls.Add(note, 0, 0); fields.SetColumnSpan(note, 2);
-        var feedback = new Label { AutoSize = true, ForeColor = Color.Firebrick };
-        void CaptureFeedback(bool valid) => feedback.Text = valid ? "" : L("このキーは割り当てられません。", "This key cannot be assigned.");
-        var draw = new KeyCapture(keys.Drawing, CaptureFeedback);
-        var damage = new KeyCapture(keys.Damage, CaptureFeedback);
-        var graph = new KeyCapture(keys.Graph, CaptureFeedback);
-        void AddField(string title, KeyCapture field, int row)
-        {
-            field.AccessibleName = title;
-            fields.Controls.Add(new Label { Text = title, AutoSize = true, Anchor = AnchorStyles.Left }, 0, row);
-            fields.Controls.Add(field, 1, row);
-        }
-        AddField(L("描画", "Drawing"), draw, 1);
-        AddField(L("対ヒーローダメージ", "Damage to heroes"), damage, 2);
-        AddField(L("チーム資産差", "Team net worth lead"), graph, 3);
-        var enable = new CheckBox { Text = Ui.T("線を描く（観戦・リプレイ中のみ）"), AutoSize = true, Checked = keys.DrawingEnabled };
-        fields.Controls.Add(enable, 0, 4); fields.SetColumnSpan(enable, 2);
-        fields.Controls.Add(feedback, 0, 5); fields.SetColumnSpan(feedback, 2);
-        var buttons = Row();
-        var reset = new Button { Text = L("キーを初期値に戻す", "Reset keys"), AutoSize = true };
-        reset.Click += (_, _) => { draw.ShowBinding(HudKey.DrawingDefault); damage.ShowBinding(HudKey.DamageDefault); graph.ShowBinding(HudKey.GraphDefault); feedback.Text = ""; };
-        var save = new Button { Text = L("保存", "Save"), AutoSize = true };
-        save.Click += (_, _) =>
-        {
-            var next = new HudKeys(draw.Binding, damage.Binding, graph.Binding, enable.Checked);
-            if (!next.IsValid) { feedback.Text = L("同じキーが複数の機能に割り当てられています。", "Each action needs a different shortcut."); return; }
-            if (GameRunning()) { feedback.Text = closeGame; return; }
-            try { next.Save(Program.Home); }
-            catch (IOException) { feedback.Text = L("キー設定を保存できませんでした。", "Could not save key bindings."); return; }
-            catch (UnauthorizedAccessException) { feedback.Text = L("キー設定を保存できませんでした。", "Could not save key bindings."); return; }
-            keys = next;
-            dialog.DialogResult = DialogResult.OK;
-        };
-        var cancel = new Button { Text = L("キャンセル", "Cancel"), AutoSize = true, DialogResult = DialogResult.Cancel };
-        dialog.CancelButton = cancel;
-        buttons.Controls.AddRange(new Control[] { reset, save, cancel });
-        fields.Controls.Add(buttons, 0, 6); fields.SetColumnSpan(buttons, 2);
-        dialog.Controls.Add(fields);
-        if (dialog.ShowDialog(this) == DialogResult.OK)
-        {
-            UpdateKeySummary();
-            await RefreshStatus();
-        }
-    }
-
-    Task ShowHelp()
-    {
-        using var dialog = new Form { Text = Ui.T("困ったとき"), ClientSize = new Size(580, 180), StartPosition = FormStartPosition.CenterParent, Font = Font, MaximizeBox = false, MinimizeBox = false };
-        var panel = new FlowLayoutPanel { Dock = DockStyle.Fill, Padding = new Padding(16), WrapContents = true };
-        panel.Controls.Add(new Label { Text = Ui.T("ゲームを終了してから操作してください。\r\n通常の表示へ戻す場合は、メイン画面の「通常モードへ戻す」を使います。"), AutoSize = true, MaximumSize = new Size(540, 0), Margin = new Padding(0, 0, 0, 12) });
-        panel.SetFlowBreak(panel.Controls[0], true);
-        panel.Controls.Add(Button(Ui.T("ファイルを確認"), async () => { await Run("verify"); }));
-        panel.Controls.Add(Button(Ui.T("画像を読み直す"), async () => { await Run("refresh-assets"); await RefreshStatus(); }));
-        panel.Controls.Add(Button(Ui.T("前の版へ戻す"), async () => { await Run("rollback"); Program.RestartRequested = true; dialog.Close(); Close(); }));
-        dialog.Controls.Add(panel); dialog.ShowDialog(this); return Task.CompletedTask;
     }
 }

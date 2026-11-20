@@ -10,6 +10,7 @@ for canvas in (1920,2560):
   for i in range(6):players.append({'hero':'0','pos':{'x':start+i*140+(-42 if side==0 else 42),'y':46},'width':140,'cards':[]})
  def overlap(a,z):return a[0]<z[0]+z[2] and z[0]<a[0]+a[2] and a[1]<z[1]+z[3] and z[1]<a[1]+a[3]
  portraits=[(p['pos']['x']+26,46,88,100) for p in players]
+ for p,portrait in zip(players,portraits):p['portrait']=list(portrait)
  urns=[(p['pos']['x']+(18 if i<6 else 94),34,28,32) for i,p in enumerate(players)]
  assert all(x>=0 and x+w<=canvas for x,y,w,h in portraits+urns),'portrait or urn outside screen'
  wealth=(canvas/2-80,54,160,26);advantage=(canvas/2-172,16,344,28)

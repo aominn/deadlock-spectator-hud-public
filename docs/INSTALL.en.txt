@@ -1,8 +1,9 @@
-Deadlock Spectator HUD 0.6.1 — Quick guide
+Deadlock Spectator HUD — Quick guide
 
 SETUP
-Close Deadlock. Extract the complete release ZIP, open HudManager.exe, select the
-Deadlock/game/citadel folder containing gameinfo.gi, then Set up → Enable HUD → Launch game.
+Close Deadlock. Extract the complete release ZIP and open HudManager.exe. On Home,
+confirm the Deadlock/game/citadel folder containing gameinfo.gi and select Prepare assets.
+On Home, select Enable HUD, then Launch game.
 Windows 10/11 x64, Steam and Deadlock are required. Other runtimes are bundled.
 Images are prepared from the installed game; missing images do not stop the other features.
 
@@ -15,7 +16,8 @@ UPDATE
 Close both the game and manager. Download the latest runnable ZIP from the
 GitHub Releases page, extract to a new folder, and open that folder's HudManager.exe.
 Follow the manager's prompts, enable the HUD and launch the game.
-Newer versions retain settings and the previous version. Do not mix individual files.
+Updates retain settings, recovery records and the previous version. For fresh installs,
+these files live under LocalAppData/DeadlockSpectatorHUD. Keep the release files together.
 
 HELP
 Verify files checks the package. Refresh images prepares images again from your game.
@@ -29,7 +31,10 @@ HUD additions: Deadlock client language (Japanese, otherwise English).
 The original game UI language is not changed. Unknown or ambiguous identities are not guessed.
 
 DRAWING
-Enable Drawing each time you open the manager. F8 is the default key and can be changed in the manager. It starts drawing when hidden, resumes from Watch, and hides the toolbar while drawing. Draw / Watch switches input.
+In Settings → Key bindings, turn on Enable drawing (spectating and replays only) and save.
+Use the assigned key (default: F8) to start, resume, or hide the toolbar while drawing.
+Back to game or Esc returns to game controls and keeps your drawings and the toolbar. Set Deadlock to Borderless Window for drawing.
+If game audio stops while drawing, turn on Play sound in background in Deadlock’s audio settings.
 Esc returns to game controls and keeps drawings. Changing apps keeps drawings too.
 Normal mode, tool shutdown, a different match or a detected seek clears drawings.
 

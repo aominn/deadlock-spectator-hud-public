@@ -17,11 +17,13 @@ internal sealed class DrawingController : IDisposable
     readonly HotkeyWindow hotkey;
     readonly Func<IntPtr, bool> targetCheck;
     readonly Func<Task<DrawingContext?>>? contextReader;
+    readonly Func<IntPtr> foregroundWindow;
+    readonly Action<IntPtr> activateWindow;
     readonly Action<string> status;
     readonly InkModel model = new();
     DrawingContext? context;
     string? inkEpoch;
-    Point? toolbarOffset;
+    PointF? toolbarAnchor;
     InkCanvas? canvas;
     InkToolbar? toolbar;
     IntPtr target;
@@ -30,9 +32,12 @@ internal sealed class DrawingController : IDisposable
     long sequence, incarnation, uploadedRevision = -1;
     DateTime checkedAt = DateTime.MinValue, contextSucceededAt = DateTime.MinValue, uploadSucceededAt = DateTime.MinValue, uploadedAt = DateTime.MinValue;
     Rectangle lastBounds;
-    public DrawingController(Action<string> status, Func<IntPtr, bool>? targetCheck = null, Func<Task<DrawingContext?>>? contextReader = null)
+    public DrawingController(Action<string> status, Func<IntPtr, bool>? targetCheck = null,
+        Func<Task<DrawingContext?>>? contextReader = null, Func<IntPtr>? foregroundWindow = null, Action<IntPtr>? activateWindow = null)
     {
         this.status = status; this.targetCheck = targetCheck ?? IsDeadlock; this.contextReader = contextReader;
+        this.foregroundWindow = foregroundWindow ?? Native.GetForegroundWindow;
+        this.activateWindow = activateWindow ?? (window => Native.SetForegroundWindow(window));
         hotkey = new HotkeyWindow(id => { if (id == 51) ToggleToolbar(); else if (id == 52) PauseDrawing(); }); timer.Tick += async (_, _) => await Tick(); timer.Start();
     }
     public void Configure(bool enabled, HudKey key)
@@ -73,7 +78,11 @@ internal sealed class DrawingController : IDisposable
             registered = Native.RegisterHotKey(hotkey.Handle, 51, 0x4000u | (uint)key.Modifiers, (uint)key.Code);
             if (!registered) { hotkeyFailure = true; status(Ui.T("描画キーを登録できません（Windows ") + Marshal.GetLastWin32Error() + Ui.T("）。別のキーを選ぶか、描画をいったん切り替えてください。")); }
         }
-        if (toolbar != null && (Native.IsIconic(target) || !Native.ClientBounds(target, out var bounds) || bounds != lastBounds)) { HideToolbar(); return; }
+        if (toolbar != null)
+        {
+            if (Native.IsIconic(target) || !Native.ClientBounds(target, out var bounds)) { HideToolbar(); return; }
+            MoveToGame(bounds);
+        }
         if (canvas == null) { if (model.Revision != uploadedRevision && inkEpoch != null) await Upload(true); return; }
         canvas.Present(model, context.Map);
         if (model.Revision != uploadedRevision && DateTime.UtcNow - uploadedAt > TimeSpan.FromMilliseconds(50)) await Upload(true);
@@ -103,9 +112,10 @@ internal sealed class DrawingController : IDisposable
         if (!CanUseContext() || !targetCheck(foreground) || !Native.ClientBounds(foreground, out var bounds)) return;
         target = foreground; lastBounds = bounds;
         toolbar = new InkToolbar(model, ToggleDrawing, PauseDrawing, HideToolbar);
+        int dpi = Native.WindowDpi(target);
+        toolbar.FitToGame(bounds.Size, dpi);
+        toolbar.Location = ToolbarLocation(bounds, toolbar.Size, toolbarAnchor, dpi);
         toolbar.Show();
-        var offset = toolbarOffset ?? new Point((bounds.Width - toolbar.Width) / 2, bounds.Height - toolbar.Height - 24);
-        toolbar.Location = new Point(Math.Clamp(bounds.Left + offset.X, bounds.Left, Math.Max(bounds.Left, bounds.Right - toolbar.Width)), Math.Clamp(bounds.Top + offset.Y, bounds.Top, Math.Max(bounds.Top, bounds.Bottom - toolbar.Height)));
         toolbar.BringToFront(); toolbar.Activate();
         ToggleDrawing();
     }
@@ -115,13 +125,40 @@ internal sealed class DrawingController : IDisposable
         if (toolbar == null || !CanUseContext() || !Native.IsWindow(target) || Native.IsIconic(target) || !targetCheck(target) || !Native.ClientBounds(target, out var bounds)) return;
         var foreground = Native.GetForegroundWindow();
         if (!Owns(foreground) && foreground != target) return;
-        lastBounds = bounds; if (inkEpoch != context!.Epoch) model.Clear(); inkEpoch = context.Epoch; incarnation++; uploadedRevision = -1; uploadSucceededAt = DateTime.UtcNow;
+        MoveToGame(bounds); if (inkEpoch != context!.Epoch) model.Clear(); inkEpoch = context.Epoch; incarnation++; uploadedRevision = -1; uploadSucceededAt = DateTime.UtcNow;
         Native.RegisterHotKey(hotkey.Handle, 52, 0x4000, 0x1B);
         canvas = new InkCanvas(bounds, model, () => context?.Map, PauseDrawing);
         canvas.Show(); canvas.Present(model, context.Map); toolbar.Owner = canvas; toolbar.SetDrawing(true);
-        canvas.Activate(); toolbar.BringToFront(); status(Ui.T("描画中：「観戦へ」かEscでゲーム操作へ。開始キーでツールバーを隠せます。"));
+        canvas.Activate(); toolbar.BringToFront(); status(Ui.T("描き込み中。「ゲーム操作へ」またはEscで戻れます。割り当てたキーでツールバーを隠せます。"));
         _ = Upload(true);
     }
+    void MoveToGame(Rectangle bounds)
+    {
+        if (toolbar == null) return;
+        int dpi = Native.WindowDpi(target);
+        var anchor = ToolbarAnchor(lastBounds, toolbar.Bounds);
+        if (!toolbar.FitToGame(bounds.Size, dpi) && bounds == lastBounds) return;
+        if (bounds != lastBounds) canvas?.SetGameBounds(bounds);
+        lastBounds = bounds;
+        toolbar.Location = ToolbarLocation(bounds, toolbar.Size, anchor, dpi);
+    }
+
+    internal static PointF ToolbarAnchor(Rectangle game, Rectangle tool)
+    {
+        return new(
+            Math.Clamp((tool.Left - game.Left) / (float)Math.Max(1, game.Width - tool.Width), 0, 1),
+            Math.Clamp((tool.Top - game.Top) / (float)Math.Max(1, game.Height - tool.Height), 0, 1));
+    }
+
+    internal static Point ToolbarLocation(Rectangle game, Size tool, PointF? anchor, int dpi)
+    {
+        int horizontal = Math.Max(0, game.Width - tool.Width);
+        int vertical = Math.Max(0, game.Height - tool.Height);
+        int x = anchor is { } relative ? (int)Math.Round(horizontal * relative.X) : horizontal / 2;
+        int y = anchor is { } saved ? (int)Math.Round(vertical * saved.Y) : vertical - 24 * dpi / 96;
+        return new(game.Left + Math.Clamp(x, 0, horizontal), game.Top + Math.Clamp(y, 0, vertical));
+    }
+
     async Task Upload(bool drawing, string? epoch = null)
     {
         if (contextReader != null) { uploadedRevision = model.Revision; return; }
@@ -143,34 +180,35 @@ internal sealed class DrawingController : IDisposable
     internal static HttpContent EncodeSnapshot(object payload) => new StringContent(JsonSerializer.Serialize(payload), Encoding.UTF8, "application/json");
     internal static bool SameMap(RectangleF? left, RectangleF? right) => left == null || right == null ? left == right : Math.Abs(left.Value.X - right.Value.X) <= .001f && Math.Abs(left.Value.Y - right.Value.Y) <= .001f && Math.Abs(left.Value.Width - right.Value.Width) <= .001f && Math.Abs(left.Value.Height - right.Value.Height) <= .001f;
     internal static bool KeepContextOnFailure(DateTime lastSuccess, DateTime now) => now >= lastSuccess && now - lastSuccess <= TimeSpan.FromSeconds(3);
+    void ReturnGameFocus()
+    {
+        if (!Owns(foregroundWindow()) || !Native.IsWindow(target) || Native.IsIconic(target) || !targetCheck(target)) return;
+        // Request focus while an overlay still owns it, before Windows picks another window when the overlay closes.
+        activateWindow(target);
+    }
     void End() => End(true);
     void PauseDrawing() => PauseDrawing(true);
     void PauseDrawing(bool restoreFocus)
     {
         model.End();
-        if (canvas == null)
-        {
-            if (restoreFocus && Owns(Native.GetForegroundWindow()) && Native.IsWindow(target)) Native.SetForegroundWindow(target);
-            return;
-        }
+        if (restoreFocus) ReturnGameFocus();
+        if (canvas == null) return;
         Native.UnregisterHotKey(hotkey.Handle, 52);
-        var old = canvas; bool wasOurs = Owns(Native.GetForegroundWindow());
+        var old = canvas;
         if (toolbar != null) toolbar.Owner = null; // Keep the toolbar alive when its drawing surface closes.
         canvas = null; old.Dispose(); toolbar?.SetDrawing(false);
-        if (restoreFocus && wasOurs && Native.IsWindow(target)) Native.SetForegroundWindow(target);
-        status(Ui.T("観戦操作に戻りました。線は残ります。開始キーか「描く」で再開できます。"));
+        status(Ui.T("ゲーム操作に戻りました。線は残ります。割り当てたキーまたは「描く」で再開できます。"));
     }
     void HideToolbar() => HideToolbar(true);
     void HideToolbar(bool restoreFocus)
     {
-        bool wasOurs = Owns(Native.GetForegroundWindow());
+        if (restoreFocus) ReturnGameFocus();
         PauseDrawing(false);
         if (toolbar != null)
         {
-            toolbarOffset = new Point(toolbar.Left - lastBounds.Left, toolbar.Top - lastBounds.Top);
+            toolbarAnchor = ToolbarAnchor(lastBounds, toolbar.Bounds);
             var old = toolbar; toolbar = null; old.Dispose();
         }
-        if (restoreFocus && wasOurs && Native.IsWindow(target)) Native.SetForegroundWindow(target);
     }
     void End(bool restoreFocus = true, string? reason = null)
     {
@@ -207,7 +245,9 @@ internal sealed class DrawingController : IDisposable
 
 internal sealed class InkCanvas : Form
 {
-    readonly InkModel model; readonly Func<RectangleF?> map; readonly Action finish; long painted = -1;
+    readonly InkModel model; readonly Func<RectangleF?> map; readonly Action finish;
+    long painted = -1;
+    RectangleF? paintedMap;
     public InkCanvas(Rectangle bounds, InkModel model, Func<RectangleF?> map, Action finish)
     {
         this.model = model; this.map = map; this.finish = finish;
@@ -220,70 +260,144 @@ internal sealed class InkCanvas : Form
         MouseCaptureChanged += (_, _) => { if (!Capture) model.End(); };
         KeyDown += (_, e) => { if (e.KeyCode == Keys.Escape) { e.Handled = true; finish(); } else if (e.Control && e.KeyCode == Keys.Z) { e.Handled = true; model.Undo(); } };
     }
-    PointF Normal(Point p) => new(p.X / (float)Width, p.Y / (float)Height);
+    PointF Normal(Point p) => new(p.X / (float)ClientSize.Width, p.Y / (float)ClientSize.Height);
+    public void SetGameBounds(Rectangle bounds)
+    {
+        model.End();
+        Capture = false;
+        Bounds = bounds;
+        painted = -1;
+    }
     protected override CreateParams CreateParams { get { var p = base.CreateParams; p.ExStyle |= 0x80000; return p; } }
     public void Present(InkModel model, RectangleF? map)
     {
-        if (IsDisposed || !Visible || painted == model.Revision) return;
-        using var bitmap = new Bitmap(Width, Height, PixelFormat.Format32bppArgb);
+        if (IsDisposed || !Visible || (painted == model.Revision &&
+            (DrawingController.SameMap(paintedMap, map) || !model.Strokes.Any(stroke => stroke.Space == "map")))) return;
+        using var bitmap = new Bitmap(ClientSize.Width, ClientSize.Height, PixelFormat.Format32bppArgb);
         using (var g = Graphics.FromImage(bitmap)) { g.Clear(Color.FromArgb(1, 0, 0, 0)); model.Paint(g, bitmap.Size, map); }
-        Native.Present(Handle, bitmap, Location); painted = model.Revision;
+        Native.Present(Handle, bitmap, Location);
+        painted = model.Revision; paintedMap = map;
     }
 }
 internal sealed class InkToolbar : Form
 {
     readonly ToolTip tips = new();
     readonly Button mode;
+    readonly FlowLayoutPanel row;
+    readonly List<(Control Control, int Width)> sizes = new();
+    Font? toolbarFont;
+    Font DrawingFont => toolbarFont ?? Font;
+    float scale;
     bool drawing;
     public InkToolbar(InkModel model, Action toggle, Action pause, Action close)
     {
-        Text = Ui.T("描画ツール"); Font = new Font(Ui.Japanese ? "Yu Gothic UI" : "Segoe UI", 9); FormBorderStyle = FormBorderStyle.None; ShowInTaskbar = true; TopMost = true; StartPosition = FormStartPosition.Manual; AutoSize = true; AutoSizeMode = AutoSizeMode.GrowAndShrink; KeyPreview = true;
+        AutoScaleMode = AutoScaleMode.None;
+        Text = Ui.T("描画ツール"); Font = new Font(Ui.Japanese ? "Yu Gothic UI" : "Segoe UI", 9); FormBorderStyle = FormBorderStyle.None; ShowInTaskbar = true; TopMost = true; StartPosition = FormStartPosition.Manual; KeyPreview = true;
         BackColor = Color.FromArgb(30, 31, 29); ForeColor = Color.FromArgb(232, 228, 215); Padding = new Padding(1);
         Paint += (_, e) => { using var pen = new Pen(Color.FromArgb(90, 87, 75)); e.Graphics.DrawRectangle(pen, 0, 0, Width - 1, Height - 1); };
         FormClosing += (_, e) => { e.Cancel = true; if (!IsDisposed) BeginInvoke(close); };
-        var row = new FlowLayoutPanel { AutoSize = true, Padding = new Padding(4), Margin = Padding.Empty, WrapContents = false, Dock = DockStyle.Fill }; Controls.Add(row);
-        var grip = new Label { Text = "⋮⋮", AutoSize = false, Width = 16, Height = 24, TextAlign = ContentAlignment.MiddleCenter, Cursor = Cursors.SizeAll, Margin = new Padding(0, 1, 2, 0) };
-        grip.MouseDown += (_, e) => { if (e.Button == MouseButtons.Left) { Native.ReleaseCapture(); Native.SendMessage(Handle, 0xA1, new IntPtr(2), IntPtr.Zero); } }; row.Controls.Add(grip); tips.SetToolTip(grip, Ui.T("ドラッグで移動"));
+        row = new FlowLayoutPanel { Margin = Padding.Empty, WrapContents = false, Dock = DockStyle.Fill };
+        Controls.Add(row);
+        void AddControl(Control control, int width)
+        {
+            sizes.Add((control, width));
+            row.Controls.Add(control);
+        }
+        var grip = new InkChoice("⋮⋮", () => false, null, null, () => DrawingFont) { Cursor = Cursors.SizeAll };
+        grip.MouseDown += (_, e) => { if (e.Button == MouseButtons.Left) { Native.ReleaseCapture(); Native.SendMessage(Handle, 0xA1, new IntPtr(2), IntPtr.Zero); } }; AddControl(grip, 24); tips.SetToolTip(grip, Ui.T("ドラッグで移動"));
         ComboBox Choose(string[] names, int selected, int width, Action<int> change)
         {
             var box = new ComboBox { DropDownStyle = ComboBoxStyle.DropDownList, Width = width, FlatStyle = FlatStyle.Flat, BackColor = BackColor, ForeColor = ForeColor, DrawMode = DrawMode.OwnerDrawFixed, ItemHeight = 19, Margin = new Padding(1, 1, 2, 0) };
             box.Items.AddRange(names); box.SelectedIndex = selected;
-            box.DrawItem += (_, e) => { if (e.Index < 0) return; using var brush = new SolidBrush((e.State & DrawItemState.Selected) != 0 ? Color.FromArgb(58, 57, 49) : BackColor); e.Graphics.FillRectangle(brush, e.Bounds); TextRenderer.DrawText(e.Graphics, names[e.Index], Font, e.Bounds, ForeColor, TextFormatFlags.Left | TextFormatFlags.VerticalCenter); };
-            box.SelectedIndexChanged += (_, _) => { model.End(); change(box.SelectedIndex); }; row.Controls.Add(box); return box;
+            box.DrawItem += (_, e) => { if (e.Index < 0) return; using var brush = new SolidBrush((e.State & DrawItemState.Selected) != 0 ? Color.FromArgb(58, 57, 49) : BackColor); e.Graphics.FillRectangle(brush, e.Bounds); DrawLabel(e.Graphics, names[e.Index], DrawingFont, new RectangleF(e.Bounds.X + 3 * scale, e.Bounds.Y, e.Bounds.Width - 3 * scale, e.Bounds.Height), ForeColor, StringAlignment.Near); };
+            box.SelectedIndexChanged += (_, _) => { model.End(); change(box.SelectedIndex); }; AddControl(box, width); return box;
         }
         model.End(); model.Space = "screen";
-        Choose(new[] { Ui.T("ペン"), Ui.T("矢印") }, model.Tool == "arrow" ? 1 : 0, 60, i => model.Tool = i == 1 ? "arrow" : "pen");
+        Choose(new[] { Ui.T("ペン"), Ui.T("矢印") }, model.Tool == "arrow" ? 1 : 0, 86, i => model.Tool = i == 1 ? "arrow" : "pen");
         var choices = new List<Button>();
         foreach (string color in new[] { "white", "cyan", "red", "yellow" })
         {
-            var button = new InkChoice("", () => model.ColorName == color, color, null) { AccessibleName = color, Width = 23 };
-            button.Click += (_, _) => { model.End(); model.ColorName = color; foreach (var b in choices) b.Invalidate(); }; choices.Add(button); row.Controls.Add(button); tips.SetToolTip(button, color switch { "cyan" => Ui.T("水色"), "red" => Ui.T("赤"), "yellow" => Ui.T("黄"), _ => Ui.T("白") });
+            var button = new InkChoice("", () => model.ColorName == color, color, null, () => DrawingFont) { AccessibleName = color };
+            button.Click += (_, _) => { model.End(); model.ColorName = color; foreach (var b in choices) b.Invalidate(); }; choices.Add(button); AddControl(button, 30); tips.SetToolTip(button, color switch { "cyan" => Ui.T("水色"), "red" => Ui.T("赤"), "yellow" => Ui.T("黄"), _ => Ui.T("白") });
         }
         foreach (int width in InkModel.Widths)
         {
-            var button = new InkChoice(width == 3 ? Ui.T("細") : Ui.T("太"), () => model.Width == width, null, width) { Width = Ui.Japanese ? 53 : 72, AccessibleName = width == 3 ? Ui.T("細い線 3px") : Ui.T("太い線 8px") };
-            button.Click += (_, _) => { model.End(); model.Width = width; foreach (var b in choices) b.Invalidate(); }; choices.Add(button); row.Controls.Add(button); tips.SetToolTip(button, Ui.T("これから描く線の太さを変更"));
+            var button = new InkChoice(width == 3 ? Ui.T("細") : Ui.T("太"), () => model.Width == width, null, width, () => DrawingFont) { AccessibleName = width == 3 ? Ui.T("細い線 3px") : Ui.T("太い線 8px") };
+            button.Click += (_, _) => { model.End(); model.Width = width; foreach (var b in choices) b.Invalidate(); }; choices.Add(button); AddControl(button, Ui.Japanese ? 62 : 86); tips.SetToolTip(button, Ui.T("これから描く線の太さを変更"));
         }
-        void Add(string text, string tip, Action action, int width) { var button = new InkChoice(text, () => false, null, null) { Width = width }; button.Click += (_, _) => action(); row.Controls.Add(button); tips.SetToolTip(button, tip); }
-        Add(Ui.T("戻す"), Ui.T("1本戻す（右クリック / Ctrl+Z）"), model.Undo, 42); Add(Ui.T("消去"), Ui.T("描いた線をすべて消す"), model.Clear, 42);
-        mode = new InkChoice(Ui.T("描く"), () => drawing, null, null) { Width = 60 }; mode.Click += (_, _) => toggle(); row.Controls.Add(mode); tips.SetToolTip(mode, Ui.T("描く / 観戦へ：線を残して操作を切替（Escで観戦へ）"));
+        void Add(string text, string tip, Action action, int width) { var button = new InkChoice(text, () => false, null, null, () => DrawingFont); button.Click += (_, _) => action(); AddControl(button, width); tips.SetToolTip(button, tip); }
+        Add(Ui.T("戻す"), Ui.T("1本戻す（右クリック / Ctrl+Z）"), model.Undo, 54); Add(Ui.T("消去"), Ui.T("描いた線をすべて消す"), model.Clear, 54);
+        mode = new InkChoice(Ui.T("描く"), () => drawing, null, null, () => DrawingFont); mode.Click += (_, _) => toggle(); AddControl(mode, Ui.Japanese ? 100 : 110); tips.SetToolTip(mode, Ui.T("Escまたは「ゲーム操作へ」で、線を残してゲーム操作へ戻ります。「描く」で再開します。"));
         KeyDown += (_, e) => { if (e.KeyCode == Keys.Escape) { e.Handled = true; pause(); } };
     }
-    public void SetDrawing(bool value) { drawing = value; mode.Text = value ? Ui.T("観戦へ") : Ui.T("描く"); mode.Invalidate(); }
+    internal static float LayoutScale(Size game, int dpi) =>
+        Math.Max(1f, Math.Min(Math.Max(dpi / 96f, game.Height / 1080f), Math.Min(game.Width / 620f, game.Height / 400f)));
+
+    internal bool FitToGame(Size game, int dpi)
+    {
+        float next = LayoutScale(game, dpi);
+        if (Math.Abs(next - scale) < .005f) return false;
+        scale = next;
+        int Px(int units) => (int)Math.Round(units * scale);
+        var previousFont = toolbarFont;
+        toolbarFont = new Font(Ui.Japanese ? "Yu Gothic UI" : "Segoe UI", Px(14), GraphicsUnit.Pixel);
+        row.SuspendLayout();
+        try
+        {
+            Padding = new Padding(Px(1));
+            row.Padding = new Padding(Px(5));
+            foreach (var (control, width) in sizes)
+            {
+                control.Margin = new Padding(Px(1));
+                control.Width = Px(width);
+                if (control is ComboBox box) box.ItemHeight = Px(30);
+                else control.Height = Px(34);
+            }
+            ClientSize = new Size(
+                sizes.Sum(item => item.Control.Width + item.Control.Margin.Horizontal) + row.Padding.Horizontal + Padding.Horizontal,
+                sizes.Max(item => item.Control.Height + item.Control.Margin.Vertical) + row.Padding.Vertical + Padding.Vertical);
+        }
+        finally { row.ResumeLayout(true); }
+        previousFont?.Dispose();
+        Invalidate(true);
+        return true;
+    }
+
+    public void SetDrawing(bool value) { drawing = value; mode.Text = value ? Ui.T("ゲーム操作へ") : Ui.T("描く"); mode.Invalidate(); }
     protected override bool ShowWithoutActivation => true;
-    protected override void Dispose(bool disposing) { if (disposing) tips.Dispose(); base.Dispose(disposing); }
+    protected override void Dispose(bool disposing) { if (disposing) tips.Dispose(); base.Dispose(disposing); if (disposing) toolbarFont?.Dispose(); }
+    static void DrawLabel(Graphics graphics, string text, Font font, RectangleF bounds, Color color, StringAlignment alignment)
+    {
+        using var brush = new SolidBrush(color);
+        using var format = new StringFormat { Alignment = alignment, LineAlignment = StringAlignment.Center,
+            FormatFlags = StringFormatFlags.NoWrap };
+        graphics.DrawString(text, font, brush, bounds, format);
+    }
+
     sealed class InkChoice : Button
     {
-        readonly Func<bool> selected; readonly string? color; readonly int? line;
-        public InkChoice(string text, Func<bool> selected, string? color, int? line)
-        { Text = text; this.selected = selected; this.color = color; this.line = line; Height = 24; Margin = new Padding(1, 1, 1, 1); FlatStyle = FlatStyle.Flat; Cursor = Cursors.Hand; SetStyle(ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true); }
+        readonly Func<bool> selected; readonly string? color; readonly int? line; readonly Func<Font> drawingFont;
+        public InkChoice(string text, Func<bool> selected, string? color, int? line, Func<Font> drawingFont)
+        { Text = text; this.selected = selected; this.color = color; this.line = line; this.drawingFont = drawingFont; Height = 24; Margin = new Padding(1, 1, 1, 1); FlatStyle = FlatStyle.Flat; Cursor = Cursors.Hand; SetStyle(ControlStyles.UserPaint | ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true); }
         protected override void OnPaint(PaintEventArgs e)
         {
             bool active = selected(); e.Graphics.Clear(active ? Color.FromArgb(64, 62, 51) : Color.FromArgb(35, 36, 33));
             if (active || Focused) { using var border = new Pen(active ? Color.FromArgb(202, 189, 146) : Color.FromArgb(101, 99, 86)); e.Graphics.DrawRectangle(border, 0, 0, Width - 1, Height - 1); }
-            if (color != null) { using var ink = new SolidBrush(InkModel.InkColor(color)); e.Graphics.FillRectangle(ink, 5, 5, Width - 10, Height - 10); }
-            else if (line != null) { using var pen = new Pen(Color.FromArgb(232, 228, 215), line.Value); e.Graphics.DrawLine(pen, 7, Height / 2, 30, Height / 2); TextRenderer.DrawText(e.Graphics, Text, Font, new Rectangle(33, 0, Width - 33, Height), Color.FromArgb(232, 228, 215), TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter); }
-            else TextRenderer.DrawText(e.Graphics, Text, Font, ClientRectangle, Color.FromArgb(232, 228, 215), TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter);
+            int DpiPixels(int pixels) => (int)Math.Round(pixels * Height / 34f);
+            if (color != null)
+            {
+                int inset = DpiPixels(5);
+                using var ink = new SolidBrush(InkModel.InkColor(color));
+                e.Graphics.FillRectangle(ink, inset, inset, Width - 2 * inset, Height - 2 * inset);
+            }
+            else if (line != null)
+            {
+                int labelX = DpiPixels(33);
+                using var pen = new Pen(Color.FromArgb(232, 228, 215), DpiPixels(line.Value));
+                e.Graphics.DrawLine(pen, DpiPixels(7), Height / 2, DpiPixels(30), Height / 2);
+                DrawLabel(e.Graphics, Text, drawingFont(), new Rectangle(labelX, 0, Width - labelX, Height), ForeColor, StringAlignment.Center);
+            }
+            else DrawLabel(e.Graphics, Text, drawingFont(), ClientRectangle, ForeColor, StringAlignment.Center);
         }
     }
 }
@@ -300,6 +414,7 @@ internal static class Native
     [DllImport("user32.dll")] internal static extern bool IsWindow(IntPtr handle);
     [DllImport("user32.dll")] internal static extern bool IsIconic(IntPtr handle);
     [DllImport("user32.dll")] internal static extern uint GetWindowThreadProcessId(IntPtr handle, out uint pid);
+    [DllImport("user32.dll")] static extern uint GetDpiForWindow(IntPtr handle);
     [DllImport("user32.dll")] static extern bool GetClientRect(IntPtr handle, out Rect rect);
     [DllImport("user32.dll")] static extern bool ClientToScreen(IntPtr handle, ref Point point);
     [DllImport("user32.dll", SetLastError = true)] internal static extern bool RegisterHotKey(IntPtr handle, int id, uint modifiers, uint key);
@@ -313,10 +428,16 @@ internal static class Native
     [DllImport("user32.dll", SetLastError = true)] static extern bool UpdateLayeredWindow(IntPtr handle, IntPtr dstDc, ref Point dst, ref Size size, IntPtr srcDc, ref Point src, uint key, ref Blend blend, uint flags);
     internal static bool ClientBounds(IntPtr handle, out Rectangle bounds)
     {
-        bounds = Rectangle.Empty; var origin = new Point(0, 0);
-        if (!GetClientRect(handle, out var r) || !ClientToScreen(handle, ref origin) || r.Right < 640 || r.Bottom < 360) return false;
-        bounds = new Rectangle(origin.X, origin.Y, r.Right, r.Bottom); return true;
+        bounds = Rectangle.Empty;
+        if (!GetClientRect(handle, out var r)) return false;
+        var origin = new Point(r.Left, r.Top);
+        var edge = new Point(r.Right, r.Bottom);
+        if (!ClientToScreen(handle, ref origin) || !ClientToScreen(handle, ref edge) ||
+            edge.X - origin.X < 640 || edge.Y - origin.Y < 360) return false;
+        bounds = Rectangle.FromLTRB(origin.X, origin.Y, edge.X, edge.Y);
+        return true;
     }
+    internal static int WindowDpi(IntPtr handle) => Math.Max(96, (int)GetDpiForWindow(handle));
     internal static void Present(IntPtr handle, Bitmap bitmap, System.Drawing.Point location)
     {
         var screen = GetDC(IntPtr.Zero); var dc = CreateCompatibleDC(screen); IntPtr image = IntPtr.Zero, old = IntPtr.Zero;
